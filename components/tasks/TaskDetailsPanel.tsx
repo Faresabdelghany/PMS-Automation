@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { TaskDescription } from "./task-details/TaskDescription"
 import { TaskComments } from "./task-details/TaskComments"
+import { TaskFiles } from "./task-details/TaskFiles"
 
 type TaskDetailsPanelProps = {
   taskId: string | null
@@ -107,6 +108,13 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
     })
   }
 
+  const handleRemoveFile = (fileId: string) => {
+    if (!editedTask) return
+    updateTask({
+      files: editedTask.files?.filter(f => f.id !== fileId),
+    })
+  }
+
   if (!editedTask) {
     return null
   }
@@ -142,6 +150,12 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
                   <TaskComments
                     comments={editedTask.comments || []}
                     onAddComment={handleAddComment}
+                  />
+                </DetailsPanelSection>
+                <DetailsPanelSection title="Files" collapsible defaultOpen={false}>
+                  <TaskFiles
+                    files={editedTask.files || []}
+                    onRemove={handleRemoveFile}
                   />
                 </DetailsPanelSection>
               </div>
