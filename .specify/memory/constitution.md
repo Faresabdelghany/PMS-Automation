@@ -1,8 +1,8 @@
 <!--
 Sync Impact Report
 ===================
-Version change: (new) → 1.0.0
-Modified principles: N/A (initial ratification)
+Version change: 1.0.0 → 1.1.0
+Modified principles: Technology Constraints (Recharts 2.x → 3.x)
 Added sections:
   - Core Principles (7 principles)
   - Technology Constraints
@@ -154,7 +154,7 @@ dependencies require a constitution amendment.
 | Forms | React Hook Form + Zod | Current |
 | Drag & Drop | dnd-kit | Current |
 | Rich Text | Tiptap | 3.x |
-| Charts | Recharts | 2.x |
+| Charts | Recharts | 3.x |
 
 **Constraints**:
 - No backend framework or database unless explicitly approved
@@ -241,4 +241,8 @@ PR comments, and individual preferences.
 - Use `CLAUDE.md` or `.specify/` guidance files for runtime
   development guidance that supplements this constitution
 
-**Version**: 1.0.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-02-27
+**Version**: 1.1.0 | **Ratified**: 2026-02-27 | **Last Amended**: 2026-02-27
+
+### Amendment History
+
+**v1.1.0 (2026-02-27)**: Updated Recharts version constraint from 2.x to 3.x following comprehensive dependency upgrade. All dependencies updated to latest stable versions while maintaining compatibility with React 19 and Next.js 16.

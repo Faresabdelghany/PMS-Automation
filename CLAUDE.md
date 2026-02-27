@@ -13,9 +13,24 @@ npm run start    # Start production server
 
 No test suite exists yet. TypeScript build errors are ignored in `next.config.mjs` (`typescript.ignoreBuildErrors: true`).
 
+## Dependencies
+
+**Current versions (last updated: 2026-02-27):**
+- Next.js: **16.1.6** (with Turbopack)
+- React: **19.2.4**
+- TypeScript: **5.x**
+- Tailwind CSS: **4.2.1**
+- Zod: **4.3.6**
+- React Hook Form: **7.71.2**
+- Radix UI: Latest versions (1.x - 2.x range)
+- Tiptap: **3.20.0**
+- Recharts: **3.7.0**
+
+All dependencies are kept up to date with latest stable versions.
+
 ## Architecture
 
-**Frontend-only Next.js 16 App Router project.** No backend, no database. All data is static mock data in `lib/data/`.
+**Frontend-only Next.js 16.1.6 App Router project.** No backend, no database. All data is static mock data in `lib/data/`.
 
 ### Route → Component Pattern
 
@@ -84,4 +99,14 @@ All in `lib/data/` — static arrays with TypeScript types:
 
 ## Governance
 
-The `.specify/memory/constitution.md` is the canonical authority. It defines 7 principles: Component-First Design, Type Safety, Accessibility, Visual Polish, Simplicity (YAGNI), Responsive Design, Consistent Patterns. Core dependencies are version-locked and require a constitution amendment to change.
+The `.specify/memory/constitution.md` (v1.1.0) is the canonical authority. It defines 7 principles: Component-First Design, Type Safety, Accessibility, Visual Polish, Simplicity (YAGNI), Responsive Design, Consistent Patterns.
+
+**Recent Updates (v1.1.0, 2026-02-27):**
+- All dependencies upgraded to latest stable versions
+- Recharts updated from 2.x to 3.x (constitution amended)
+- Next.js 16.1.6 with Turbopack improvements
+- React 19.2.4 with latest bug fixes
+- All Radix UI components updated
+- Zod 4.3.6 with improved type inference
+
+Core dependencies are version-locked to major versions and require a constitution amendment for major version changes.
