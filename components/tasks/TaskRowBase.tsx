@@ -9,6 +9,8 @@ export type TaskRowBaseProps = {
   checked: boolean
   title: string
   onCheckedChange?: () => void
+  onTaskClick?: (taskId: string) => void
+  taskId?: string
   titleAriaLabel?: string
   titleSuffix?: ReactNode
   meta?: ReactNode
@@ -20,6 +22,8 @@ export function TaskRowBase({
   checked,
   title,
   onCheckedChange,
+  onTaskClick,
+  taskId,
   titleAriaLabel,
   titleSuffix,
   meta,
@@ -41,14 +45,26 @@ export function TaskRowBase({
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span
-            className={cn(
-              "flex-1 truncate text-left max-w-[60vw] sm:max-w-none",
-              checked && "line-through text-muted-foreground",
-            )}
-          >
-            {title}
-          </span>
+          {onTaskClick && taskId ? (
+            <button
+              onClick={() => onTaskClick(taskId)}
+              className={cn(
+                "flex-1 truncate text-left max-w-[60vw] sm:max-w-none hover:underline cursor-pointer",
+                checked && "line-through text-muted-foreground",
+              )}
+            >
+              {title}
+            </button>
+          ) : (
+            <span
+              className={cn(
+                "flex-1 truncate text-left max-w-[60vw] sm:max-w-none",
+                checked && "line-through text-muted-foreground",
+              )}
+            >
+              {title}
+            </span>
+          )}
           {titleSuffix}
         </div>
         {subtitle && (
