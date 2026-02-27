@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { DetailsPanelLayout, DetailsPanelHeader, DetailsPanelFooter, DetailsPanelSection } from "@/components/shared/details-panel"
-import type { ProjectTask } from "@/lib/data/project-details"
+import type { ProjectTask, Comment } from "@/lib/data/project-details"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { TaskDescription } from "./task-details/TaskDescription"
+import { TaskComments } from "./task-details/TaskComments"
 
 type TaskDetailsPanelProps = {
   taskId: string | null
@@ -91,6 +92,21 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
     setEditedTask({ ...editedTask, ...updates })
   }
 
+  const handleAddComment = (text: string) => {
+    if (!editedTask) return
+
+    const newComment: Comment = {
+      id: `comment-${Date.now()}`,
+      author: editedTask.assignee ?? { id: 'user-1', name: 'Current User' },
+      text,
+      timestamp: new Date(),
+    }
+
+    updateTask({
+      comments: [...(editedTask.comments || []), newComment],
+    })
+  }
+
   if (!editedTask) {
     return null
   }
@@ -120,6 +136,12 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
                   <TaskDescription
                     description={editedTask.description}
                     onUpdate={(description) => updateTask({ description })}
+                  />
+                </DetailsPanelSection>
+                <DetailsPanelSection title="Comments" collapsible defaultOpen={false}>
+                  <TaskComments
+                    comments={editedTask.comments || []}
+                    onAddComment={handleAddComment}
                   />
                 </DetailsPanelSection>
               </div>
