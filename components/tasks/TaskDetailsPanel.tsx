@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import { TaskDescription } from "./task-details/TaskDescription"
 import { TaskComments } from "./task-details/TaskComments"
 import { TaskFiles } from "./task-details/TaskFiles"
+import { TaskRelated } from "./task-details/TaskRelated"
 
 type TaskDetailsPanelProps = {
   taskId: string | null
@@ -115,6 +116,13 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
     })
   }
 
+  const handleUnlinkTask = (taskId: string) => {
+    if (!editedTask) return
+    updateTask({
+      relatedTaskIds: editedTask.relatedTaskIds?.filter(id => id !== taskId),
+    })
+  }
+
   if (!editedTask) {
     return null
   }
@@ -156,6 +164,12 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
                   <TaskFiles
                     files={editedTask.files || []}
                     onRemove={handleRemoveFile}
+                  />
+                </DetailsPanelSection>
+                <DetailsPanelSection title="Related Tasks" collapsible defaultOpen={false}>
+                  <TaskRelated
+                    relatedTaskIds={editedTask.relatedTaskIds || []}
+                    onUnlink={handleUnlinkTask}
                   />
                 </DetailsPanelSection>
               </div>
