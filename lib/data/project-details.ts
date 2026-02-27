@@ -686,7 +686,17 @@ export function getProjectDetailsById(id: string): ProjectDetails {
   return details
 }
 
+/**
+ * Generates a mock activity log for a task based on its current state.
+ * Creates events for task creation, status changes, and assignments.
+ * @param task - The task to generate activity log for
+ * @returns Array of activity events sorted by timestamp (newest first)
+ */
 export function generateMockActivityLog(task: ProjectTask): ActivityEvent[] {
+  const DAYS_SINCE_CREATION = 7
+  const DAYS_SINCE_STATUS_CHANGE = 3
+  const DAYS_SINCE_ASSIGNMENT = 2
+
   const events: ActivityEvent[] = []
   const baseDate = new Date()
 
@@ -694,8 +704,8 @@ export function generateMockActivityLog(task: ProjectTask): ActivityEvent[] {
   events.push({
     id: `${task.id}-event-created`,
     type: 'task_created',
-    user: task.assignee ?? { id: 'system', name: 'System' },
-    timestamp: new Date(baseDate.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+    user: task.assignee ?? { id: 'system', name: 'System', avatarUrl: getAvatarUrl('System') },
+    timestamp: new Date(baseDate.getTime() - DAYS_SINCE_CREATION * 24 * 60 * 60 * 1000),
   })
 
   // Status changed (if in-progress or done)
@@ -703,8 +713,8 @@ export function generateMockActivityLog(task: ProjectTask): ActivityEvent[] {
     events.push({
       id: `${task.id}-event-status`,
       type: 'status_changed',
-      user: task.assignee ?? { id: 'system', name: 'System' },
-      timestamp: new Date(baseDate.getTime() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+      user: task.assignee ?? { id: 'system', name: 'System', avatarUrl: getAvatarUrl('System') },
+      timestamp: new Date(baseDate.getTime() - DAYS_SINCE_STATUS_CHANGE * 24 * 60 * 60 * 1000),
       oldValue: 'todo',
       newValue: task.status,
     })
@@ -716,7 +726,7 @@ export function generateMockActivityLog(task: ProjectTask): ActivityEvent[] {
       id: `${task.id}-event-assigned`,
       type: 'assigned',
       user: task.assignee,
-      timestamp: new Date(baseDate.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+      timestamp: new Date(baseDate.getTime() - DAYS_SINCE_ASSIGNMENT * 24 * 60 * 60 * 1000),
       newValue: task.assignee.name,
     })
   }
