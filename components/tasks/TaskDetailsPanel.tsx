@@ -6,6 +6,7 @@ import { DetailsPanelLayout, DetailsPanelHeader, DetailsPanelFooter, DetailsPane
 import type { ProjectTask, Comment } from "@/lib/data/project-details"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 import { TaskDescription } from "./task-details/TaskDescription"
 import { TaskComments } from "./task-details/TaskComments"
@@ -24,6 +25,7 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
   const [isDirty, setIsDirty] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [showUnsavedWarning, setShowUnsavedWarning] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Load task data when taskId changes
   useEffect(() => {
@@ -31,24 +33,33 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
       setEditedTask(null)
       setOriginalTask(null)
       setIsDirty(false)
+      setIsLoading(false)
       return
     }
 
-    // TODO: Load task from data source
-    // For now, create a mock task
-    const mockTask: ProjectTask = {
-      id: taskId,
-      name: "Mock Task",
-      status: "todo",
-      projectId: "proj-1",
-      projectName: "Mock Project",
-      workstreamId: "ws-1",
-      workstreamName: "Mock Workstream",
-    }
+    setIsLoading(true)
 
-    setEditedTask(mockTask)
-    setOriginalTask(mockTask)
-    setIsDirty(false)
+    // Simulate loading delay
+    const timeout = setTimeout(() => {
+      // TODO: Load task from data source
+      // For now, create a mock task
+      const mockTask: ProjectTask = {
+        id: taskId,
+        name: "Mock Task",
+        status: "todo",
+        projectId: "proj-1",
+        projectName: "Mock Project",
+        workstreamId: "ws-1",
+        workstreamName: "Mock Workstream",
+      }
+
+      setEditedTask(mockTask)
+      setOriginalTask(mockTask)
+      setIsDirty(false)
+      setIsLoading(false)
+    }, 300)
+
+    return () => clearTimeout(timeout)
   }, [taskId])
 
   // Track dirty state
@@ -148,6 +159,33 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
 
   if (!editedTask) {
     return null
+  }
+
+  if (isLoading) {
+    return (
+      <Dialog open={taskId !== null} onOpenChange={(open) => !open && handleClose()}>
+        <DialogContent className="max-w-5xl h-[90vh] p-0">
+          <div className="h-full flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b">
+              <div className="flex-1 space-y-3">
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            </div>
+            <div className="flex-1 p-6 space-y-6">
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-32 w-full" />
+              </div>
+              <div className="space-y-3">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-24 w-full" />
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    )
   }
 
   const statusBadge = (
