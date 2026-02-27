@@ -62,6 +62,29 @@ export function TaskDetailsPanel({ taskId, onClose, onSave }: TaskDetailsPanelPr
     setIsDirty(hasChanges)
   }, [editedTask, originalTask])
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd/Ctrl + Enter to save
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault()
+        if (isDirty && !isSaving) {
+          handleSave()
+        }
+      }
+      // Escape to close
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        handleClose()
+      }
+    }
+
+    if (taskId) {
+      window.addEventListener('keydown', handleKeyDown)
+      return () => window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [taskId, isDirty, isSaving])
+
   const handleClose = () => {
     if (isDirty) {
       setShowUnsavedWarning(true)
