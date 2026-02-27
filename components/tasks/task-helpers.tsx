@@ -83,9 +83,10 @@ export type ProjectTasksSectionProps = {
   group: ProjectTaskGroup
   onToggleTask: (taskId: string) => void
   onAddTask: (context: CreateTaskContext) => void
+  onTaskClick?: (taskId: string) => void
 }
 
-export function ProjectTasksSection({ group, onToggleTask, onAddTask }: ProjectTasksSectionProps) {
+export function ProjectTasksSection({ group, onToggleTask, onAddTask, onTaskClick }: ProjectTasksSectionProps) {
   const { project, tasks } = group
   const total = tasks.length
   const done = tasks.filter((t) => t.status === "done").length
@@ -149,6 +150,7 @@ export function ProjectTasksSection({ group, onToggleTask, onAddTask }: ProjectT
               key={task.id}
               task={task}
               onToggle={() => onToggleTask(task.id)}
+              onTaskClick={onTaskClick}
             />
           ))}
         </SortableContext>
@@ -260,9 +262,10 @@ function getPriorityLabel(priority: NonNullable<ProjectTask["priority"]>): strin
 export type TaskRowDnDProps = {
   task: ProjectTask
   onToggle: () => void
+  onTaskClick?: (taskId: string) => void
 }
 
-export function TaskRowDnD({ task, onToggle }: TaskRowDnDProps) {
+export function TaskRowDnD({ task, onToggle, onTaskClick }: TaskRowDnDProps) {
   const isDone = task.status === "done"
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -280,6 +283,8 @@ export function TaskRowDnD({ task, onToggle }: TaskRowDnDProps) {
         checked={isDone}
         title={task.name}
         onCheckedChange={onToggle}
+        onTaskClick={onTaskClick}
+        taskId={task.id}
         titleAriaLabel={task.name}
         titleSuffix={<TaskBadges workstreamName={task.workstreamName} className="hidden sm:inline" />}
         subtitle={<div className="hidden sm:inline">{getTaskDescriptionSnippet(task)}</div>}
@@ -331,9 +336,10 @@ export type ProjectTaskListViewProps = {
   groups: ProjectTaskGroup[]
   onToggleTask: (taskId: string) => void
   onAddTask: (context: CreateTaskContext) => void
+  onTaskClick?: (taskId: string) => void
 }
 
-export function ProjectTaskListView({ groups, onToggleTask, onAddTask }: ProjectTaskListViewProps) {
+export function ProjectTaskListView({ groups, onToggleTask, onAddTask, onTaskClick }: ProjectTaskListViewProps) {
   return (
     <>
       {groups.map((group) => (
@@ -342,6 +348,7 @@ export function ProjectTaskListView({ groups, onToggleTask, onAddTask }: Project
           group={group}
           onToggleTask={onToggleTask}
           onAddTask={onAddTask}
+          onTaskClick={onTaskClick}
         />
       ))}
     </>

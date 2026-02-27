@@ -38,6 +38,7 @@ import { ChipOverflow } from "@/components/chip-overflow"
 import { ViewOptionsPopover } from "@/components/view-options-popover"
 import { cn } from "@/lib/utils"
 import { TaskQuickCreateModal, type CreateTaskContext } from "@/components/tasks/TaskQuickCreateModal"
+import { TaskDetailsPanel } from "@/components/tasks/TaskDetailsPanel"
 
 export function MyTasksPage() {
   const [groups, setGroups] = useState<ProjectTaskGroup[]>(() => {
@@ -56,6 +57,7 @@ export function MyTasksPage() {
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false)
   const [createContext, setCreateContext] = useState<CreateTaskContext | undefined>(undefined)
   const [editingTask, setEditingTask] = useState<ProjectTask | undefined>(undefined)
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
 
   const counts = useMemo<FilterCounts>(() => {
     const allTasks = groups.flatMap((g) => g.tasks)
@@ -177,6 +179,10 @@ export function MyTasksPage() {
     )
   }
 
+  const handleSaveTask = async (updatedTask: ProjectTask) => {
+    handleTaskUpdated(updatedTask)
+  }
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
@@ -285,6 +291,7 @@ export function MyTasksPage() {
               groups={visibleGroups}
               onToggleTask={toggleTask}
               onAddTask={(context) => openCreateTask(context)}
+              onTaskClick={setSelectedTaskId}
             />
           </DndContext>
         )}
@@ -311,6 +318,12 @@ export function MyTasksPage() {
         onTaskCreated={handleTaskCreated}
         editingTask={editingTask}
         onTaskUpdated={handleTaskUpdated}
+      />
+
+      <TaskDetailsPanel
+        taskId={selectedTaskId}
+        onClose={() => setSelectedTaskId(null)}
+        onSave={handleSaveTask}
       />
     </div>
   )
