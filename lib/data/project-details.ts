@@ -60,6 +60,45 @@ export type WorkstreamTask = {
   description?: string
 }
 
+export type Comment = {
+  id: string
+  author: User
+  text: string
+  timestamp: Date
+}
+
+export type TaskFile = {
+  id: string
+  name: string
+  type: 'pdf' | 'doc' | 'image' | 'file'
+  sizeMB: number
+  url: string
+  uploadedBy: User
+  uploadedDate: Date
+}
+
+export type ActivityEventType =
+  | 'status_changed'
+  | 'assigned'
+  | 'date_changed'
+  | 'priority_changed'
+  | 'comment_added'
+  | 'file_attached'
+  | 'description_updated'
+  | 'task_created'
+  | 'related_task_linked'
+
+export type ActivityEvent = {
+  id: string
+  type: ActivityEventType
+  user: User
+  timestamp: Date
+  oldValue?: string
+  newValue?: string
+  comment?: string
+  fileName?: string
+}
+
 export type WorkstreamGroup = {
   id: string
   name: string
@@ -71,6 +110,11 @@ export type ProjectTask = WorkstreamTask & {
   projectName: string
   workstreamId: string
   workstreamName: string
+  // Extended fields for details panel
+  comments?: Comment[]
+  files?: TaskFile[]
+  relatedTaskIds?: string[]
+  activityLog?: ActivityEvent[]
 }
 
 export type TimeSummary = {
@@ -640,4 +684,43 @@ export function getProjectDetailsById(id: string): ProjectDetails {
   }
 
   return details
+}
+
+export function generateMockActivityLog(task: ProjectTask): ActivityEvent[] {
+  const events: ActivityEvent[] = []
+  const baseDate = new Date()
+
+  // Task created event
+  events.push({
+    id: `${task.id}-event-created`,
+    type: 'task_created',
+    user: task.assignee ?? { id: 'system', name: 'System' },
+    timestamp: new Date(baseDate.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
+  })
+
+  // Status changed (if in-progress or done)
+  if (task.status !== 'todo') {
+    events.push({
+      id: `${task.id}-event-status`,
+      type: 'status_changed',
+      user: task.assignee ?? { id: 'system', name: 'System' },
+      timestamp: new Date(baseDate.getTime() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+      oldValue: 'todo',
+      newValue: task.status,
+    })
+  }
+
+  // Assigned event
+  if (task.assignee) {
+    events.push({
+      id: `${task.id}-event-assigned`,
+      type: 'assigned',
+      user: task.assignee,
+      timestamp: new Date(baseDate.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+      newValue: task.assignee.name,
+    })
+  }
+
+  // Sort by timestamp (newest first)
+  return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
 }
