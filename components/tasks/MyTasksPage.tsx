@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import dynamic from "next/dynamic"
 import { format } from "date-fns"
 import { ChartBar, DotsSixVertical, FolderSimple, Plus, Sparkle } from "@phosphor-icons/react/dist/ssr"
 import {
@@ -19,7 +20,11 @@ import { CSS } from "@dnd-kit/utilities"
 import { projects, type Project, type FilterCounts } from "@/lib/data/projects"
 import { getProjectDetailsById, getProjectTasks, type ProjectTask } from "@/lib/data/project-details"
 import { DEFAULT_VIEW_OPTIONS, type FilterChip as FilterChipType, type ViewOptions } from "@/lib/view-options"
-import { TaskWeekBoardView } from "@/components/tasks/TaskWeekBoardView"
+
+const TaskWeekBoardView = dynamic(
+  () => import("@/components/tasks/TaskWeekBoardView").then(m => m.TaskWeekBoardView),
+  { ssr: false }
+)
 import {
   ProjectTaskGroup,
   ProjectTaskListView,
@@ -38,7 +43,11 @@ import { ChipOverflow } from "@/components/chip-overflow"
 import { ViewOptionsPopover } from "@/components/view-options-popover"
 import { cn } from "@/lib/utils"
 import { TaskQuickCreateModal, type CreateTaskContext } from "@/components/tasks/TaskQuickCreateModal"
-import { TaskDetailsPanel } from "@/components/tasks/TaskDetailsPanel"
+
+const TaskDetailsPanel = dynamic(
+  () => import("@/components/tasks/TaskDetailsPanel").then(m => m.TaskDetailsPanel),
+  { ssr: false }
+)
 
 export function MyTasksPage() {
   const [groups, setGroups] = useState<ProjectTaskGroup[]>(() => {

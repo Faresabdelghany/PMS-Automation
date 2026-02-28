@@ -145,7 +145,8 @@ export function TaskDetailsPanel({ task, open, onClose }: TaskDetailsPanelProps)
     ])
   }
 
-  // Sync edit state when task changes
+  // Sync edit state when a different task is selected
+  const taskId = task?.id
   useEffect(() => {
     if (task) {
       setEditTitle(task.name)
@@ -157,7 +158,7 @@ export function TaskDetailsPanel({ task, open, onClose }: TaskDetailsPanelProps)
       setEditingField(null)
       setActivities(seedActivities)
     }
-  }, [task])
+  }, [taskId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const getInitials = (name: string) =>
     name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import {
   X,
@@ -30,7 +31,10 @@ import {
 import type { QuickLink } from "@/lib/data/project-details"
 import { projects } from "@/lib/data/projects"
 import { ClientWizard } from "@/components/clients/ClientWizard"
-import { ProjectWizard } from "@/components/project-wizard/ProjectWizard"
+const ProjectWizard = dynamic(
+  () => import("@/components/project-wizard/ProjectWizard").then(m => m.ProjectWizard),
+  { ssr: false }
+)
 
 interface ClientDetailsDrawerProps {
   clientId: string | null

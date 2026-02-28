@@ -1,12 +1,23 @@
 "use client"
 
 import { useEffect, useState, useRef, useMemo } from "react"
+import dynamic from "next/dynamic"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { ProjectHeader } from "@/components/project-header"
-import { ProjectTimeline } from "@/components/project-timeline"
 import { ProjectCardsView } from "@/components/project-cards-view"
-import { ProjectBoardView } from "@/components/project-board-view"
-import { ProjectWizard } from "@/components/project-wizard/ProjectWizard"
+
+const ProjectTimeline = dynamic(
+  () => import("@/components/project-timeline").then(m => m.ProjectTimeline),
+  { ssr: false }
+)
+const ProjectBoardView = dynamic(
+  () => import("@/components/project-board-view").then(m => m.ProjectBoardView),
+  { ssr: false }
+)
+const ProjectWizard = dynamic(
+  () => import("@/components/project-wizard/ProjectWizard").then(m => m.ProjectWizard),
+  { ssr: false }
+)
 import { computeFilterCounts, projects } from "@/lib/data/projects"
 import { DEFAULT_VIEW_OPTIONS, type FilterChip, type ViewOptions } from "@/lib/view-options"
 import { chipsToParams, paramsToChips } from "@/lib/url/filters"

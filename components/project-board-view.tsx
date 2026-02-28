@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import type { Project } from "@/lib/data/projects"
 import { ProjectCard } from "@/components/project-card"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -52,9 +52,12 @@ export function ProjectBoardView({ projects, loading = false, onAddProject }: Pr
   const [items, setItems] = useState<Project[]>(projects)
   const [draggingId, setDraggingId] = useState<string | null>(null)
 
-  useEffect(() => {
+  // Sync with parent without useEffect (React-recommended pattern)
+  const [prevProjects, setPrevProjects] = useState(projects)
+  if (projects !== prevProjects) {
+    setPrevProjects(projects)
     setItems(projects)
-  }, [projects])
+  }
 
   const groups = useMemo(() => {
     const m = new Map<Project["status"], Project[]>()

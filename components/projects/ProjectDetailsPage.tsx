@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
+import dynamic from "next/dynamic"
 import { LinkSimple, SquareHalf } from "@phosphor-icons/react/dist/ssr"
 import { toast } from "sonner"
 import { AnimatePresence, motion } from "motion/react"
@@ -14,12 +15,31 @@ import { OutcomesList } from "@/components/projects/OutcomesList"
 import { KeyFeaturesColumns } from "@/components/projects/KeyFeaturesColumns"
 import { TimelineGantt } from "@/components/projects/TimelineGantt"
 import { RightMetaPanel } from "@/components/projects/RightMetaPanel"
-import { WorkstreamTab } from "@/components/projects/WorkstreamTab"
-import { ProjectTasksTab } from "@/components/projects/ProjectTasksTab"
-import { NotesTab } from "@/components/projects/NotesTab"
-import { AssetsFilesTab } from "@/components/projects/AssetsFilesTab"
-import { TaskDetailsPanel } from "@/components/tasks/TaskDetailsPanel"
-import { ProjectWizard } from "@/components/project-wizard/ProjectWizard"
+
+const WorkstreamTab = dynamic(
+  () => import("@/components/projects/WorkstreamTab").then(m => m.WorkstreamTab),
+  { ssr: false }
+)
+const ProjectTasksTab = dynamic(
+  () => import("@/components/projects/ProjectTasksTab").then(m => m.ProjectTasksTab),
+  { ssr: false }
+)
+const NotesTab = dynamic(
+  () => import("@/components/projects/NotesTab").then(m => m.NotesTab),
+  { ssr: false }
+)
+const AssetsFilesTab = dynamic(
+  () => import("@/components/projects/AssetsFilesTab").then(m => m.AssetsFilesTab),
+  { ssr: false }
+)
+const TaskDetailsPanel = dynamic(
+  () => import("@/components/tasks/TaskDetailsPanel").then(m => m.TaskDetailsPanel),
+  { ssr: false }
+)
+const ProjectWizard = dynamic(
+  () => import("@/components/project-wizard/ProjectWizard").then(m => m.ProjectWizard),
+  { ssr: false }
+)
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"

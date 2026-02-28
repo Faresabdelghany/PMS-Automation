@@ -222,7 +222,7 @@ export function ViewOptionsPopover({ options, onChange, allowedViewTypes }: View
                     >
                       <option.icon className="h-4 w-4" />
                       <span className="flex-1 text-left">{option.label}</span>
-                      {option.count && <span className="text-xs text-muted-foreground">{option.count}</span>}
+                      {option.count ? <span className="text-xs text-muted-foreground">{option.count}</span> : null}
                     </button>
                   ))}
                 </PopoverContent>
