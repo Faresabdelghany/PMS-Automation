@@ -38,6 +38,42 @@ interface FilterPopoverProps {
   counts?: FilterCounts
 }
 
+const CATEGORIES = [
+  { id: "status", label: "Status", icon: Spinner },
+  { id: "priority", label: "Priority", icon: ChartBar },
+  { id: "tags", label: "Tags", icon: Tag },
+  { id: "members", label: "Members", icon: User },
+] as const
+
+const STATUS_OPTIONS = [
+  { id: "backlog", label: "Backlog", color: "var(--chart-2)" },
+  { id: "planned", label: "Planned", color: "var(--chart-2)" },
+  { id: "active", label: "Active", color: "var(--chart-3)" },
+  { id: "cancelled", label: "Cancelled", color: "var(--chart-5)" },
+  { id: "completed", label: "Completed", color: "var(--chart-3)" },
+]
+
+const PRIORITY_OPTIONS = [
+  { id: "urgent", label: "Urgent" },
+  { id: "high", label: "High" },
+  { id: "medium", label: "Medium" },
+  { id: "low", label: "Low" },
+]
+
+const MEMBER_OPTIONS = [
+  { id: "no-member", label: "No member", avatar: undefined },
+  { id: "current", label: "Current member", avatar: undefined, hint: "1 projects" },
+  { id: "jason", label: "jason duong", avatar: "/placeholder-user.jpg", hint: "3 projects" },
+]
+
+const TAG_OPTIONS = [
+  { id: "frontend", label: "frontend" },
+  { id: "backend", label: "backend" },
+  { id: "bug", label: "bug" },
+  { id: "feature", label: "feature" },
+  { id: "urgent", label: "urgent" },
+]
+
 export function FilterPopover({ initialChips, onApply, onClear, counts }: FilterPopoverProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
@@ -73,41 +109,11 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
     setTemp(next)
   }, [open, initialChips])
 
-  const categories = [
-    { id: "status", label: "Status", icon: Spinner },
-    { id: "priority", label: "Priority", icon: ChartBar },
-    { id: "tags", label: "Tags", icon: Tag },
-    { id: "members", label: "Members", icon: User },
-  ] as const
-
-  const statusOptions = [
-    { id: "backlog", label: "Backlog", color: "var(--chart-2)" },
-    { id: "planned", label: "Planned", color: "var(--chart-2)" },
-    { id: "active", label: "Active", color: "var(--chart-3)" },
-    { id: "cancelled", label: "Cancelled", color: "var(--chart-5)" },
-    { id: "completed", label: "Completed", color: "var(--chart-3)" },
-  ]
-
-  const priorityOptions = [
-    { id: "urgent", label: "Urgent" },
-    { id: "high", label: "High" },
-    { id: "medium", label: "Medium" },
-    { id: "low", label: "Low" },
-  ]
-
-  const memberOptions = [
-    { id: "no-member", label: "No member", avatar: undefined },
-    { id: "current", label: "Current member", avatar: undefined, hint: "1 projects" },
-    { id: "jason", label: "jason duong", avatar: "/placeholder-user.jpg", hint: "3 projects" },
-  ]
-
-  const tagOptions = [
-    { id: "frontend", label: "frontend" },
-    { id: "backend", label: "backend" },
-    { id: "bug", label: "bug" },
-    { id: "feature", label: "feature" },
-    { id: "urgent", label: "urgent" },
-  ]
+  const categories = CATEGORIES
+  const statusOptions = STATUS_OPTIONS
+  const priorityOptions = PRIORITY_OPTIONS
+  const memberOptions = MEMBER_OPTIONS
+  const tagOptions = TAG_OPTIONS
 
   const filteredCategories = useMemo(() => {
     const q = query.trim().toLowerCase()

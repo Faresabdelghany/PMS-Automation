@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { ProjectDetailsPage } from "@/components/projects/ProjectDetailsPage"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -12,7 +13,9 @@ export default async function Page({ params }: PageProps) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <ProjectDetailsPage projectId={id} />
+        <Suspense fallback={null}>
+          <ProjectDetailsPage projectId={id} />
+        </Suspense>
       </SidebarInset>
     </SidebarProvider>
   )
