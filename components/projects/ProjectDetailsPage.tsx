@@ -5,7 +5,7 @@ import { LinkSimple, SquareHalf } from "@phosphor-icons/react/dist/ssr"
 import { toast } from "sonner"
 import { AnimatePresence, motion } from "motion/react"
 
-import type { ProjectDetails } from "@/lib/data/project-details"
+import type { ProjectDetails, ProjectTask, WorkstreamTask } from "@/lib/data/project-details"
 import { getProjectDetailsById } from "@/lib/data/project-details"
 import { Breadcrumbs } from "@/components/projects/Breadcrumbs"
 import { ProjectHeader } from "@/components/projects/ProjectHeader"
@@ -18,6 +18,7 @@ import { WorkstreamTab } from "@/components/projects/WorkstreamTab"
 import { ProjectTasksTab } from "@/components/projects/ProjectTasksTab"
 import { NotesTab } from "@/components/projects/NotesTab"
 import { AssetsFilesTab } from "@/components/projects/AssetsFilesTab"
+import { TaskDetailsPanel } from "@/components/tasks/TaskDetailsPanel"
 import { ProjectWizard } from "@/components/project-wizard/ProjectWizard"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
@@ -37,6 +38,7 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
   const [state, setState] = useState<LoadState>({ status: "loading" })
   const [showMeta, setShowMeta] = useState(true)
   const [isWizardOpen, setIsWizardOpen] = useState(false)
+  const [detailTask, setDetailTask] = useState<ProjectTask | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -75,6 +77,22 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
       { label: state.status === "ready" ? state.project.name : "Project Details" },
     ],
     [state.status, state.status === "ready" ? state.project.name : null]
+  )
+
+  const handleWorkstreamTaskClick = useCallback(
+    (task: WorkstreamTask, groupId: string) => {
+      if (state.status !== "ready") return
+      const group = state.project.workstreams?.find((g) => g.id === groupId)
+      const projectTask: ProjectTask = {
+        ...task,
+        projectId: state.project.id,
+        projectName: state.project.name,
+        workstreamId: groupId,
+        workstreamName: group?.name ?? "",
+      }
+      setDetailTask(projectTask)
+    },
+    [state],
   )
 
   const openWizard = useCallback(() => {
@@ -153,11 +171,11 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
                   </TabsContent>
 
                   <TabsContent value="workstream">
-                    <WorkstreamTab workstreams={project.workstreams} />
+                    <WorkstreamTab workstreams={project.workstreams} onTaskClick={handleWorkstreamTaskClick} />
                   </TabsContent>
 
                   <TabsContent value="tasks">
-                    <ProjectTasksTab project={project} />
+                    <ProjectTasksTab project={project} onTaskClick={setDetailTask} />
                   </TabsContent>
 
                   <TabsContent value="notes">
@@ -194,6 +212,12 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
           <ProjectWizard onClose={closeWizard} onCreate={closeWizard} />
         )}
       </div>
+
+      <TaskDetailsPanel
+        task={detailTask}
+        open={detailTask !== null}
+        onClose={() => setDetailTask(null)}
+      />
     </div>
   )
 }

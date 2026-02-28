@@ -57,7 +57,7 @@ export function MyTasksPage() {
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false)
   const [createContext, setCreateContext] = useState<CreateTaskContext | undefined>(undefined)
   const [editingTask, setEditingTask] = useState<ProjectTask | undefined>(undefined)
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
+  const [detailTask, setDetailTask] = useState<ProjectTask | null>(null)
 
   const counts = useMemo<FilterCounts>(() => {
     const allTasks = groups.flatMap((g) => g.tasks)
@@ -179,10 +179,6 @@ export function MyTasksPage() {
     )
   }
 
-  const handleSaveTask = async (updatedTask: ProjectTask) => {
-    handleTaskUpdated(updatedTask)
-  }
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
 
@@ -291,7 +287,7 @@ export function MyTasksPage() {
               groups={visibleGroups}
               onToggleTask={toggleTask}
               onAddTask={(context) => openCreateTask(context)}
-              onTaskClick={setSelectedTaskId}
+              onTaskClick={(task) => setDetailTask(task)}
             />
           </DndContext>
         )}
@@ -321,9 +317,9 @@ export function MyTasksPage() {
       />
 
       <TaskDetailsPanel
-        taskId={selectedTaskId}
-        onClose={() => setSelectedTaskId(null)}
-        onSave={handleSaveTask}
+        task={detailTask}
+        open={detailTask !== null}
+        onClose={() => setDetailTask(null)}
       />
     </div>
   )

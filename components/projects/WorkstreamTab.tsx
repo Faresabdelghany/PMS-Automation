@@ -33,9 +33,10 @@ import { TaskRowBase } from "@/components/tasks/TaskRowBase"
 
 type WorkstreamTabProps = {
   workstreams: WorkstreamGroup[] | undefined
+  onTaskClick?: (task: WorkstreamTask, groupId: string) => void
 }
 
-export function WorkstreamTab({ workstreams }: WorkstreamTabProps) {
+export function WorkstreamTab({ workstreams, onTaskClick }: WorkstreamTabProps) {
   const [state, setState] = useState<WorkstreamGroup[]>(() => workstreams ?? [])
   const [openValues, setOpenValues] = useState<string[]>(() =>
     workstreams && workstreams.length ? [workstreams[0].id] : [],
@@ -269,6 +270,7 @@ export function WorkstreamTab({ workstreams }: WorkstreamTabProps) {
                   activeTaskId={activeTaskId}
                   overTaskId={overTaskId}
                   onToggleTask={(taskId) => toggleTask(group.id, taskId)}
+                  onTaskClick={onTaskClick}
                 />
               </AccordionItem>
             ))}
@@ -319,9 +321,10 @@ type WorkstreamTasksProps = {
   activeTaskId: string | null
   overTaskId: string | null
   onToggleTask: (taskId: string) => void
+  onTaskClick?: (task: WorkstreamTask, groupId: string) => void
 }
 
-function WorkstreamTasks({ group, activeTaskId, overTaskId, onToggleTask }: WorkstreamTasksProps) {
+function WorkstreamTasks({ group, activeTaskId, overTaskId, onToggleTask, onTaskClick }: WorkstreamTasksProps) {
   const { setNodeRef } = useDroppable({ id: `group:${group.id}` })
 
   return (
@@ -335,6 +338,7 @@ function WorkstreamTasks({ group, activeTaskId, overTaskId, onToggleTask }: Work
               onToggle={() => onToggleTask(task.id)}
               activeTaskId={activeTaskId}
               overTaskId={overTaskId}
+              onTaskClick={onTaskClick ? () => onTaskClick(task, group.id) : undefined}
             />
           ))}
         </div>
@@ -348,9 +352,10 @@ type TaskRowProps = {
   onToggle: () => void
   activeTaskId: string | null
   overTaskId: string | null
+  onTaskClick?: () => void
 }
 
-function TaskRow({ task, onToggle, activeTaskId, overTaskId }: TaskRowProps) {
+function TaskRow({ task, onToggle, activeTaskId, overTaskId, onTaskClick }: TaskRowProps) {
   const isDone = task.status === "done"
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver } = useSortable({
@@ -371,6 +376,7 @@ function TaskRow({ task, onToggle, activeTaskId, overTaskId }: TaskRowProps) {
         checked={isDone}
         title={task.name}
         onCheckedChange={onToggle}
+        onTitleClick={onTaskClick}
         titleAriaLabel={task.name}
         meta={
           <>

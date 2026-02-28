@@ -83,7 +83,7 @@ export type ProjectTasksSectionProps = {
   group: ProjectTaskGroup
   onToggleTask: (taskId: string) => void
   onAddTask: (context: CreateTaskContext) => void
-  onTaskClick?: (taskId: string) => void
+  onTaskClick?: (task: ProjectTask) => void
 }
 
 export function ProjectTasksSection({ group, onToggleTask, onAddTask, onTaskClick }: ProjectTasksSectionProps) {
@@ -262,7 +262,7 @@ function getPriorityLabel(priority: NonNullable<ProjectTask["priority"]>): strin
 export type TaskRowDnDProps = {
   task: ProjectTask
   onToggle: () => void
-  onTaskClick?: (taskId: string) => void
+  onTaskClick?: (task: ProjectTask) => void
 }
 
 export function TaskRowDnD({ task, onToggle, onTaskClick }: TaskRowDnDProps) {
@@ -283,8 +283,7 @@ export function TaskRowDnD({ task, onToggle, onTaskClick }: TaskRowDnDProps) {
         checked={isDone}
         title={task.name}
         onCheckedChange={onToggle}
-        onTaskClick={onTaskClick}
-        taskId={task.id}
+        onTitleClick={onTaskClick ? () => onTaskClick(task) : undefined}
         titleAriaLabel={task.name}
         titleSuffix={<TaskBadges workstreamName={task.workstreamName} className="hidden sm:inline" />}
         subtitle={<div className="hidden sm:inline">{getTaskDescriptionSnippet(task)}</div>}
@@ -336,7 +335,7 @@ export type ProjectTaskListViewProps = {
   groups: ProjectTaskGroup[]
   onToggleTask: (taskId: string) => void
   onAddTask: (context: CreateTaskContext) => void
-  onTaskClick?: (taskId: string) => void
+  onTaskClick?: (task: ProjectTask) => void
 }
 
 export function ProjectTaskListView({ groups, onToggleTask, onAddTask, onTaskClick }: ProjectTaskListViewProps) {

@@ -29,9 +29,10 @@ import { cn } from "@/lib/utils"
 
 type ProjectTasksTabProps = {
   project: ProjectDetails
+  onTaskClick?: (task: ProjectTask) => void
 }
 
-export function ProjectTasksTab({ project }: ProjectTasksTabProps) {
+export function ProjectTasksTab({ project, onTaskClick }: ProjectTasksTabProps) {
   const [tasks, setTasks] = useState<ProjectTask[]>(() => getProjectTasks(project))
   const [filters, setFilters] = useState<FilterChipType[]>([])
 
@@ -120,6 +121,7 @@ export function ProjectTasksTab({ project }: ProjectTasksTabProps) {
                 key={task.id}
                 task={task}
                 onToggle={() => toggleTask(task.id)}
+                onTaskClick={onTaskClick}
               />
             ))}
           </SortableContext>
@@ -226,9 +228,10 @@ function getStatusColor(status: ProjectTask["status"]): string {
 type TaskRowDnDProps = {
   task: ProjectTask
   onToggle: () => void
+  onTaskClick?: (task: ProjectTask) => void
 }
 
-function TaskRowDnD({ task, onToggle }: TaskRowDnDProps) {
+function TaskRowDnD({ task, onToggle, onTaskClick }: TaskRowDnDProps) {
   const isDone = task.status === "done"
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -246,6 +249,7 @@ function TaskRowDnD({ task, onToggle }: TaskRowDnDProps) {
         checked={isDone}
         title={task.name}
         onCheckedChange={onToggle}
+        onTitleClick={onTaskClick ? () => onTaskClick(task) : undefined}
         titleAriaLabel={task.name}
         titleSuffix={<TaskBadges workstreamName={task.workstreamName} />}
         meta={
