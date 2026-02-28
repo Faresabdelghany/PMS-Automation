@@ -38,6 +38,7 @@ const isValidEmail = (value: string) => {
 
 export function AuthDialog({ open, onOpenChange, mode, onModeChange }: AuthDialogProps) {
     const [signInStep, setSignInStep] = useState<SignInStep>("email")
+    const [hasMounted, setHasMounted] = useState(false)
     const [lastUsedProvider, setLastUsedProvider] = useState<string | null>(null)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -59,6 +60,10 @@ export function AuthDialog({ open, onOpenChange, mode, onModeChange }: AuthDialo
         setTermsAccepted(false)
         setShowPassword(false)
     }, [open, mode])
+
+    useEffect(() => {
+        setHasMounted(true)
+    }, [])
 
     useEffect(() => {
         if (!open) return
@@ -118,14 +123,14 @@ export function AuthDialog({ open, onOpenChange, mode, onModeChange }: AuthDialo
                                 <GoogleIcon className="h-4 w-4" />
                                 Continue with Google
                             </Button>
-                            {lastUsedProvider === "google" && (
+                            {hasMounted && lastUsedProvider === "google" ? (
                                 <Badge
                                     variant="muted"
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px]"
                                 >
                                     Last used
                                 </Badge>
-                            )}
+                            ) : null}
                         </div>
 
                         <div className="flex items-center gap-3">

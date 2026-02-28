@@ -148,15 +148,15 @@ export const ProjectCard = memo(function ProjectCard({ project, actions, variant
             </div>
           )}
           <div className="flex items-center gap-2">
-            {!isBoard && (
+            {!isBoard ? (
               <div className={cn("flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium", s.pill)}>
                 <span className={cn("inline-block size-1.5 rounded-full", s.dot)} />
                 {s.label}
               </div>
-            )}
-            {isBoard && (
+            ) : null}
+            {isBoard ? (
               <PriorityBadge level={project.priority} appearance="inline" />
-            )}
+            ) : null}
             {actions ? (
               <div
                 className="shrink-0"
@@ -174,16 +174,16 @@ export const ProjectCard = memo(function ProjectCard({ project, actions, variant
             {project.name}
           </p>
           {isBoard
-            ? secondaryLine && (
+            ? secondaryLine ? (
               <div className="mt-1 text-sm text-muted-foreground truncate">{secondaryLine}</div>
-            )
-            : secondaryLine && (
+            ) : null
+            : secondaryLine ? (
               <p className="mt-1 text-sm text-muted-foreground truncate">{secondaryLine}</p>
-            )}
+            ) : null}
         </div>
 
 
-        {!isBoard && (
+        {!isBoard ? (
           <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <CalendarBlank className="h-4 w-4" />
@@ -191,7 +191,7 @@ export const ProjectCard = memo(function ProjectCard({ project, actions, variant
             </div>
             <PriorityBadge level={project.priority} appearance="inline" />
           </div>
-        )}
+        ) : null}
 
         <div className="mt-4 border-t border-border/60" />
 

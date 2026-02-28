@@ -445,7 +445,7 @@ export function ProjectTimeline() {
                         )}
                         style={{ width: cellWidth }}
                       >
-                        {showLabel && (
+                        {showLabel ? (
                           <div className="h-full flex items-center justify-center">
                             <span
                               className={cn(
@@ -456,7 +456,7 @@ export function ProjectTimeline() {
                               {label}
                             </span>
                           </div>
-                        )}
+                        ) : null}
                       </div>
                     )
                   })}
@@ -530,7 +530,7 @@ export function ProjectTimeline() {
                     </div>
                   </div>
 
-                  {expandedProjects.includes(project.id) &&
+                  {expandedProjects.includes(project.id) ?
                     project.tasks.map((task) => (
                       <div key={task.id} className="flex h-[54px] group hover:bg-accent/10 relative border-b border-border/20">
                         <div
@@ -597,12 +597,12 @@ export function ProjectTimeline() {
                           />
                         </div>
                       </div>
-                    ))}
+                    )) : null}
                 </div>
               ))}
             </div>
 
-            {todayOffsetDays != null && (
+            {todayOffsetDays != null ? (
               <div
                 className="absolute z-10 pointer-events-none overflow-hidden"
                 style={{
@@ -617,7 +617,7 @@ export function ProjectTimeline() {
                   style={{ left: (todayOffsetDays || 0) * cellWidth + cellWidth / 2 }}
                 />
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
@@ -652,7 +652,7 @@ export function ProjectTimeline() {
             </div>
 
             {/* Mobile Task List */}
-            {expandedProjects.includes(project.id) && (
+            {expandedProjects.includes(project.id) ? (
               <div className="bg-muted/20">
                 {project.tasks.map((task) => (
                   <div key={task.id} className="px-4 py-3 pl-12 border-t border-border/20">
@@ -679,7 +679,7 @@ export function ProjectTimeline() {
                   </div>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
         ))}
       </div>

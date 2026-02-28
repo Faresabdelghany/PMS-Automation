@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { startOfWeek, addWeeks, addDays, isSameDay, format } from "date-fns"
 import { CaretLeft, CaretRight, CalendarBlank, Plus } from "@phosphor-icons/react/dist/ssr"
 import {
@@ -115,27 +115,24 @@ export function TaskWeekBoardView({ tasks, onAddTask, onToggleTask, onChangeTag,
 
   const [activeTask, setActiveTask] = useState<ProjectTask | undefined>(undefined)
 
-  useEffect(() => {
-    setColumnOrder((prev) => {
-      const next: Record<string, string[]> = {}
-
-      for (const column of weekColumns) {
-        const key = getDayKey(column.date)
-        const existing = prev[key] ?? []
-        const taskIds = column.tasks.map((t) => t.id)
-
-        const idSet = new Set(taskIds)
-        const ordered: string[] = [
-          ...existing.filter((id) => idSet.has(id)),
-          ...taskIds.filter((id) => !existing.includes(id)),
-        ]
-
-        next[key] = ordered
-      }
-
-      return next
-    })
-  }, [weekColumns])
+  // Sync column order when weekColumns change (render-time pattern)
+  const prevWeekColumnsRef = useRef(weekColumns)
+  if (weekColumns !== prevWeekColumnsRef.current) {
+    prevWeekColumnsRef.current = weekColumns
+    const next: Record<string, string[]> = {}
+    for (const column of weekColumns) {
+      const key = getDayKey(column.date)
+      const existing = columnOrder[key] ?? []
+      const taskIds = column.tasks.map((t) => t.id)
+      const idSet = new Set(taskIds)
+      const ordered: string[] = [
+        ...existing.filter((id) => idSet.has(id)),
+        ...taskIds.filter((id) => !existing.includes(id)),
+      ]
+      next[key] = ordered
+    }
+    setColumnOrder(next)
+  }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event

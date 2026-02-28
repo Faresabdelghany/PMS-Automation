@@ -90,7 +90,12 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
 
   const [tagSearch, setTagSearch] = useState("")
 
-  // Preselect from chips when opening
+  // Preselect from chips when opening — serialize to stable key to avoid
+  // re-running when the parent creates a new array with the same content
+  const chipsKey = useMemo(
+    () => (initialChips || []).map((c) => `${c.key}:${c.value}`).join(","),
+    [initialChips]
+  )
   useEffect(() => {
     if (!open) return
     const next: FilterTemp = {
@@ -107,7 +112,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
       if (k === "tag" || k === "tags") next.tags.add(c.value.toLowerCase())
     }
     setTemp(next)
-  }, [open, initialChips])
+  }, [open, chipsKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const categories = CATEGORIES
   const statusOptions = STATUS_OPTIONS

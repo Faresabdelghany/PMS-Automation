@@ -290,7 +290,7 @@ export function MyTasksPage() {
       </header>
 
       <div className="flex-1 min-h-0 space-y-4 overflow-y-auto px-4 py-4">
-        {viewOptions.viewType === "list" && (
+        {viewOptions.viewType === "list" ? (
           <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <ProjectTaskListView
               groups={visibleGroups}
@@ -299,8 +299,8 @@ export function MyTasksPage() {
               onTaskClick={(task) => setDetailTask(task)}
             />
           </DndContext>
-        )}
-        {viewOptions.viewType === "board" && (
+        ) : null}
+        {viewOptions.viewType === "board" ? (
           <TaskWeekBoardView
             tasks={allVisibleTasks}
             onAddTask={(context) => openCreateTask(context)}
@@ -309,7 +309,7 @@ export function MyTasksPage() {
             onMoveTaskDate={moveTaskDate}
             onOpenTask={openEditTask}
           />
-        )}
+        ) : null}
       </div>
 
       <TaskQuickCreateModal

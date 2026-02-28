@@ -91,12 +91,13 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
     }
   }, [])
 
+  const projectName = state.status === "ready" ? state.project.name : null
   const breadcrumbs = useMemo(
     () => [
       { label: "Projects", href: "/" },
-      { label: state.status === "ready" ? state.project.name : "Project Details" },
+      { label: projectName ?? "Project Details" },
     ],
-    [state.status, state.status === "ready" ? state.project.name : null]
+    [projectName]
   )
 
   const handleWorkstreamTaskClick = useCallback(
@@ -209,7 +210,7 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
               </div>
 
               <AnimatePresence initial={false}>
-                {showMeta && (
+                {showMeta ? (
                   <motion.div
                     key="meta-panel"
                     initial={{ x: 80, opacity: 0 }}
@@ -220,7 +221,7 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
                   >
                     <RightMetaPanel project={project} />
                   </motion.div>
-                )}
+                ) : null}
               </AnimatePresence>
             </div>
           </div>
@@ -228,9 +229,9 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
 
         <Separator className="mt-auto" />
 
-        {isWizardOpen && (
+        {isWizardOpen ? (
           <ProjectWizard onClose={closeWizard} onCreate={closeWizard} />
-        )}
+        ) : null}
       </div>
 
       <TaskDetailsPanel

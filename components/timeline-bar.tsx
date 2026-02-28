@@ -68,9 +68,9 @@ export function TimelineBar({ startDate, endDate, dates, cellWidth, label, progr
         <span className="text-xs font-medium truncate">
           {dateRange}: {label}
         </span>
-        {progress !== undefined && variant === "project" && (
+        {progress !== undefined && variant === "project" ? (
           <span className="ml-auto text-xs font-medium text-muted-foreground pl-2">{progress}%</span>
-        )}
+        ) : null}
       </div>
     </div>
   )

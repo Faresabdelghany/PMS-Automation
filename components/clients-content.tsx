@@ -275,7 +275,7 @@ export function ClientsContent() {
           </div>
 
           <div className="flex items-center gap-3 flex-1 justify-end">
-            {selectedIds.size > 0 && (
+            {selectedIds.size > 0 ? (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span>{selectedIds.size} selected</span>
                 <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={handleArchiveSelected}>
@@ -285,7 +285,7 @@ export function ClientsContent() {
                   Clear
                 </Button>
               </div>
-            )}
+            ) : null}
             <div className="flex-1 max-w-xs relative">
               <MagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -413,20 +413,20 @@ export function ClientsContent() {
                             </Avatar>
                             <div className="flex flex-col min-w-0">
                               <span className="truncate">{displayContactName}</span>
-                              {client.primaryContactEmail && (
+                              {client.primaryContactEmail ? (
                                 <span className="mt-0.5 text-[11px] text-muted-foreground truncate">
                                   {client.primaryContactEmail}
                                 </span>
-                              )}
+                              ) : null}
                             </div>
                           </div>
                         </TableCell>
                         <TableCell className="align-middle text-sm">
                           <div className="flex flex-col min-w-0">
                             <span className="truncate text-sm text-foreground">{client.name}</span>
-                            {client.location && (
+                            {client.location ? (
                               <span className="truncate text-[11px] text-muted-foreground">{client.location}</span>
-                            )}
+                            ) : null}
                           </div>
                         </TableCell>
                         <TableCell className="align-middle text-sm text-muted-foreground">
@@ -606,9 +606,9 @@ export function ClientsContent() {
           )}
         </div>
       </div>
-      {isWizardOpen && (
+      {isWizardOpen ? (
         <ClientWizard mode="create" onClose={() => setIsWizardOpen(false)} />
-      )}
+      ) : null}
       <ClientDetailsDrawer clientId={activeClientId} onClose={() => setActiveClientId(null)} />
     </div>
   )

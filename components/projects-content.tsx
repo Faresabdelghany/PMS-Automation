@@ -135,12 +135,12 @@ export function ProjectsContent() {
         onViewOptionsChange={setViewOptions}
         onAddProject={openWizard}
       />
-      {viewOptions.viewType === "timeline" && <ProjectTimeline />}
-      {viewOptions.viewType === "list" && <ProjectCardsView projects={filteredProjects} onCreateProject={openWizard} />}
-      {viewOptions.viewType === "board" && <ProjectBoardView projects={filteredProjects} onAddProject={openWizard} />}
-      {isWizardOpen && (
+      {viewOptions.viewType === "timeline" ? <ProjectTimeline /> : null}
+      {viewOptions.viewType === "list" ? <ProjectCardsView projects={filteredProjects} onCreateProject={openWizard} /> : null}
+      {viewOptions.viewType === "board" ? <ProjectBoardView projects={filteredProjects} onAddProject={openWizard} /> : null}
+      {isWizardOpen ? (
         <ProjectWizard onClose={closeWizard} onCreate={handleProjectCreated} />
-      )}
+      ) : null}
     </div>
   )
 }

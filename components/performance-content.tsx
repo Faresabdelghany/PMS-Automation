@@ -206,12 +206,10 @@ function PerformanceFilterPopover({
     return Array.from(members).sort((a, b) => a.localeCompare(b))
   }, [projects, tempProjectId])
 
-  useEffect(() => {
-    if (tempMember === "all") return
-    if (!availableMembers.includes(tempMember)) {
-      setTempMember("all")
-    }
-  }, [availableMembers, tempMember])
+  // Reset member if no longer valid for current project scope
+  if (tempMember !== "all" && !availableMembers.includes(tempMember)) {
+    setTempMember("all")
+  }
 
   const handleApply = () => {
     onApply({ projectId: tempProjectId, member: tempMember })
@@ -343,23 +341,26 @@ function PerformanceFilterPopover({
   )
 }
 
+function computeDateRange(id: RangeId) {
+  const range = RANGE_OPTIONS.find((option) => option.id === id)
+  const days = range && "days" in range ? range.days : 30
+  const rangeStart = addDays(REFERENCE_TODAY, -(days - 1))
+  return { start: toISODate(rangeStart), end: toISODate(REFERENCE_TODAY) }
+}
+
 export function PerformanceContent() {
   const [rangeId, setRangeId] = useState<RangeId>("30d")
   const [selectedProjectId, setSelectedProjectId] = useState("all")
   const [selectedMember, setSelectedMember] = useState("all")
-  const [dateRange, setDateRange] = useState<{ start: string; end: string }>({ start: "", end: "" })
+  const [dateRange, setDateRange] = useState(() => computeDateRange("30d"))
   const [isCustomRangeOpen, setIsCustomRangeOpen] = useState(false)
 
-  useEffect(() => {
-    if (rangeId === "custom") return
-    const range = RANGE_OPTIONS.find((option) => option.id === rangeId)
-    const days = range && "days" in range ? range.days : 30
-    const rangeStart = addDays(REFERENCE_TODAY, -(days - 1))
-    setDateRange({
-      start: toISODate(rangeStart),
-      end: toISODate(REFERENCE_TODAY),
-    })
-  }, [rangeId])
+  const handleRangeChange = (value: RangeId) => {
+    setRangeId(value)
+    if (value !== "custom") {
+      setDateRange(computeDateRange(value))
+    }
+  }
 
   const memberOptions = useMemo(() => {
     const scopedProjects =
@@ -400,12 +401,10 @@ export function PerformanceContent() {
     }
   }
 
-  useEffect(() => {
-    if (selectedMember === "all") return
-    if (!memberOptions.includes(selectedMember)) {
-      setSelectedMember("all")
-    }
-  }, [memberOptions, selectedMember])
+  // Reset member if no longer valid for current project scope
+  if (selectedMember !== "all" && !memberOptions.includes(selectedMember)) {
+    setSelectedMember("all")
+  }
 
   const {
     kpis,
@@ -653,7 +652,7 @@ export function PerformanceContent() {
     setSelectedProjectId("all")
     setSelectedMember("all")
     setRangeId("30d")
-    setDateRange({ start: "", end: "" })
+    setDateRange(computeDateRange("30d"))
     setIsCustomRangeOpen(false)
   }
 
@@ -689,7 +688,7 @@ export function PerformanceContent() {
             <ChipOverflow chips={filterChips} onRemove={handleRemoveChip} maxVisible={6} />
           </div>
           <div className="flex items-center gap-2">
-            <Select value={rangeId} onValueChange={(value) => setRangeId(value as RangeId)}>
+            <Select value={rangeId} onValueChange={(value) => handleRangeChange(value as RangeId)}>
               <SelectTrigger className="h-8 w-[170px] rounded-lg border-border/60 bg-transparent px-3">
                 <SelectValue placeholder="Select range" />
               </SelectTrigger>

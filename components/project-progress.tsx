@@ -54,12 +54,12 @@ export function ProjectProgress({ project, className, size = 18, showTaskSummary
       <ProgressCircle progress={percent} color={color} size={size} />
       <div className="flex items-center gap-4">
         <span>{percent}%</span>
-        {showTaskSummary && totalTasks > 0 && (
+        {showTaskSummary && totalTasks > 0 ? (
           <span className="flex items-center gap-1 text-sm">
             <ListChecks className="h-4 w-4" />
             {doneTasks} / {totalTasks} Tasks
           </span>
-        )}
+        ) : null}
       </div>
     </div>
   )
