@@ -19,6 +19,7 @@ import type { ProjectDetails, ProjectTask } from "@/lib/data/project-details"
 import { getProjectTasks } from "@/lib/data/project-details"
 import type { FilterCounts } from "@/lib/data/projects"
 import type { FilterChip as FilterChipType } from "@/lib/view-options"
+import { filterTasksByChips, computeTaskFilterCounts } from "@/components/tasks/task-helpers"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -165,53 +166,6 @@ function getStatusLabel(status: ProjectTask["status"]): string {
     default:
       return "To do"
   }
-}
-
-function filterTasksByChips(tasks: ProjectTask[], chips: FilterChipType[]): ProjectTask[] {
-  if (!chips.length) return tasks
-
-  const memberValues = chips
-    .filter((chip) => chip.key.toLowerCase().startsWith("member") || chip.key.toLowerCase() === "pic")
-    .map((chip) => chip.value.toLowerCase())
-
-  if (!memberValues.length) return tasks
-
-  return tasks.filter((task) => {
-    const name = task.assignee?.name.toLowerCase() ?? ""
-
-    for (const value of memberValues) {
-      if (value === "no member" && !task.assignee) return true
-      if (value === "current member" && task.assignee) return true
-      if (value && name.includes(value)) return true
-    }
-
-    return false
-  })
-}
-
-function computeTaskFilterCounts(tasks: ProjectTask[]): FilterCounts {
-  const counts: FilterCounts = {
-    members: {
-      "no-member": 0,
-      current: 0,
-      jason: 0,
-    },
-  }
-
-  for (const task of tasks) {
-    if (!task.assignee) {
-      counts.members!["no-member"] = (counts.members!["no-member"] || 0) + 1
-    } else {
-      counts.members!.current = (counts.members!.current || 0) + 1
-
-      const name = task.assignee.name.toLowerCase()
-      if (name.includes("jason duong")) {
-        counts.members!.jason = (counts.members!.jason || 0) + 1
-      }
-    }
-  }
-
-  return counts
 }
 
 function getStatusColor(status: ProjectTask["status"]): string {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
@@ -92,10 +92,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
 
   // Preselect from chips when opening — serialize to stable key to avoid
   // re-running when the parent creates a new array with the same content
-  const chipsKey = useMemo(
-    () => (initialChips || []).map((c) => `${c.key}:${c.value}`).join(","),
-    [initialChips]
-  )
+  const chipsKey = (initialChips || []).map((c) => `${c.key}:${c.value}`).join(",")
   useEffect(() => {
     if (!open) return
     const next: FilterTemp = {
@@ -114,17 +111,10 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
     setTemp(next)
   }, [open, chipsKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const categories = CATEGORIES
-  const statusOptions = STATUS_OPTIONS
-  const priorityOptions = PRIORITY_OPTIONS
-  const memberOptions = MEMBER_OPTIONS
-  const tagOptions = TAG_OPTIONS
-
-  const filteredCategories = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    if (!q) return categories
-    return categories.filter((c) => c.label.toLowerCase().includes(q))
-  }, [categories, query])
+  const q = query.trim().toLowerCase()
+  const filteredCategories = q
+    ? CATEGORIES.filter((c) => c.label.toLowerCase().includes(q))
+    : CATEGORIES
 
   const toggleSet = (set: Set<string>, v: string) => {
     const n = new Set(set)
@@ -196,7 +186,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
           <div className="p-3">
             {active === "priority" && (
               <div className="grid grid-cols-2 gap-2">
-                {priorityOptions.map((opt) => (
+                {PRIORITY_OPTIONS.map((opt) => (
                   <label key={opt.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">
                     <Checkbox
                       checked={temp.priority.has(opt.id)}
@@ -213,7 +203,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
 
             {active === "status" && (
               <div className="grid grid-cols-2 gap-2">
-                {statusOptions.map((opt) => (
+                {STATUS_OPTIONS.map((opt) => (
                   <label key={opt.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: opt.color }} />
                     <Checkbox
@@ -231,7 +221,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
 
             {active === "members" && (
               <div className="space-y-2">
-                {memberOptions.map((m) => (
+                {MEMBER_OPTIONS.map((m) => (
                   <label key={m.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">
                     <Checkbox
                       checked={temp.members.has(m.label)}
@@ -259,7 +249,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  {tagOptions
+                  {TAG_OPTIONS
                     .filter((t) => t.label.toLowerCase().includes(tagSearch.toLowerCase()))
                     .map((t) => (
                       <label key={t.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">

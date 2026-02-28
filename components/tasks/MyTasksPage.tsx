@@ -325,11 +325,13 @@ export function MyTasksPage() {
         onTaskUpdated={handleTaskUpdated}
       />
 
-      <TaskDetailsPanel
-        task={detailTask}
-        open={detailTask !== null}
-        onClose={() => setDetailTask(null)}
-      />
+      {detailTask !== null ? (
+        <TaskDetailsPanel
+          task={detailTask}
+          open={true}
+          onClose={() => setDetailTask(null)}
+        />
+      ) : null}
     </div>
   )
 }

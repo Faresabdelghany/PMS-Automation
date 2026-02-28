@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowRight, Eye, EyeOff } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -38,7 +38,6 @@ const isValidEmail = (value: string) => {
 
 export function AuthDialog({ open, onOpenChange, mode, onModeChange }: AuthDialogProps) {
     const [signInStep, setSignInStep] = useState<SignInStep>("email")
-    const [hasMounted, setHasMounted] = useState(false)
     const [lastUsedProvider, setLastUsedProvider] = useState<string | null>(null)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -62,18 +61,14 @@ export function AuthDialog({ open, onOpenChange, mode, onModeChange }: AuthDialo
     }, [open, mode])
 
     useEffect(() => {
-        setHasMounted(true)
-    }, [])
-
-    useEffect(() => {
         if (!open) return
 
         const stored = window.localStorage.getItem(PROVIDER_STORAGE_KEY)
         setLastUsedProvider(stored)
     }, [open])
 
-    const emailIsValid = useMemo(() => isValidEmail(email), [email])
-    const passwordIsValid = useMemo(() => password.trim().length >= MIN_PASSWORD_LENGTH, [password])
+    const emailIsValid = isValidEmail(email)
+    const passwordIsValid = password.trim().length >= MIN_PASSWORD_LENGTH
 
     const canContinueSignIn = signInStep === "email" ? emailIsValid : password.trim().length > 0
     const canContinueSignUp = emailIsValid && passwordIsValid && termsAccepted
@@ -123,7 +118,7 @@ export function AuthDialog({ open, onOpenChange, mode, onModeChange }: AuthDialo
                                 <GoogleIcon className="h-4 w-4" />
                                 Continue with Google
                             </Button>
-                            {hasMounted && lastUsedProvider === "google" ? (
+                            {lastUsedProvider === "google" ? (
                                 <Badge
                                     variant="muted"
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px]"
