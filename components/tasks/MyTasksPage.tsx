@@ -291,7 +291,7 @@ export function MyTasksPage() {
 
       <div className="flex-1 min-h-0 space-y-4 overflow-y-auto px-4 py-4">
         {viewOptions.viewType === "list" ? (
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <DndContext id="my-tasks-list" collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <ProjectTaskListView
               groups={visibleGroups}
               onToggleTask={toggleTask}

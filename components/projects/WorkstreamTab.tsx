@@ -218,6 +218,7 @@ export function WorkstreamTab({ workstreams, onTaskClick }: WorkstreamTabProps) 
 
       <div className="px-1">
         <DndContext
+          id="workstream"
           sensors={sensors}
           collisionDetection={closestCorners}
           onDragStart={handleDragStart}

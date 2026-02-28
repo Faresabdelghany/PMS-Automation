@@ -115,7 +115,7 @@ export function ProjectTasksTab({ project, onTaskClick }: ProjectTasksTabProps) 
       </header>
 
       <div className="space-y-1 px-2 py-3">
-        <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <DndContext id="project-tasks" collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={filteredTasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
             {filteredTasks.map((task) => (
               <TaskRowDnD

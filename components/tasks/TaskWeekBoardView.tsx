@@ -236,6 +236,7 @@ export function TaskWeekBoardView({ tasks, onAddTask, onToggleTask, onChangeTag,
 
       {/* Columns */}
       <DndContext
+        id="week-board"
         sensors={sensors}
         collisionDetection={closestCorners}
         onDragStart={({ active }) => {
