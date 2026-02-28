@@ -219,8 +219,9 @@ export function TaskDetailsPanel({ task, open, onClose }: TaskDetailsPanelProps)
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent showCloseButton={false} aria-describedby={undefined} className="w-[90vw] max-w-[calc(100%-2rem)] sm:max-w-[1100px] p-0 gap-0 overflow-hidden rounded-xl">
+      <DialogContent showCloseButton={false} className="w-[90vw] max-w-[calc(100%-2rem)] sm:max-w-[1100px] p-0 gap-0 overflow-hidden rounded-xl">
         <DialogTitle className="sr-only">Task Detail</DialogTitle>
+        <DialogDescription className="sr-only">View and edit task details</DialogDescription>
         <div className="flex h-[75vh] max-h-[700px]">
           {/* ── LEFT PANEL ── */}
           <div className="flex-1 flex flex-col min-w-0">
