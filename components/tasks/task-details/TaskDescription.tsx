@@ -12,6 +12,7 @@ type TaskDescriptionProps = {
 
 export function TaskDescription({ description = '', onUpdate }: TaskDescriptionProps) {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Placeholder.configure({
