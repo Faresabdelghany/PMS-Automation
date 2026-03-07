@@ -1,4 +1,4 @@
-export type NavItemId = "inbox" | "my-tasks" | "projects" | "clients" | "performance"
+export type NavItemId = "inbox" | "my-tasks" | "projects" | "clients" | "performance" | "agents"
 
 export type SidebarFooterItemId = "settings" | "templates" | "help"
 
@@ -22,19 +22,15 @@ export type SidebarFooterItem = {
 }
 
 export const navItems: NavItem[] = [
-    { id: "inbox", label: "Inbox", badge: 24 },
-    { id: "my-tasks", label: "My task" },
+    { id: "inbox", label: "Inbox" },
+    { id: "my-tasks", label: "Tasks" },
     { id: "projects", label: "Projects", isActive: true },
     { id: "clients", label: "Clients" },
     { id: "performance", label: "Performance" },
+    { id: "agents", label: "Agents" },
 ]
 
-export const activeProjects: ActiveProjectSummary[] = [
-    { id: "ai-learning", name: "AI Learning Platform", color: "var(--chart-5)", progress: 25 },
-    { id: "fintech-app", name: "Fintech Mobile App", color: "var(--chart-3)", progress: 80 },
-    { id: "ecommerce-admin", name: "E-commerce Admin", color: "var(--chart-3)", progress: 65 },
-    { id: "healthcare-app", name: "Healthcare Booking App", color: "var(--chart-2)", progress: 10 },
-]
+export const activeProjects: ActiveProjectSummary[] = []
 
 export const footerItems: SidebarFooterItem[] = [
     { id: "settings", label: "Settings" },

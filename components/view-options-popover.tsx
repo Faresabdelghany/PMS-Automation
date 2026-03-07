@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch"
 import {
   Sliders,
   ListBullets,
+  SquaresFour,
   Kanban,
   ChartBar,
   TextIndent,
@@ -22,7 +23,7 @@ import {
 import { cn } from "@/lib/utils"
 
 type Options = {
-  viewType: "list" | "board" | "timeline"
+  viewType: "list" | "board" | "kanban" | "timeline"
   tasks: "indented" | "collapsed" | "flat"
   ordering: "manual" | "alphabetical" | "date"
   showAbsentParent: boolean
@@ -44,7 +45,8 @@ export function ViewOptionsPopover({ options, onChange, allowedViewTypes }: View
 
   const viewTypes = [
     { id: "list", label: "List", icon: ListBullets },
-    { id: "board", label: "Board", icon: Kanban },
+    { id: "board", label: "Board", icon: SquaresFour },
+    { id: "kanban", label: "Kanban", icon: Kanban },
     { id: "timeline", label: "Timeline", icon: ChartBar },
   ].filter((type) => !allowedViewTypes || allowedViewTypes.includes(type.id))
 

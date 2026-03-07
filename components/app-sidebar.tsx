@@ -32,6 +32,7 @@ import {
   Folder,
   Users,
   ChartBar,
+  Robot,
   Gear,
   Layout,
   Question,
@@ -49,6 +50,7 @@ const navItemIcons: Record<NavItemId, React.ComponentType<{ className?: string }
   projects: Folder,
   clients: Users,
   performance: ChartBar,
+  agents: Robot,
 }
 
 const footerItemIcons: Record<SidebarFooterItemId, React.ComponentType<{ className?: string }>> = {
@@ -74,6 +76,7 @@ export function AppSidebar() {
     if (id === "inbox") return "/inbox"
     if (id === "clients") return "/clients"
     if (id === "performance") return "/performance"
+    if (id === "agents") return "/agents"
     return "#"
   }
 
@@ -92,6 +95,9 @@ export function AppSidebar() {
     }
     if (id === "performance") {
       return pathname.startsWith("/performance")
+    }
+    if (id === "agents") {
+      return pathname.startsWith("/agents")
     }
     return false
   }

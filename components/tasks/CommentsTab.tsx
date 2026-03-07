@@ -21,14 +21,18 @@ import { cn } from "@/lib/utils"
 
 /* ─── Constants ─── */
 
-const CURRENT_USER = "Jason Duong"
+const CURRENT_USER = "Fares"
 
 const ALL_COMMENT_MEMBERS = [
-  { name: "Dea Ananda" },
-  { name: "Akmal Nasrulloh" },
-  { name: "Aldyyy" },
-  { name: "Rahmadini" },
-  { name: "Jason Duong" },
+  { name: "Fares" },
+  { name: "Ziko" },
+  { name: "Product Analyst" },
+  { name: "Dev" },
+  { name: "Testing Agent" },
+  { name: "Code Reviewer" },
+  { name: "Designer" },
+  { name: "Marketing Agent" },
+  { name: "Job Search Agent" },
 ]
 
 function getInitials(name: string) {
@@ -80,34 +84,9 @@ function getFileIcon(type: string) {
   return FileIcon
 }
 
-/* ─── Seed data ─── */
+/* ─── Imports for persistence ─── */
 
-const seedComments: Comment[] = [
-  {
-    id: "c1",
-    user: { name: "Dea Ananda" },
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    html: `<p>Hey team, I've been reviewing the design brief and I think we need to adjust the KPI dashboard layout. <span data-type="mention" data-id="Rahmadini" data-label="Rahmadini">@Rahmadini</span> can you take a look at the wireframes? 🤔</p>`,
-  },
-  {
-    id: "c2",
-    user: { name: "Akmal Nasrulloh" },
-    timestamp: new Date(Date.now() - 90 * 60 * 1000),
-    html: `<p>I agree with the changes. The current layout doesn't align well with the client's requirements. <span data-type="mention" data-id="Dea Ananda" data-label="Dea Ananda">@Dea Ananda</span> we should schedule a review meeting.</p>`,
-  },
-  {
-    id: "c3",
-    user: { name: "Aldyyy" },
-    timestamp: new Date(Date.now() - 45 * 60 * 1000),
-    html: `<p>Yup that's right. It should be user-friendly and intuitive ✨</p>`,
-    attachments: [
-      { id: "a1", name: "KPI-Dashboard-Wireframe-v2.pdf", size: 2_450_000, type: "application/pdf" },
-      { id: "a2", name: "design-mockup.png", size: 845_000, type: "image/png" },
-    ],
-  },
-]
-
-const NEW_MESSAGES_DIVIDER_AFTER = 1
+import { fetchComments, createComment as createCommentService } from "@/lib/services/comments"
 
 /* ─── Emoji data ─── */
 
@@ -121,11 +100,27 @@ const EMOJI_DATA = [
 /* ─── CommentsTab ─── */
 
 type CommentsTabProps = {
+  taskId?: string
   onCountChange?: (count: number) => void
 }
 
-export function CommentsTab({ onCountChange }: CommentsTabProps) {
-  const [comments, setComments] = useState<Comment[]>(seedComments)
+export function CommentsTab({ taskId, onCountChange }: CommentsTabProps) {
+  const [comments, setComments] = useState<Comment[]>([])
+  const [isLoading, setIsLoading] = useState(!!taskId)
+
+  // Fetch comments from Supabase when taskId is available
+  useEffect(() => {
+    if (!taskId) return
+    let cancelled = false
+    setIsLoading(true)
+    fetchComments(taskId).then((fetched) => {
+      if (!cancelled) {
+        setComments(fetched)
+        setIsLoading(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [taskId])
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showToolbar, setShowToolbar] = useState(true)
   const [pendingFiles, setPendingFiles] = useState<Attachment[]>([])
@@ -329,21 +324,35 @@ export function CommentsTab({ onCountChange }: CommentsTabProps) {
     const hasFiles = pendingFiles.length > 0
     if (!hasText && !hasFiles) return
     const html = editor.getHTML()
-    setComments((prev) => [
-      ...prev,
-      {
-        id: String(Date.now()),
-        user: { name: CURRENT_USER },
-        timestamp: new Date(),
-        html: hasText ? html : "<p></p>",
-        attachments: hasFiles ? [...pendingFiles] : undefined,
-      },
-    ])
+    const commentHtml = hasText ? html : "<p></p>"
+
+    // Optimistic local update
+    const tempId = String(Date.now())
+    const optimistic: Comment = {
+      id: tempId,
+      user: { name: CURRENT_USER },
+      timestamp: new Date(),
+      html: commentHtml,
+      attachments: hasFiles ? [...pendingFiles] : undefined,
+    }
+    setComments((prev) => [...prev, optimistic])
+
+    // Persist to Supabase
+    if (taskId) {
+      createCommentService(taskId, CURRENT_USER, commentHtml).then((saved) => {
+        if (saved) {
+          setComments((prev) =>
+            prev.map((c) => (c.id === tempId ? { ...c, id: saved.id, timestamp: saved.timestamp } : c)),
+          )
+        }
+      })
+    }
+
     editor.commands.clearContent()
     setEditorEmpty(true)
     setPendingFiles([])
     setShowEmojiPicker(false)
-  }, [editor, editorEmpty, pendingFiles])
+  }, [editor, editorEmpty, pendingFiles, taskId])
 
   useEffect(() => { sendCommentRef.current = sendComment }, [sendComment])
   useEffect(() => { editorRef.current = editor }, [editor])
@@ -486,20 +495,15 @@ export function CommentsTab({ onCountChange }: CommentsTabProps) {
 
       {/* Comments list */}
       <div className="space-y-0">
-        {comments.map((comment, index) => (
-          <div key={comment.id}>
-            {index === NEW_MESSAGES_DIVIDER_AFTER + 1 && (
-              <div className="flex items-center gap-3 py-2 my-1">
-                <div className="flex-1 h-px bg-orange-400/60" />
-                <span className="text-[11px] font-semibold text-orange-500 uppercase tracking-wider whitespace-nowrap">
-                  New Messages
-                </span>
-                <div className="flex-1 h-px bg-orange-400/60" />
-              </div>
-            )}
-            <CommentItem comment={comment} />
-          </div>
-        ))}
+        {isLoading ? (
+          <p className="text-sm text-muted-foreground py-4">Loading comments...</p>
+        ) : comments.length === 0 ? (
+          <p className="text-sm text-muted-foreground py-4">No comments yet. Start the conversation.</p>
+        ) : (
+          comments.map((comment) => (
+            <CommentItem key={comment.id} comment={comment} />
+          ))
+        )}
       </div>
 
       {/* Rich text editor */}

@@ -1,16 +1,15 @@
 "use client"
 
 import { format } from "date-fns"
-import { ChartBar, DotsSixVertical, FolderSimple, Plus } from "@phosphor-icons/react/dist/ssr"
+import { DotsSixVertical, FolderSimple, Plus } from "@phosphor-icons/react/dist/ssr"
 import {
   SortableContext,
-  arrayMove,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 
-import type { Project, FilterCounts } from "@/lib/data/projects"
+import type { FilterCounts } from "@/lib/data/projects"
 import type { ProjectTask } from "@/lib/data/project-details"
 import { TaskRowBase } from "@/components/tasks/TaskRowBase"
 import { Button } from "@/components/ui/button"
@@ -21,10 +20,14 @@ import { cn } from "@/lib/utils"
 import type { FilterChip as FilterChipType } from "@/lib/view-options"
 import type { CreateTaskContext } from "@/components/tasks/TaskQuickCreateModal"
 
-export type ProjectTaskGroup = {
-  project: Project
+export type CategoryTaskGroup = {
+  id: string
+  name: string
   tasks: ProjectTask[]
 }
+
+/** @deprecated Use CategoryTaskGroup instead */
+export type ProjectTaskGroup = CategoryTaskGroup
 
 export function filterTasksByChips(tasks: ProjectTask[], chips: FilterChipType[]): ProjectTask[] {
   if (!chips.length) return tasks
@@ -80,14 +83,14 @@ export function getTaskDescriptionSnippet(task: ProjectTask): string {
 }
 
 export type ProjectTasksSectionProps = {
-  group: ProjectTaskGroup
+  group: CategoryTaskGroup
   onToggleTask: (taskId: string) => void
   onAddTask: (context: CreateTaskContext) => void
   onTaskClick?: (task: ProjectTask) => void
 }
 
 export function ProjectTasksSection({ group, onToggleTask, onAddTask, onTaskClick }: ProjectTasksSectionProps) {
-  const { project, tasks } = group
+  const { id, name, tasks } = group
   const total = tasks.length
   const done = tasks.filter((t) => t.status === "done").length
   const percent = total ? Math.round((done / total) * 100) : 0
@@ -99,30 +102,14 @@ export function ProjectTasksSection({ group, onToggleTask, onAddTask, onTaskClic
           <FolderSimple className="h-5 w-5" weight="regular" />
         </div>
         <div className="flex-1 space-y-1">
-          <span className="text-sm font-semibold leading-tight">{project.name}</span>
+          <span className="text-sm font-semibold leading-tight">{name}</span>
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1">
-              <ChartBar className="h-3 w-3" weight="regular" />
-              <span className="font-medium">{capitalize(project.priority)}</span>
-            </span>
-            <div className="h-4 w-px bg-border/70 hidden sm:inline" />
-            {project.typeLabel && project.durationLabel && (
-              <>
-                <span className="rounded-full bg-muted px-2 py-0.5 font-medium hidden sm:inline">
-                  {project.typeLabel} {project.durationLabel}
-                </span>
-                <div className="h-4 w-px bg-border/70 hidden sm:inline" />
-              </>
-            )}
-            <span className="rounded-full bg-muted px-2 py-0.5 font-medium hidden sm:inline">
-              {getProjectStatusLabel(project.status)}
+            <span className="font-medium">
+              {done}/{total} done
             </span>
           </div>
         </div>
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="font-medium">
-            {done}/{total}
-          </span>
           <ProgressCircle progress={percent} color="var(--chart-2)" size={18} />
           <div className="h-4 w-px bg-border/80" />
           <Button
@@ -133,8 +120,8 @@ export function ProjectTasksSection({ group, onToggleTask, onAddTask, onTaskClic
             aria-label="Add task"
             onClick={() =>
               onAddTask({
-                projectId: project.id,
-                workstreamName: tasks[0]?.workstreamName,
+                projectId: id,
+                workstreamName: name,
               })
             }
           >
@@ -207,22 +194,6 @@ function getStatusColor(status: ProjectTask["status"]): string {
   }
 }
 
-function getProjectStatusLabel(status: Project["status"]): string {
-  switch (status) {
-    case "active":
-      return "In Progress"
-    case "planned":
-      return "Planned"
-    case "backlog":
-      return "Backlog"
-    case "completed":
-      return "Completed"
-    case "cancelled":
-      return "Cancelled"
-    default:
-      return capitalize(status)
-  }
-}
 
 function capitalize(value: string): string {
   if (!value) return value
@@ -343,7 +314,7 @@ export function ProjectTaskListView({ groups, onToggleTask, onAddTask, onTaskCli
     <>
       {groups.map((group) => (
         <ProjectTasksSection
-          key={group.project.id}
+          key={group.id}
           group={group}
           onToggleTask={onToggleTask}
           onAddTask={onAddTask}

@@ -71,18 +71,6 @@ export const ProjectCard = memo(function ProjectCard({ project, actions, variant
 
   const initials = assignee ? assignee.split(" ").map((p) => p[0]).join("").slice(0, 2).toUpperCase() : null
 
-  const secondaryLine = (() => {
-    const a = project.client
-    const b = project.typeLabel
-    const c = project.durationLabel
-    if (a || b || c) {
-      return [a, b, c].filter(Boolean).join(" • ")
-    }
-    if (project.tags && project.tags.length > 0) {
-      return project.tags.join(" • ")
-    }
-    return ""
-  })()
 
   const dueLabel = (() => {
     if (!dueDate) return "No due date"
@@ -173,13 +161,6 @@ export const ProjectCard = memo(function ProjectCard({ project, actions, variant
           <p className="text-[15px] font-semibold text-foreground leading-6">
             {project.name}
           </p>
-          {isBoard
-            ? secondaryLine ? (
-              <div className="mt-1 text-sm text-muted-foreground truncate">{secondaryLine}</div>
-            ) : null
-            : secondaryLine ? (
-              <p className="mt-1 text-sm text-muted-foreground truncate">{secondaryLine}</p>
-            ) : null}
         </div>
 
 
