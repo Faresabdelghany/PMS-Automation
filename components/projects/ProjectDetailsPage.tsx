@@ -7,7 +7,7 @@ import { toast } from "sonner"
 import { AnimatePresence, motion } from "motion/react"
 
 import type { ProjectDetails, ProjectTask, WorkstreamTask } from "@/lib/data/project-details"
-import { getProjectDetailsById } from "@/lib/data/project-details"
+import { fetchProjectDetailsById } from "@/lib/services/projects"
 import { Breadcrumbs } from "@/components/projects/Breadcrumbs"
 import { ProjectHeader } from "@/components/projects/ProjectHeader"
 import { ScopeColumns } from "@/components/projects/ScopeColumns"
@@ -64,16 +64,58 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
     let cancelled = false
     setState({ status: "loading" })
 
-    const delay = 600 + Math.floor(Math.random() * 301)
-    const t = setTimeout(() => {
-      if (cancelled) return
-      const project = getProjectDetailsById(projectId)
-      setState({ status: "ready", project })
-    }, delay)
+    fetchProjectDetailsById(projectId)
+      .then((project) => {
+        if (cancelled) return
+        if (!project) {
+          setState({
+            status: "ready",
+            project: {
+              id: projectId,
+              name: `Project ${projectId}`,
+              description: "",
+              meta: { priorityLabel: "Medium", locationLabel: "", sprintLabel: "", lastSyncLabel: "Live" },
+              scope: { inScope: [], outOfScope: [] },
+              outcomes: [],
+              keyFeatures: { p0: [], p1: [], p2: [] },
+              timelineTasks: [],
+              workstreams: [],
+              time: { estimateLabel: "", dueDate: new Date(), daysRemainingLabel: "", progressPercent: 0 },
+              backlog: { statusLabel: "Planned", groupLabel: "None", priorityLabel: "Medium", labelBadge: "", picUsers: [] },
+              quickLinks: [],
+              files: [],
+              notes: [],
+            },
+          })
+          return
+        }
+        setState({ status: "ready", project })
+      })
+      .catch(() => {
+        if (cancelled) return
+        setState({
+          status: "ready",
+          project: {
+            id: projectId,
+            name: `Project ${projectId}`,
+            description: "",
+            meta: { priorityLabel: "Medium", locationLabel: "", sprintLabel: "", lastSyncLabel: "Live" },
+            scope: { inScope: [], outOfScope: [] },
+            outcomes: [],
+            keyFeatures: { p0: [], p1: [], p2: [] },
+            timelineTasks: [],
+            workstreams: [],
+            time: { estimateLabel: "", dueDate: new Date(), daysRemainingLabel: "", progressPercent: 0 },
+            backlog: { statusLabel: "Planned", groupLabel: "None", priorityLabel: "Medium", labelBadge: "", picUsers: [] },
+            quickLinks: [],
+            files: [],
+            notes: [],
+          },
+        })
+      })
 
     return () => {
       cancelled = true
-      clearTimeout(t)
     }
   }, [projectId])
 

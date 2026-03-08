@@ -7,6 +7,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import type { Agent } from "@/lib/data/agents"
 import type { AgentLog } from "@/lib/services/agents"
 import { fetchAgentsWithActivity, fetchAgentLogs } from "@/lib/services/agents"
+import { fetchInternalTasks } from "@/lib/services/tasks"
+import type { ProjectTask } from "@/lib/data/project-details"
 
 function formatTimeAgo(dateStr: string): string {
   const date = new Date(dateStr)
@@ -66,7 +68,7 @@ function ActivityRow({ log }: { log: AgentLog }) {
   return (
     <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted/50 transition-colors">
       <Badge
-        variant={log.status === "completed" ? "default" : "destructive"}
+        variant={log.status === "completed" ? "default" : "secondary"}
         className="text-[10px] px-1.5 min-w-[70px] justify-center"
       >
         {log.status}
@@ -82,16 +84,18 @@ export function AgentsPage() {
   const [agents, setAgents] = useState<Agent[]>([])
   const [logs, setLogs] = useState<AgentLog[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [internalTasks, setInternalTasks] = useState<ProjectTask[]>([])
 
   useEffect(() => {
     let cancelled = false
     setIsLoading(true)
 
-    Promise.all([fetchAgentsWithActivity(), fetchAgentLogs(30)]).then(
-      ([agentsData, logsData]) => {
+    Promise.all([fetchAgentsWithActivity(), fetchAgentLogs(30), fetchInternalTasks()]).then(
+      ([agentsData, logsData, internalTasksData]) => {
         if (!cancelled) {
           setAgents(agentsData)
           setLogs(logsData)
+          setInternalTasks(internalTasksData)
           setIsLoading(false)
         }
       }
@@ -106,8 +110,9 @@ export function AgentsPage() {
     const total = agents.length
     const completedTasks = logs.filter((l) => l.status === "completed").length
     const failedTasks = logs.filter((l) => l.status === "failed").length
-    return { total, completedTasks, failedTasks }
-  }, [agents, logs])
+    const internalTaskCount = internalTasks.length
+    return { total, completedTasks, failedTasks, internalTaskCount }
+  }, [agents, logs, internalTasks])
 
   if (isLoading) {
     return (
@@ -136,6 +141,7 @@ export function AgentsPage() {
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span>{stats.total} agents</span>
             <span>{stats.completedTasks} completed</span>
+            <span>{stats.internalTaskCount} internal tasks</span>
             {stats.failedTasks > 0 && (
               <span className="text-destructive">{stats.failedTasks} failed</span>
             )}
@@ -155,6 +161,26 @@ export function AgentsPage() {
             ))}
           </div>
         </div>
+
+        {/* Internal / system tasks visibility */}
+        {internalTasks.length > 0 && (
+          <div>
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+              Internal Tasks (Agent + System)
+            </p>
+            <div className="space-y-0.5">
+              {internalTasks.slice(0, 12).map((task) => (
+                <div key={task.id} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted/50 transition-colors">
+                  <Badge variant={task.taskType === "system_task" ? "secondary" : "default"} className="text-[10px] px-1.5 min-w-[80px] justify-center">
+                    {task.taskType === "system_task" ? "system" : "agent"}
+                  </Badge>
+                  <span className="text-sm text-foreground flex-1 truncate">{task.name}</span>
+                  <span className="text-[10px] text-muted-foreground uppercase">{task.status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Recent activity */}
         {logs.length > 0 && (

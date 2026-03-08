@@ -21,9 +21,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ProgressCircle } from "@/components/progress-circle"
 import { DotsSixVertical } from "@phosphor-icons/react/dist/ssr"
 import { CommentsTab } from "@/components/tasks/CommentsTab"
-import { updateTask as updateTaskService } from "@/lib/services/tasks"
+import { fetchTaskById, updateTask as updateTaskService } from "@/lib/services/tasks"
 import { fetchAgentLogsByTask, type AgentLog } from "@/lib/services/agents"
 import { fetchSubtasks, createSubtask, updateSubtask } from "@/lib/services/subtasks"
+import { fetchTaskEvents, type TaskEvent } from "@/lib/services/task-events"
 
 type TaskDetailsPanelProps = {
   task: ProjectTask | null
@@ -117,6 +118,10 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
   const [agentLogs, setAgentLogs] = useState<AgentLog[]>([])
   const [agentLogsLoading, setAgentLogsLoading] = useState(false)
 
+  // Real task events timeline from Supabase
+  const [taskEvents, setTaskEvents] = useState<TaskEvent[]>([])
+  const [taskEventsLoading, setTaskEventsLoading] = useState(false)
+
   const logActivity = (action: string, detail: ActivityDetail, taskName?: string) => {
     setActivities((prev) => [
       {
@@ -165,12 +170,32 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
       setEditDueDate(task.dueLabel || "")
       setEditPriority(task.priority || "no-priority")
       setEditAssignee(task.assignee?.name ?? "")
+
+      fetchTaskById(task.id).then((latest) => {
+        if (!latest) return
+        setEditTitle(latest.name)
+        setEditDescription(latest.description || "")
+        setEditStatus(latest.status)
+        setEditStartDate(latest.startDate ? format(new Date(latest.startDate), "yyyy-MM-dd") : "")
+        setEditDueDate(latest.dueLabel || "")
+        setEditPriority(latest.priority || "no-priority")
+        setEditAssignee(latest.assignee?.name ?? "")
+        onTaskUpdated?.(latest)
+      })
       setEditingField(null)
       setActivities([])
       setSubtasks([])
+      setTaskEvents([])
 
-      // Fetch subtasks + agent logs
+      // Fetch subtasks + timeline + debug logs
       fetchSubtasks(task.id).then((items) => setSubtasks(items))
+
+      setTaskEventsLoading(true)
+      fetchTaskEvents(task.id).then((events) => {
+        setTaskEvents(events)
+        setTaskEventsLoading(false)
+      })
+
       setAgentLogsLoading(true)
       fetchAgentLogsByTask(task.id).then((logs) => {
         setAgentLogs(logs)
@@ -697,10 +722,26 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
                     )}
                   </div>
 
+                  {/* Timeline events (persisted from task_events) */}
+                  <div>
+                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Timeline</h4>
+                    {taskEventsLoading ? (
+                      <p className="text-sm text-muted-foreground">Loading timeline...</p>
+                    ) : taskEvents.length === 0 ? (
+                      <p className="text-sm text-muted-foreground">No timeline events linked to this task yet.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {taskEvents.map((event) => (
+                          <TaskEventItem key={event.id} event={event} />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   {/* Session activities (local changes) */}
                   {activities.length > 0 && (
                     <div>
-                      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Session Changes</h4>
+                      <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Session Changes (Local Only)</h4>
                       <div className="space-y-4">
                         {activities.map((activity) => (
                           <ActivityItem key={activity.id} activity={activity} getInitials={getInitials} />
@@ -711,11 +752,11 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
 
                   {/* Agent logs (persisted from Supabase) */}
                   <div>
-                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Agent Activity</h4>
+                    <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Debug / Agent Logs</h4>
                     {agentLogsLoading ? (
-                      <p className="text-sm text-muted-foreground">Loading agent activity...</p>
+                      <p className="text-sm text-muted-foreground">Loading debug logs...</p>
                     ) : agentLogs.length === 0 ? (
-                      <p className="text-sm text-muted-foreground">No agent activity linked to this task yet.</p>
+                      <p className="text-sm text-muted-foreground">No debug logs linked to this task yet.</p>
                     ) : (
                       <div className="space-y-3">
                         {agentLogs.map((log) => (
@@ -725,7 +766,7 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
                     )}
                   </div>
 
-                  {activities.length === 0 && agentLogs.length === 0 && !agentLogsLoading && (
+                  {activities.length === 0 && taskEvents.length === 0 && agentLogs.length === 0 && !agentLogsLoading && !taskEventsLoading && (
                     <p className="text-sm text-muted-foreground">No activities yet.</p>
                   )}
                 </div>
@@ -768,6 +809,28 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
         </div>
       </DialogContent>
     </Dialog>
+  )
+}
+
+function TaskEventItem({ event }: { event: TaskEvent }) {
+  const actorTone = event.actorType === "agent" ? "text-primary" : "text-foreground"
+  return (
+    <div className="flex gap-2.5">
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-semibold">
+        {event.actorType === "agent" ? "🤖" : "👤"}
+      </div>
+      <div className="flex-1 min-w-0 space-y-1">
+        <div className="text-xs leading-relaxed">
+          <span className={cn("font-semibold", actorTone)}>{event.actorName}</span>
+          <span className="text-muted-foreground ml-1">{event.summary}</span>
+        </div>
+        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+          <span>{format(new Date(event.createdAt), "MMM d, yyyy")} at {format(new Date(event.createdAt), "hh:mm a")}</span>
+          <span className="opacity-50">· {event.eventType}</span>
+          {event.runId && <span className="opacity-50">· run {event.runId.slice(0, 8)}</span>}
+        </div>
+      </div>
+    </div>
   )
 }
 

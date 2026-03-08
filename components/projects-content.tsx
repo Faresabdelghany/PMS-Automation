@@ -18,7 +18,8 @@ const ProjectWizard = dynamic(
   () => import("@/components/project-wizard/ProjectWizard").then(m => m.ProjectWizard),
   { ssr: false }
 )
-import { computeFilterCounts, projects } from "@/lib/data/projects"
+import { computeFilterCounts, type Project } from "@/lib/data/projects"
+import { fetchProjects } from "@/lib/services/projects"
 import { DEFAULT_VIEW_OPTIONS, type FilterChip, type ViewOptions } from "@/lib/view-options"
 import { chipsToParams, paramsToChips } from "@/lib/url/filters"
 
@@ -28,6 +29,8 @@ export function ProjectsContent() {
   const searchParams = useSearchParams()
 
   const [viewOptions, setViewOptions] = useState<ViewOptions>(DEFAULT_VIEW_OPTIONS)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [isLoadingProjects, setIsLoadingProjects] = useState(true)
 
   const [filters, setFilters] = useState<FilterChip[]>([])
 
@@ -44,8 +47,10 @@ export function ProjectsContent() {
     setIsWizardOpen(false)
   }
 
-  const handleProjectCreated = () => {
+  const handleProjectCreated = async () => {
     setIsWizardOpen(false)
+    const data = await fetchProjects()
+    setProjects(data)
   }
 
   const removeFilter = (key: string, value: string) => {
@@ -58,6 +63,27 @@ export function ProjectsContent() {
     setFilters(chips)
     replaceUrlFromChips(chips)
   }
+
+  useEffect(() => {
+    let cancelled = false
+    setIsLoadingProjects(true)
+
+    fetchProjects()
+      .then((data) => {
+        if (cancelled) return
+        setProjects(data)
+        setIsLoadingProjects(false)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setProjects([])
+        setIsLoadingProjects(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     const currentParams = searchParams.toString()
@@ -135,9 +161,9 @@ export function ProjectsContent() {
         onViewOptionsChange={setViewOptions}
         onAddProject={openWizard}
       />
-      {viewOptions.viewType === "timeline" ? <ProjectTimeline /> : null}
-      {viewOptions.viewType === "list" ? <ProjectCardsView projects={filteredProjects} onCreateProject={openWizard} /> : null}
-      {viewOptions.viewType === "board" ? <ProjectBoardView projects={filteredProjects} onAddProject={openWizard} /> : null}
+      {viewOptions.viewType === "timeline" ? <ProjectTimeline projects={filteredProjects} loading={isLoadingProjects} /> : null}
+      {viewOptions.viewType === "list" ? <ProjectCardsView projects={filteredProjects} loading={isLoadingProjects} onCreateProject={openWizard} /> : null}
+      {viewOptions.viewType === "board" ? <ProjectBoardView projects={filteredProjects} loading={isLoadingProjects} onAddProject={openWizard} /> : null}
       {isWizardOpen ? (
         <ProjectWizard onClose={closeWizard} onCreate={handleProjectCreated} />
       ) : null}

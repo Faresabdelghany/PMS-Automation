@@ -215,6 +215,7 @@ export function TaskQuickCreateModal({ open, onClose, context, onTaskCreated, ed
         dueLabel: targetDate ? format(targetDate, 'yyyy-MM-dd') : undefined,
         startDate,
         assignee: assignee?.name,
+        taskType: 'user_task',
       }
 
       const created = await createTaskService(input)

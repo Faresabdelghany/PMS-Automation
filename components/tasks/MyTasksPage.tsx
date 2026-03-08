@@ -16,7 +16,7 @@ import type { ProjectTask, WorkstreamTaskStatus } from "@/lib/data/project-detai
 import type { FilterCounts } from "@/lib/data/projects"
 import { DEFAULT_VIEW_OPTIONS, type FilterChip as FilterChipType, type ViewOptions } from "@/lib/view-options"
 import {
-  fetchTasks,
+  fetchUserTasks,
   updateTask as updateTaskService,
   reorderTasks as reorderTasksService,
 } from "@/lib/services/tasks"
@@ -79,6 +79,7 @@ function groupTasksByCategory(tasks: ProjectTask[]): CategoryTaskGroup[] {
 export function MyTasksPage() {
   const [allTasks, setAllTasks] = useState<ProjectTask[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   const [filters, setFilters] = useState<FilterChipType[]>([])
   const [viewOptions, setViewOptions] = useState<ViewOptions>(DEFAULT_VIEW_OPTIONS)
@@ -88,17 +89,45 @@ export function MyTasksPage() {
   const [editingTask, setEditingTask] = useState<ProjectTask | undefined>(undefined)
   const [detailTask, setDetailTask] = useState<ProjectTask | null>(null)
 
-  // Fetch tasks from Supabase on mount
+  // Fetch user-facing tasks from Supabase on mount
   useEffect(() => {
     let cancelled = false
-    setIsLoading(true)
-    fetchTasks().then((tasks) => {
-      if (!cancelled) {
-        setAllTasks(tasks)
-        setIsLoading(false)
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
+
+    const load = async () => {
+      setIsLoading(true)
+      setLoadError(null)
+
+      timeoutId = setTimeout(() => {
+        if (!cancelled) {
+          setLoadError("Tasks are taking longer than expected to load. Please refresh.")
+          setIsLoading(false)
+        }
+      }, 15000)
+
+      try {
+        const tasks = await fetchUserTasks()
+        if (!cancelled) {
+          setAllTasks(tasks)
+          setIsLoading(false)
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setLoadError(err instanceof Error ? err.message : "Failed to load tasks")
+          setAllTasks([])
+          setIsLoading(false)
+        }
+      } finally {
+        if (timeoutId) clearTimeout(timeoutId)
       }
-    })
-    return () => { cancelled = true }
+    }
+
+    load()
+
+    return () => {
+      cancelled = true
+      if (timeoutId) clearTimeout(timeoutId)
+    }
   }, [])
 
   const groups = useMemo(() => groupTasksByCategory(allTasks), [allTasks])
@@ -227,6 +256,28 @@ export function MyTasksPage() {
     )
   }
 
+  if (loadError) {
+    return (
+      <div className="flex flex-1 flex-col min-h-0 bg-background mx-2 my-2 border border-border rounded-lg min-w-0">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-border/70">
+          <div className="flex items-center gap-3">
+            <SidebarTrigger className="h-8 w-8 rounded-lg hover:bg-accent text-muted-foreground" />
+            <p className="text-base font-medium text-foreground">Tasks</p>
+          </div>
+          <Button size="sm" variant="ghost" onClick={() => window.location.reload()}>
+            Retry
+          </Button>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center space-y-2">
+            <p className="text-sm font-medium text-foreground">Couldn’t load tasks</p>
+            <p className="text-sm text-muted-foreground">{loadError}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!visibleGroups.length) {
     return (
       <div className="flex flex-1 flex-col min-h-0 bg-background mx-2 my-2 border border-border rounded-lg min-w-0">
@@ -246,7 +297,7 @@ export function MyTasksPage() {
         </div>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center space-y-3">
-            <p className="text-sm text-muted-foreground">No tasks yet</p>
+            <p className="text-sm text-muted-foreground">No user-facing tasks yet</p>
             <Button size="sm" onClick={() => openCreateTask()}>
               <Plus className="mr-1.5 h-4 w-4" />
               Create your first task

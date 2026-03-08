@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useMemo } from "react"
-import { projects as initialProjects, type Project } from "@/lib/data/projects"
+import type { Project } from "@/lib/data/projects"
 import {
   differenceInCalendarDays,
   addDays,
@@ -33,9 +33,14 @@ const FIXED_TODAY = new Date(2024, 0, 23) // 23 Jan 2024
 
 // projects imported from lib/data
 
-export function ProjectTimeline() {
-  const [projects, setProjects] = useState(initialProjects)
-  const [expandedProjects, setExpandedProjects] = useState<string[]>(initialProjects.map((p) => p.id))
+type ProjectTimelineProps = {
+  projects: Project[]
+  loading?: boolean
+}
+
+export function ProjectTimeline({ projects: inputProjects, loading = false }: ProjectTimelineProps) {
+  const [projects, setProjects] = useState(inputProjects)
+  const [expandedProjects, setExpandedProjects] = useState<string[]>(inputProjects.map((p) => p.id))
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [viewMode, setViewMode] = useState<"Day" | "Week" | "Month" | "Quarter">("Week")
   const [zoom, setZoom] = useState(1)
@@ -70,6 +75,11 @@ export function ProjectTimeline() {
   })
 
   const viewModes = useMemo(() => ["Day", "Week", "Month", "Quarter"] as const, [])
+
+  useEffect(() => {
+    setProjects(inputProjects)
+    setExpandedProjects(inputProjects.map((p) => p.id))
+  }, [inputProjects])
 
   const toggleProject = (projectId: string) => {
     setExpandedProjects((prev) =>
@@ -314,6 +324,10 @@ export function ProjectTimeline() {
     })
     setEditStartDate(item.startDate.toISOString().split('T')[0])
     setEditEndDate(item.endDate.toISOString().split('T')[0])
+  }
+
+  if (loading) {
+    return <div className="p-8 text-sm text-muted-foreground">Loading timeline...</div>
   }
 
   return (

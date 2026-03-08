@@ -4,6 +4,9 @@ import type { ProjectTask, WorkstreamTaskStatus, User } from "@/lib/data/project
 
 // ---------- DB row type ----------
 
+export const TASK_TYPES = ["user_task", "agent_task", "system_task"] as const
+export type TaskType = (typeof TASK_TYPES)[number]
+
 type TodoRow = {
   id: string
   title: string
@@ -24,7 +27,11 @@ type TodoRow = {
   updated_by_agent: string | null
   last_update_summary: string | null
   workflow_stage: string | null
+  task_type: TaskType
+  project_id: string | null
 }
+
+export type TaskTypeFilter = TaskType | "all"
 
 // ---------- Mapping helpers ----------
 
@@ -60,6 +67,11 @@ function userFromName(name: string): User {
   }
 }
 
+function normalizeTaskType(value: string | null | undefined): TaskType {
+  if (value === "agent_task" || value === "system_task") return value
+  return "user_task"
+}
+
 function rowToTask(row: TodoRow): ProjectTask {
   return {
     id: row.id,
@@ -72,8 +84,8 @@ function rowToTask(row: TodoRow): ProjectTask {
     dueLabel: row.due_date ?? undefined,
     startDate: row.start_date ? new Date(row.start_date) : undefined,
     assignee: row.assignee ? userFromName(row.assignee) : undefined,
-    // category-based grouping: use category as both projectId/Name and workstream
-    projectId: row.category ?? "uncategorized",
+    // Prefer linked project_id when available
+    projectId: row.project_id ?? row.category ?? "uncategorized",
     projectName: row.category ?? "Uncategorized",
     workstreamId: row.category ?? "uncategorized",
     workstreamName: row.category ?? "Uncategorized",
@@ -84,24 +96,53 @@ function rowToTask(row: TodoRow): ProjectTask {
     updatedByAgent: row.updated_by_agent ?? undefined,
     lastUpdateSummary: row.last_update_summary ?? undefined,
     workflowStage: row.workflow_stage ?? undefined,
+    taskType: normalizeTaskType(row.task_type),
   }
 }
 
 // ---------- CRUD ----------
 
-export async function fetchTasks(): Promise<ProjectTask[]> {
-  const { data, error } = await supabase
-    .from("todos")
+export async function fetchTasks(taskType: TaskTypeFilter = "user_task"): Promise<ProjectTask[]> {
+  const table = taskType === "user_task" ? "v_user_tasks" : "todos"
+
+  let query = supabase
+    .from(table)
     .select("*")
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
 
+  if (taskType !== "all" && taskType !== "user_task") {
+    query = query.eq("task_type", taskType)
+  }
+
+  const { data, error } = await query
+
   if (error) {
     console.error("fetchTasks error:", error)
-    return []
+    throw new Error(`Failed to load tasks: ${error.message}`)
   }
 
   return (data as TodoRow[]).map(rowToTask)
+}
+
+export async function fetchUserTasks(): Promise<ProjectTask[]> {
+  return fetchTasks("user_task")
+}
+
+export async function fetchInternalTasks(): Promise<ProjectTask[]> {
+  const all = await fetchTasks("all")
+  return all.filter((task) => task.taskType !== "user_task")
+}
+
+export async function fetchTaskById(id: string): Promise<ProjectTask | null> {
+  const { data, error } = await supabase.from("todos").select("*").eq("id", id).single()
+
+  if (error) {
+    console.error("fetchTaskById error:", error)
+    return null
+  }
+
+  return rowToTask(data as TodoRow)
 }
 
 export type CreateTaskInput = {
@@ -114,6 +155,8 @@ export type CreateTaskInput = {
   dueLabel?: string
   startDate?: Date
   assignee?: string
+  taskType?: TaskType
+  projectId?: string
 }
 
 export async function createTask(input: CreateTaskInput): Promise<ProjectTask | null> {
@@ -129,6 +172,8 @@ export async function createTask(input: CreateTaskInput): Promise<ProjectTask | 
       due_date: input.dueLabel || null,
       start_date: input.startDate ? input.startDate.toISOString().split("T")[0] : null,
       assignee: input.assignee || null,
+      task_type: input.taskType ?? "user_task",
+      project_id: input.projectId ?? null,
     })
     .select()
     .single()
@@ -151,6 +196,7 @@ export type UpdateTaskInput = Partial<{
   dueLabel: string
   startDate: Date | null
   assignee: string | null
+  projectId: string | null
 }>
 
 export async function updateTask(id: string, input: UpdateTaskInput): Promise<ProjectTask | null> {
@@ -167,6 +213,7 @@ export async function updateTask(id: string, input: UpdateTaskInput): Promise<Pr
     updates.start_date = input.startDate ? input.startDate.toISOString().split("T")[0] : null
   }
   if (input.assignee !== undefined) updates.assignee = input.assignee
+  if (input.projectId !== undefined) updates.project_id = input.projectId
 
   if (Object.keys(updates).length === 0) return null
 
