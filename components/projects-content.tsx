@@ -47,10 +47,13 @@ export function ProjectsContent() {
     setIsWizardOpen(false)
   }
 
-  const handleProjectCreated = async () => {
+  const handleProjectCreated = async (projectId?: string) => {
     setIsWizardOpen(false)
     const data = await fetchProjects()
     setProjects(data)
+    if (projectId) {
+      router.push(`/projects/${projectId}`)
+    }
   }
 
   const removeFilter = (key: string, value: string) => {

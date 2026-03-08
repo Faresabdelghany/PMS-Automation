@@ -1,3 +1,7 @@
+/**
+ * @deprecated Project details are loaded from Supabase via lib/services/projects.ts.
+ * This file now primarily provides shared types used by UI components.
+ */
 import type { Project as ProjectListItem } from "@/lib/data/projects"
 import { projects } from "@/lib/data/projects"
 import { getAvatarUrl } from "@/lib/assets/avatars"
@@ -120,6 +124,7 @@ export type ProjectTask = WorkstreamTask & {
   updatedByAgent?: string
   lastUpdateSummary?: string
   workflowStage?: string
+  taskType?: string
 }
 
 export type TimeSummary = {
@@ -270,6 +275,7 @@ function baseDetailsFromListItem(p: ProjectListItem): ProjectDetails {
   }
 }
 
+/** @deprecated Use fetchProjectDetailsById from lib/services/projects.ts */
 export function getProjectDetailsById(id: string): ProjectDetails {
   const base = projects.find((p) => p.id === id)
 

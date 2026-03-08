@@ -1,3 +1,7 @@
+/**
+ * @deprecated Runtime project data is now Supabase-backed via lib/services/projects.ts.
+ * This module is retained for shared types/utilities only.
+ */
 export type Project = {
   id: string
   name: string

@@ -27,9 +27,8 @@ import { cn } from "@/lib/utils"
 import { DraggableBar } from "@/components/project-timeline-draggable-bar"
 import { PriorityGlyphIcon } from "@/components/priority-badge"
 
-// Fixed "today" so the demo stays visually consistent over time.
-// This controls the initial viewport and the vertical "today" line.
-const FIXED_TODAY = new Date(2024, 0, 23) // 23 Jan 2024
+// Use real current date for initial viewport and vertical "today" line.
+const TODAY = new Date()
 
 // projects imported from lib/data
 
@@ -55,7 +54,7 @@ export function ProjectTimeline({ projects: inputProjects, loading = false }: Pr
   // Start the visible range one week before the week of FIXED_TODAY
   // so the "today" line is not too close to the name column.
   const [viewStartDate, setViewStartDate] = useState(
-    () => startOfWeek(addWeeks(FIXED_TODAY, -1), { weekStartsOn: 1 }),
+    () => startOfWeek(addWeeks(TODAY, -1), { weekStartsOn: 1 }),
   )
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const nameColRef = useRef<HTMLDivElement>(null)
@@ -89,7 +88,7 @@ export function ProjectTimeline({ projects: inputProjects, loading = false }: Pr
 
   const goToToday = () => {
     shouldAutoScrollToTodayRef.current = true
-    setViewStartDate(startOfWeek(addWeeks(FIXED_TODAY, -1), { weekStartsOn: 1 }))
+    setViewStartDate(startOfWeek(addWeeks(TODAY, -1), { weekStartsOn: 1 }))
   }
 
   const navigateTime = (direction: "prev" | "next") => {
@@ -129,7 +128,7 @@ export function ProjectTimeline({ projects: inputProjects, loading = false }: Pr
 
   // Calculate today line position (based on fixed demo date)
   useEffect(() => {
-    const offset = differenceInCalendarDays(FIXED_TODAY, dates[0])
+    const offset = differenceInCalendarDays(TODAY, dates[0])
     if (offset < 0 || offset >= dates.length) {
       setTodayOffsetDays(null)
       return
@@ -464,7 +463,7 @@ export function ProjectTimeline({ projects: inputProjects, loading = false }: Pr
                             <span
                               className={cn(
                                 "block text-xs whitespace-nowrap leading-none",
-                                isSameDay(day, FIXED_TODAY) ? "text-primary font-semibold" : "text-muted-foreground",
+                                isSameDay(day, TODAY) ? "text-primary font-semibold" : "text-muted-foreground",
                               )}
                             >
                               {label}

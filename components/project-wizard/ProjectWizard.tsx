@@ -15,12 +15,13 @@ import { StepReview } from "./steps/StepReview";
 import { StepQuickCreate } from "./steps/StepQuickCreate";
 import { CaretLeft, CaretRight, X } from "@phosphor-icons/react/dist/ssr";
 import { cn } from "@/lib/utils";
+import { createProject, type CreateProjectInput } from "@/lib/services/projects";
 
 const QUICK_CREATE_STEP = 100;
 
 interface ProjectWizardProps {
   onClose: () => void;
-  onCreate?: () => void;
+  onCreate?: (projectId?: string) => void;
 }
 
 export function ProjectWizard({ onClose, onCreate }: ProjectWizardProps) {
@@ -89,6 +90,18 @@ export function ProjectWizard({ onClose, onCreate }: ProjectWizardProps) {
     onClose();
   };
 
+  const handleCreateProject = async (input: CreateProjectInput) => {
+    try {
+      const created = await createProject(input)
+      onCreate?.(created.id)
+      toast.success("Project created successfully")
+      onClose()
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to create project"
+      toast.error(message)
+    }
+  }
+
   // Define steps for the stepper (excluding Mode selection)
   const steps = [
     "Project intent",
@@ -133,11 +146,7 @@ export function ProjectWizard({ onClose, onCreate }: ProjectWizardProps) {
         ) : step === QUICK_CREATE_STEP ? (
             <StepQuickCreate 
                 onClose={handleClose} 
-                onCreate={() => {
-                  onCreate?.();
-                  toast.success("Project created successfully");
-                  onClose();
-                }} 
+                onCreate={handleCreateProject} 
                 onExpandChange={setIsQuickCreateExpanded}
             />
         ) : (
@@ -221,9 +230,15 @@ export function ProjectWizard({ onClose, onCreate }: ProjectWizardProps) {
                                     <Button variant="outline">Save as template</Button>
                                     <Button
                                       onClick={() => {
-                                        onCreate?.();
-                                        toast.success("Project created successfully");
-                                        onClose();
+                                        handleCreateProject({
+                                          name: data.intent || "Untitled Project",
+                                          description: data.description || "",
+                                          status: "planned",
+                                          priority: "medium",
+                                          progress: 0,
+                                          members: data.ownerId ? [data.ownerId] : [],
+                                          typeLabel: data.mode === "quick" ? "Quick" : "Guided",
+                                        })
                                       }}
                                     >
                                       Create project

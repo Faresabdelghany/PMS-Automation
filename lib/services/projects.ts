@@ -2,6 +2,21 @@ import { supabase } from "@/lib/supabase"
 import type { Project } from "@/lib/data/projects"
 import type { ProjectDetails, ProjectTask, WorkstreamGroup } from "@/lib/data/project-details"
 
+export type CreateProjectInput = {
+  name: string
+  description?: string
+  status?: string
+  priority?: string
+  startDate?: Date
+  endDate?: Date
+  progress?: number
+  tags?: string[]
+  members?: string[]
+  client?: string
+  typeLabel?: string
+  durationLabel?: string
+}
+
 type ProjectRow = {
   id: string
   name: string
@@ -44,6 +59,48 @@ function mapTaskType(tag?: string | null): "bug" | "improvement" | "task" {
   if (t.includes("bug")) return "bug"
   if (t.includes("improvement")) return "improvement"
   return "task"
+}
+
+function normalizeProjectStatus(status?: string): Project["status"] {
+  const s = (status ?? "planned").toLowerCase()
+  if (s === "todo") return "planned"
+  if (s === "in-progress" || s === "in_progress") return "active"
+  if (s === "done") return "completed"
+  if (s === "canceled") return "cancelled"
+  if (s === "backlog" || s === "planned" || s === "active" || s === "cancelled" || s === "completed") return s
+  return "planned"
+}
+
+function normalizeProjectPriority(priority?: string): Project["priority"] {
+  const p = (priority ?? "medium").toLowerCase()
+  if (p === "no-priority") return "medium"
+  if (p === "urgent" || p === "high" || p === "medium" || p === "low") return p
+  return "medium"
+}
+
+export async function createProject(input: CreateProjectInput): Promise<ProjectRow> {
+  const startDate = input.startDate ?? new Date()
+  const endDate = input.endDate ?? startDate
+
+  const payload = {
+    name: input.name.trim(),
+    description: input.description ?? "",
+    status: normalizeProjectStatus(input.status),
+    priority: normalizeProjectPriority(input.priority),
+    start_date: startDate.toISOString().split("T")[0],
+    end_date: endDate.toISOString().split("T")[0],
+    progress: Math.max(0, Math.min(100, input.progress ?? 0)),
+    tags: input.tags ?? [],
+    members: input.members ?? [],
+    client: input.client ?? null,
+    type_label: input.typeLabel ?? null,
+    duration_label: input.durationLabel ?? null,
+  }
+
+  const { data, error } = await supabase.from("projects").insert(payload).select("*").single()
+
+  if (error) throw new Error(`Failed to create project: ${error.message}`)
+  return data as ProjectRow
 }
 
 function mapProject(row: ProjectRow, todos: TodoRow[]): Project {

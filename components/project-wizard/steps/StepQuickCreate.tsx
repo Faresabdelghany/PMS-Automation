@@ -20,6 +20,7 @@ import {
 import { Check, X, CornersOut, Star, CalendarBlank, UserCircle, Spinner, List, Paperclip, Microphone, Rows, ChartBar, Tag } from "@phosphor-icons/react/dist/ssr";
 import { ProjectDescriptionEditor } from "../ProjectDescriptionEditor";
 import { clients, type Client } from "@/lib/data/clients";
+import type { CreateProjectInput } from "@/lib/services/projects";
 
 // --- Mock Data ---
 
@@ -176,7 +177,7 @@ export function DatePicker({
 
 interface StepQuickCreateProps {
   onClose: () => void;
-  onCreate: () => void;
+  onCreate: (input: CreateProjectInput) => void;
   onExpandChange?: (isExpanded: boolean) => void;
 }
 
@@ -186,7 +187,7 @@ export function StepQuickCreate({
   onExpandChange,
 }: StepQuickCreateProps) {
   const [title, setTitle] = useState("");
-  // Description is now managed by Tiptap editor
+  const [description, setDescription] = useState("");
 
   // Data State
   const [assignee, setAssignee] = useState(USERS[0]);
@@ -222,9 +223,24 @@ export function StepQuickCreate({
     return () => clearTimeout(timer);
   }, []);
 
+  const buildPayload = (): CreateProjectInput => ({
+    name: title || "Untitled Project",
+    description,
+    status: status.id,
+    priority: priority?.id,
+    startDate,
+    endDate: targetDate,
+    progress: status.id === "done" ? 100 : 0,
+    tags: selectedTag ? [selectedTag.label] : [],
+    members: assignee?.name ? [assignee.name] : [],
+    client: client?.name,
+    typeLabel: sprintType?.label,
+    durationLabel: targetDate && startDate ? `${Math.max(1, Math.ceil((targetDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)))} days` : undefined,
+  })
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-      onCreate();
+      onCreate(buildPayload());
     }
   };
 
@@ -261,7 +277,7 @@ export function StepQuickCreate({
         </div>
 
         {/* Description Area (Tiptap) */}
-        <ProjectDescriptionEditor onExpandChange={onExpandChange} />
+        <ProjectDescriptionEditor value={description} onChange={setDescription} onExpandChange={onExpandChange} />
 
         {/* Property Buttons - Interactive Dropdowns */}
         <div className="flex flex-wrap gap-2.5 items-start w-full shrink-0">
@@ -546,7 +562,7 @@ export function StepQuickCreate({
           </div>
 
           <button
-            onClick={onCreate}
+            onClick={() => onCreate(buildPayload())}
             className="bg-primary hover:bg-primary/90 flex gap-3 h-10 items-center justify-center px-4 py-2 rounded-lg transition-colors cursor-pointer"
           >
             <span className="font-medium text-primary-foreground text-sm leading-5">
