@@ -34,10 +34,13 @@ import {
   ProjectTaskListView,
   filterTasksByChips,
   computeTaskFilterCounts,
+  deriveTaskMemberOptions,
+  deriveTaskPriorityOptions,
+  deriveTaskTagOptions,
 } from "@/components/tasks/task-helpers"
 import { Button } from "@/components/ui/button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { FilterPopover } from "@/components/filter-popover"
+import { FilterPopover, type StatusOption } from "@/components/filter-popover"
 import { ChipOverflow } from "@/components/chip-overflow"
 import { ViewOptionsPopover } from "@/components/view-options-popover"
 import { TaskQuickCreateModal, type CreateTaskContext } from "@/components/tasks/TaskQuickCreateModal"
@@ -46,6 +49,12 @@ const TaskDetailsPanel = dynamic(
   () => import("@/components/tasks/TaskDetailsPanel").then(m => m.TaskDetailsPanel),
   { ssr: false }
 )
+
+const TASK_STATUS_OPTIONS: StatusOption[] = [
+  { id: "todo", label: "To Do", color: "oklch(0.65 0.15 250)" },
+  { id: "in-progress", label: "In Progress", color: "oklch(0.75 0.15 80)" },
+  { id: "done", label: "Done", color: "oklch(0.72 0.19 150)" },
+]
 
 function groupTasksByCategory(tasks: ProjectTask[]): CategoryTaskGroup[] {
   const map = new Map<string, ProjectTask[]>()
@@ -97,6 +106,10 @@ export function MyTasksPage() {
   const counts = useMemo<FilterCounts>(() => {
     return computeTaskFilterCounts(allTasks)
   }, [allTasks])
+
+  const taskMemberOptions = useMemo(() => deriveTaskMemberOptions(allTasks), [allTasks])
+  const taskPriorityOptions = useMemo(() => deriveTaskPriorityOptions(allTasks), [allTasks])
+  const taskTagOptions = useMemo(() => deriveTaskTagOptions(allTasks), [allTasks])
 
   const visibleGroups = useMemo<CategoryTaskGroup[]>(() => {
     if (!filters.length) return groups
@@ -284,6 +297,10 @@ export function MyTasksPage() {
               onApply={setFilters}
               onClear={() => setFilters([])}
               counts={counts}
+              statusOptions={TASK_STATUS_OPTIONS}
+              memberOptions={taskMemberOptions}
+              priorityOptions={taskPriorityOptions}
+              tagOptions={taskTagOptions}
             />
             <ChipOverflow
               chips={filters}

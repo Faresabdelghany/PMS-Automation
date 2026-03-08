@@ -36,44 +36,149 @@ export function filterTasksByChips(tasks: ProjectTask[], chips: FilterChipType[]
     .filter((chip) => chip.key.toLowerCase().startsWith("member") || chip.key.toLowerCase() === "pic")
     .map((chip) => chip.value.toLowerCase())
 
-  if (!memberValues.length) return tasks
+  const statusValues = chips
+    .filter((chip) => chip.key.toLowerCase() === "status")
+    .map((chip) => chip.value.toLowerCase())
+
+  const priorityValues = chips
+    .filter((chip) => chip.key.toLowerCase() === "priority")
+    .map((chip) => chip.value.toLowerCase())
+
+  const tagValues = chips
+    .filter((chip) => chip.key.toLowerCase() === "tag" || chip.key.toLowerCase() === "tags")
+    .map((chip) => chip.value.toLowerCase())
 
   return tasks.filter((task) => {
-    const name = task.assignee?.name.toLowerCase() ?? ""
-
-    for (const value of memberValues) {
-      if (value === "no member" && !task.assignee) return true
-      if (value === "current member" && task.assignee) return true
-      if (value && name.includes(value)) return true
+    // Status filter
+    if (statusValues.length) {
+      const taskStatus = task.status.toLowerCase()
+      if (!statusValues.some((v) => taskStatus === v)) return false
     }
 
-    return false
+    // Priority filter
+    if (priorityValues.length) {
+      const taskPriority = (task.priority ?? "no-priority").toLowerCase()
+      if (!priorityValues.some((v) => taskPriority === v)) return false
+    }
+
+    // Tag filter
+    if (tagValues.length) {
+      const taskTag = (task.tag ?? "").toLowerCase()
+      if (!taskTag || !tagValues.some((v) => taskTag === v)) return false
+    }
+
+    // Member filter
+    if (memberValues.length) {
+      const name = task.assignee?.name.toLowerCase() ?? ""
+      const memberMatch = memberValues.some((value) => {
+        if (value === "unassigned" && !task.assignee) return true
+        return value && name === value
+      })
+      if (!memberMatch) return false
+    }
+
+    return true
   })
 }
 
 export function computeTaskFilterCounts(tasks: ProjectTask[]): FilterCounts {
   const counts: FilterCounts = {
+    status: {
+      "todo": 0,
+      "in-progress": 0,
+      "done": 0,
+    },
+    priority: {},
+    tags: {},
     members: {
-      "no-member": 0,
-      current: 0,
-      jason: 0,
+      "unassigned": 0,
     },
   }
 
   for (const task of tasks) {
-    if (!task.assignee) {
-      counts.members!["no-member"] = (counts.members!["no-member"] || 0) + 1
-    } else {
-      counts.members!.current = (counts.members!.current || 0) + 1
+    // Status counts
+    const status = task.status
+    counts.status![status] = (counts.status![status] || 0) + 1
 
-      const name = task.assignee.name.toLowerCase()
-      if (name.includes("jason duong")) {
-        counts.members!.jason = (counts.members!.jason || 0) + 1
-      }
+    // Priority counts
+    const priority = task.priority ?? "no-priority"
+    counts.priority![priority] = (counts.priority![priority] || 0) + 1
+
+    // Tag counts
+    if (task.tag) {
+      counts.tags![task.tag] = (counts.tags![task.tag] || 0) + 1
+    }
+
+    // Member counts — dynamically keyed by assignee name
+    if (!task.assignee) {
+      counts.members!["unassigned"] = (counts.members!["unassigned"] || 0) + 1
+    } else {
+      const key = task.assignee.name
+      counts.members![key] = (counts.members![key] || 0) + 1
     }
   }
 
   return counts
+}
+
+/** Derive member options from task data for the filter popover */
+export function deriveTaskMemberOptions(tasks: ProjectTask[]): { id: string; label: string }[] {
+  const members = new Map<string, number>()
+
+  for (const task of tasks) {
+    if (!task.assignee) {
+      // counted as "unassigned"
+    } else {
+      members.set(task.assignee.name, (members.get(task.assignee.name) || 0) + 1)
+    }
+  }
+
+  const options: { id: string; label: string }[] = [
+    { id: "unassigned", label: "Unassigned" },
+  ]
+
+  const sorted = [...members.keys()].sort((a, b) => a.localeCompare(b))
+  for (const name of sorted) {
+    options.push({ id: name, label: name })
+  }
+
+  return options
+}
+
+/** Derive priority options from task data for the filter popover */
+export function deriveTaskPriorityOptions(tasks: ProjectTask[]): { id: string; label: string }[] {
+  const priorities = new Set<string>()
+  for (const task of tasks) {
+    priorities.add(task.priority ?? "no-priority")
+  }
+
+  // Fixed display order
+  const ORDER = ["urgent", "high", "medium", "low", "no-priority"]
+  const LABELS: Record<string, string> = {
+    urgent: "Urgent",
+    high: "High",
+    medium: "Medium",
+    low: "Low",
+    "no-priority": "No Priority",
+  }
+
+  return ORDER
+    .filter((p) => priorities.has(p))
+    .map((p) => ({ id: p, label: LABELS[p] ?? p }))
+}
+
+/** Derive tag options from task data for the filter popover */
+export function deriveTaskTagOptions(tasks: ProjectTask[]): { id: string; label: string }[] {
+  const tags = new Map<string, number>()
+  for (const task of tasks) {
+    if (task.tag) {
+      tags.set(task.tag, (tags.get(task.tag) || 0) + 1)
+    }
+  }
+
+  return [...tags.keys()]
+    .sort((a, b) => a.localeCompare(b))
+    .map((t) => ({ id: t, label: t }))
 }
 
 export function getTaskDescriptionSnippet(task: ProjectTask): string {

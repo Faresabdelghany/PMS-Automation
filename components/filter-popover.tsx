@@ -31,11 +31,19 @@ interface FilterCounts {
   members?: Record<string, number>
 }
 
+export type StatusOption = { id: string; label: string; color: string }
+export type MemberOption = { id: string; label: string; avatar?: string }
+export type SimpleOption = { id: string; label: string }
+
 interface FilterPopoverProps {
   initialChips?: FilterChip[]
   onApply: (chips: FilterChip[]) => void
   onClear: () => void
   counts?: FilterCounts
+  statusOptions?: StatusOption[]
+  memberOptions?: MemberOption[]
+  priorityOptions?: SimpleOption[]
+  tagOptions?: SimpleOption[]
 }
 
 const CATEGORIES = [
@@ -74,7 +82,7 @@ const TAG_OPTIONS = [
   { id: "urgent", label: "urgent" },
 ]
 
-export function FilterPopover({ initialChips, onApply, onClear, counts }: FilterPopoverProps) {
+export function FilterPopover({ initialChips, onApply, onClear, counts, statusOptions, memberOptions, priorityOptions, tagOptions }: FilterPopoverProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState("")
   const [active, setActive] = useState<
@@ -186,7 +194,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
           <div className="p-3">
             {active === "priority" && (
               <div className="grid grid-cols-2 gap-2">
-                {PRIORITY_OPTIONS.map((opt) => (
+                {(priorityOptions ?? PRIORITY_OPTIONS).map((opt) => (
                   <label key={opt.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">
                     <Checkbox
                       checked={temp.priority.has(opt.id)}
@@ -203,7 +211,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
 
             {active === "status" && (
               <div className="grid grid-cols-2 gap-2">
-                {STATUS_OPTIONS.map((opt) => (
+                {(statusOptions ?? STATUS_OPTIONS).map((opt) => (
                   <label key={opt.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">
                     <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: opt.color }} />
                     <Checkbox
@@ -221,17 +229,15 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
 
             {active === "members" && (
               <div className="space-y-2">
-                {MEMBER_OPTIONS.map((m) => (
+                {(memberOptions ?? MEMBER_OPTIONS).map((m) => (
                   <label key={m.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">
                     <Checkbox
                       checked={temp.members.has(m.label)}
                       onCheckedChange={() => setTemp((t) => ({ ...t, members: toggleSet(t.members, m.label) }))}
                     />
                     <span className="text-sm flex-1">{m.label}</span>
-                    {counts?.members?.[m.id] != null ? (
+                    {counts?.members?.[m.id] != null && (
                       <span className="text-xs text-muted-foreground">{counts.members[m.id]}</span>
-                    ) : (
-                      m.hint && <span className="text-xs text-muted-foreground">{m.hint}</span>
                     )}
                   </label>
                 ))}
@@ -249,7 +255,7 @@ export function FilterPopover({ initialChips, onApply, onClear, counts }: Filter
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  {TAG_OPTIONS
+                  {(tagOptions ?? TAG_OPTIONS)
                     .filter((t) => t.label.toLowerCase().includes(tagSearch.toLowerCase()))
                     .map((t) => (
                       <label key={t.id} className="flex items-center gap-2 rounded-lg border p-2 hover:bg-accent cursor-pointer">

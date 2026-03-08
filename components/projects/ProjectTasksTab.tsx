@@ -19,11 +19,11 @@ import type { ProjectDetails, ProjectTask } from "@/lib/data/project-details"
 import { getProjectTasks } from "@/lib/data/project-details"
 import type { FilterCounts } from "@/lib/data/projects"
 import type { FilterChip as FilterChipType } from "@/lib/view-options"
-import { filterTasksByChips, computeTaskFilterCounts } from "@/components/tasks/task-helpers"
+import { filterTasksByChips, computeTaskFilterCounts, deriveTaskMemberOptions, deriveTaskPriorityOptions, deriveTaskTagOptions } from "@/components/tasks/task-helpers"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { FilterPopover } from "@/components/filter-popover"
+import { FilterPopover, type StatusOption } from "@/components/filter-popover"
 import { ChipOverflow } from "@/components/chip-overflow"
 import { TaskRowBase } from "@/components/tasks/TaskRowBase"
 import { cn } from "@/lib/utils"
@@ -32,6 +32,12 @@ type ProjectTasksTabProps = {
   project: ProjectDetails
   onTaskClick?: (task: ProjectTask) => void
 }
+
+const TASK_STATUS_OPTIONS: StatusOption[] = [
+  { id: "todo", label: "To Do", color: "oklch(0.65 0.15 250)" },
+  { id: "in-progress", label: "In Progress", color: "oklch(0.75 0.15 80)" },
+  { id: "done", label: "Done", color: "oklch(0.72 0.19 150)" },
+]
 
 export function ProjectTasksTab({ project, onTaskClick }: ProjectTasksTabProps) {
   const [tasks, setTasks] = useState<ProjectTask[]>(() => getProjectTasks(project))
@@ -42,6 +48,9 @@ export function ProjectTasksTab({ project, onTaskClick }: ProjectTasksTabProps) 
   }, [project])
 
   const counts = useMemo<FilterCounts>(() => computeTaskFilterCounts(tasks), [tasks])
+  const taskMemberOptions = useMemo(() => deriveTaskMemberOptions(tasks), [tasks])
+  const taskPriorityOptions = useMemo(() => deriveTaskPriorityOptions(tasks), [tasks])
+  const taskTagOptions = useMemo(() => deriveTaskTagOptions(tasks), [tasks])
 
   const filteredTasks = useMemo(
     () => filterTasksByChips(tasks, filters),
@@ -90,6 +99,10 @@ export function ProjectTasksTab({ project, onTaskClick }: ProjectTasksTabProps) 
             onApply={setFilters}
             onClear={() => setFilters([])}
             counts={counts}
+            statusOptions={TASK_STATUS_OPTIONS}
+            memberOptions={taskMemberOptions}
+            priorityOptions={taskPriorityOptions}
+            tagOptions={taskTagOptions}
           />
           <ChipOverflow
             chips={filters}
