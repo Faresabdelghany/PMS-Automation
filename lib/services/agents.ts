@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabase"
 import { agents as staticAgents, type Agent } from "@/lib/data/agents"
 
+// ---------- DB row type ----------
+
 type AgentLogRow = {
   id: string
   agent_name: string
@@ -9,33 +11,53 @@ type AgentLogRow = {
   status: string
   created_at: string
   todo_id: string | null
+  run_id: string | null
+  event_type: string | null
+  level: string | null
+  error_message: string | null
+  completed_at: string | null
 }
+
+// ---------- App type ----------
 
 export type AgentLog = {
   id: string
   agentName: string
   taskDescription: string
   modelUsed: string
-  status: "completed" | "failed"
+  status: "completed" | "failed" | "in_progress"
   createdAt: string
   todoId: string | null
+  runId: string | null
+  eventType: string | null
+  level: string | null
+  errorMessage: string | null
+  completedAt: string | null
 }
 
+// ---------- Mapping ----------
+
 function rowToLog(row: AgentLogRow): AgentLog {
+  const status = row.status === "failed" ? "failed" : row.status === "in_progress" ? "in_progress" : "completed"
   return {
     id: row.id,
     agentName: row.agent_name,
     taskDescription: row.task_description,
     modelUsed: row.model_used,
-    status: row.status === "failed" ? "failed" : "completed",
+    status,
     createdAt: row.created_at,
     todoId: row.todo_id,
+    runId: row.run_id,
+    eventType: row.event_type,
+    level: row.level,
+    errorMessage: row.error_message,
+    completedAt: row.completed_at,
   }
 }
 
-/**
- * Fetch agent logs linked to a specific task (todo).
- */
+// ---------- Queries ----------
+
+/** Fetch agent logs linked to a specific task */
 export async function fetchAgentLogsByTask(todoId: string): Promise<AgentLog[]> {
   const { data, error } = await supabase
     .from("agent_logs")
@@ -45,6 +67,38 @@ export async function fetchAgentLogsByTask(todoId: string): Promise<AgentLog[]> 
 
   if (error) {
     console.error("fetchAgentLogsByTask error:", error)
+    return []
+  }
+
+  return (data as AgentLogRow[]).map(rowToLog)
+}
+
+/** Fetch agent logs linked to a specific run */
+export async function fetchAgentLogsByRun(runId: string): Promise<AgentLog[]> {
+  const { data, error } = await supabase
+    .from("agent_logs")
+    .select("*")
+    .eq("run_id", runId)
+    .order("created_at", { ascending: true })
+
+  if (error) {
+    console.error("fetchAgentLogsByRun error:", error)
+    return []
+  }
+
+  return (data as AgentLogRow[]).map(rowToLog)
+}
+
+/** Fetch agent logs filtered by event type */
+export async function fetchAgentLogsByEvent(eventType: string): Promise<AgentLog[]> {
+  const { data, error } = await supabase
+    .from("agent_logs")
+    .select("*")
+    .eq("event_type", eventType)
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error("fetchAgentLogsByEvent error:", error)
     return []
   }
 
@@ -69,7 +123,6 @@ export async function fetchAgentLogs(limit = 50): Promise<AgentLog[]> {
 export async function fetchAgentsWithActivity(): Promise<Agent[]> {
   const logs = await fetchAgentLogs(200)
 
-  // Count tasks per agent and find last active time
   const taskCounts = new Map<string, number>()
   const lastActive = new Map<string, string>()
 

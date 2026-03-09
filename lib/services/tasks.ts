@@ -2,10 +2,16 @@ import { supabase } from "@/lib/supabase"
 import { getAvatarUrl } from "@/lib/assets/avatars"
 import type { ProjectTask, WorkstreamTaskStatus, User } from "@/lib/data/project-details"
 
-// ---------- DB row type ----------
+// ---------- DB row type (full todos table) ----------
 
 export const TASK_TYPES = ["user_task", "agent_task", "system_task"] as const
 export type TaskType = (typeof TASK_TYPES)[number]
+
+export const LIFECYCLE_STATUSES = [
+  "queued", "ready", "in_progress", "dev_done", "in_test",
+  "changes_requested", "tested_passed", "in_review", "done", "failed", "cancelled",
+] as const
+export type LifecycleStatus = (typeof LIFECYCLE_STATUSES)[number]
 
 type TodoRow = {
   id: string
@@ -29,9 +35,45 @@ type TodoRow = {
   workflow_stage: string | null
   task_type: TaskType
   project_id: string | null
+  // New workflow contract columns
+  parent_task_id: string | null
+  order_index: number | null
+  source: string | null
+  acceptance_criteria: string | null
+  lifecycle_status: string | null
+  current_run_id: string | null
+  track_status: string | null
+  claimed_by: string | null
+  claimed_at: string | null
+  source_message_id: string | null
+  source_channel: string | null
+  completed_at: string | null
+  failed_at: string | null
+  archived_at: string | null
+  last_event_at: string | null
 }
 
 export type TaskTypeFilter = TaskType | "all"
+
+// ---------- Extended ProjectTask with workflow fields ----------
+
+export type ExtendedProjectTask = ProjectTask & {
+  parentTaskId?: string
+  orderIndex?: number
+  source?: string
+  acceptanceCriteria?: string
+  lifecycleStatus?: LifecycleStatus
+  currentRunId?: string
+  trackStatus?: string
+  claimedBy?: string
+  claimedAt?: string
+  sourceMessageId?: string
+  sourceChannel?: string
+  completedAt?: string
+  failedAt?: string
+  archivedAt?: string
+  lastEventAt?: string
+}
 
 // ---------- Mapping helpers ----------
 
@@ -45,6 +87,30 @@ const STATUS_TO_DB: Record<string, string> = {
   todo: "todo",
   "in-progress": "in_progress",
   done: "done",
+}
+
+/** Map lifecycle_status to a user-friendly display status */
+export function lifecycleToDisplay(lifecycle: string | null): WorkstreamTaskStatus {
+  if (!lifecycle) return "todo"
+  switch (lifecycle) {
+    case "queued":
+    case "ready":
+    case "changes_requested":
+      return "todo"
+    case "in_progress":
+    case "dev_done":
+    case "in_test":
+    case "in_review":
+    case "tested_passed":
+      return "in-progress"
+    case "done":
+      return "done"
+    case "failed":
+    case "cancelled":
+      return "done" // terminal states show as done in simple view
+    default:
+      return "todo"
+  }
 }
 
 function priorityToApp(dbPriority: string | null): ProjectTask["priority"] {
@@ -72,11 +138,16 @@ function normalizeTaskType(value: string | null | undefined): TaskType {
   return "user_task"
 }
 
-function rowToTask(row: TodoRow): ProjectTask {
+function rowToTask(row: TodoRow): ExtendedProjectTask {
+  // Use lifecycle_status as primary status when available (child tasks)
+  const displayStatus = row.lifecycle_status
+    ? lifecycleToDisplay(row.lifecycle_status)
+    : (STATUS_TO_APP[row.status] ?? "todo")
+
   return {
     id: row.id,
     name: row.title,
-    status: STATUS_TO_APP[row.status] ?? "todo",
+    status: displayStatus,
     priority: priorityToApp(row.priority),
     category: row.category ?? undefined,
     tag: row.tag ?? undefined,
@@ -84,7 +155,6 @@ function rowToTask(row: TodoRow): ProjectTask {
     dueLabel: row.due_date ?? undefined,
     startDate: row.start_date ? new Date(row.start_date) : undefined,
     assignee: row.assignee ? userFromName(row.assignee) : undefined,
-    // Prefer linked project_id when available
     projectId: row.project_id ?? row.category ?? "uncategorized",
     projectName: row.category ?? "Uncategorized",
     workstreamId: row.category ?? "uncategorized",
@@ -97,12 +167,28 @@ function rowToTask(row: TodoRow): ProjectTask {
     lastUpdateSummary: row.last_update_summary ?? undefined,
     workflowStage: row.workflow_stage ?? undefined,
     taskType: normalizeTaskType(row.task_type),
+    // New workflow fields
+    parentTaskId: row.parent_task_id ?? undefined,
+    orderIndex: row.order_index ?? undefined,
+    source: row.source ?? undefined,
+    acceptanceCriteria: row.acceptance_criteria ?? undefined,
+    lifecycleStatus: (row.lifecycle_status as LifecycleStatus) ?? undefined,
+    currentRunId: row.current_run_id ?? undefined,
+    trackStatus: row.track_status ?? undefined,
+    claimedBy: row.claimed_by ?? undefined,
+    claimedAt: row.claimed_at ?? undefined,
+    sourceMessageId: row.source_message_id ?? undefined,
+    sourceChannel: row.source_channel ?? undefined,
+    completedAt: row.completed_at ?? undefined,
+    failedAt: row.failed_at ?? undefined,
+    archivedAt: row.archived_at ?? undefined,
+    lastEventAt: row.last_event_at ?? undefined,
   }
 }
 
 // ---------- CRUD ----------
 
-export async function fetchTasks(taskType: TaskTypeFilter = "user_task"): Promise<ProjectTask[]> {
+export async function fetchTasks(taskType: TaskTypeFilter = "user_task"): Promise<ExtendedProjectTask[]> {
   const table = taskType === "user_task" ? "v_user_tasks" : "todos"
 
   let query = supabase
@@ -125,16 +211,16 @@ export async function fetchTasks(taskType: TaskTypeFilter = "user_task"): Promis
   return (data as TodoRow[]).map(rowToTask)
 }
 
-export async function fetchUserTasks(): Promise<ProjectTask[]> {
+export async function fetchUserTasks(): Promise<ExtendedProjectTask[]> {
   return fetchTasks("user_task")
 }
 
-export async function fetchInternalTasks(): Promise<ProjectTask[]> {
+export async function fetchInternalTasks(): Promise<ExtendedProjectTask[]> {
   const all = await fetchTasks("all")
   return all.filter((task) => task.taskType !== "user_task")
 }
 
-export async function fetchTaskById(id: string): Promise<ProjectTask | null> {
+export async function fetchTaskById(id: string): Promise<ExtendedProjectTask | null> {
   const { data, error } = await supabase.from("todos").select("*").eq("id", id).single()
 
   if (error) {
@@ -143,6 +229,55 @@ export async function fetchTaskById(id: string): Promise<ProjectTask | null> {
   }
 
   return rowToTask(data as TodoRow)
+}
+
+/** Fetch ordered child tasks for a parent task (SpecKit decomposition) */
+export async function fetchChildTasks(parentTaskId: string): Promise<ExtendedProjectTask[]> {
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("parent_task_id", parentTaskId)
+    .order("order_index", { ascending: true })
+
+  if (error) {
+    console.error("fetchChildTasks error:", error)
+    return []
+  }
+
+  return (data as TodoRow[]).map(rowToTask)
+}
+
+/** Fetch all tasks linked to a project */
+export async function fetchTasksByProject(projectId: string): Promise<ExtendedProjectTask[]> {
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("project_id", projectId)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error("fetchTasksByProject error:", error)
+    return []
+  }
+
+  return (data as TodoRow[]).map(rowToTask)
+}
+
+/** Fetch tasks by lifecycle_status (workflow state) */
+export async function fetchTasksByLifecycleStatus(status: LifecycleStatus): Promise<ExtendedProjectTask[]> {
+  const { data, error } = await supabase
+    .from("todos")
+    .select("*")
+    .eq("lifecycle_status", status)
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    console.error("fetchTasksByLifecycleStatus error:", error)
+    return []
+  }
+
+  return (data as TodoRow[]).map(rowToTask)
 }
 
 export type CreateTaskInput = {
@@ -157,24 +292,38 @@ export type CreateTaskInput = {
   assignee?: string
   taskType?: TaskType
   projectId?: string
+  // New workflow fields
+  parentTaskId?: string
+  orderIndex?: number
+  source?: string
+  acceptanceCriteria?: string
+  lifecycleStatus?: LifecycleStatus
 }
 
-export async function createTask(input: CreateTaskInput): Promise<ProjectTask | null> {
+export async function createTask(input: CreateTaskInput): Promise<ExtendedProjectTask | null> {
+  const payload: Record<string, unknown> = {
+    title: input.name,
+    status: STATUS_TO_DB[input.status] ?? "todo",
+    priority: priorityToDb(input.priority),
+    category: input.category || null,
+    tag: input.tag || null,
+    description: input.description || null,
+    due_date: input.dueLabel || null,
+    start_date: input.startDate ? input.startDate.toISOString().split("T")[0] : null,
+    assignee: input.assignee || null,
+    task_type: input.taskType ?? "user_task",
+    project_id: input.projectId ?? null,
+  }
+
+  if (input.parentTaskId) payload.parent_task_id = input.parentTaskId
+  if (input.orderIndex !== undefined) payload.order_index = input.orderIndex
+  if (input.source) payload.source = input.source
+  if (input.acceptanceCriteria) payload.acceptance_criteria = input.acceptanceCriteria
+  if (input.lifecycleStatus) payload.lifecycle_status = input.lifecycleStatus
+
   const { data, error } = await supabase
     .from("todos")
-    .insert({
-      title: input.name,
-      status: STATUS_TO_DB[input.status] ?? "todo",
-      priority: priorityToDb(input.priority),
-      category: input.category || null,
-      tag: input.tag || null,
-      description: input.description || null,
-      due_date: input.dueLabel || null,
-      start_date: input.startDate ? input.startDate.toISOString().split("T")[0] : null,
-      assignee: input.assignee || null,
-      task_type: input.taskType ?? "user_task",
-      project_id: input.projectId ?? null,
-    })
+    .insert(payload)
     .select()
     .single()
 
@@ -197,9 +346,13 @@ export type UpdateTaskInput = Partial<{
   startDate: Date | null
   assignee: string | null
   projectId: string | null
+  // New workflow fields
+  lifecycleStatus: LifecycleStatus
+  acceptanceCriteria: string
+  parentTaskId: string | null
 }>
 
-export async function updateTask(id: string, input: UpdateTaskInput): Promise<ProjectTask | null> {
+export async function updateTask(id: string, input: UpdateTaskInput): Promise<ExtendedProjectTask | null> {
   const updates: Record<string, unknown> = {}
 
   if (input.name !== undefined) updates.title = input.name
@@ -214,6 +367,9 @@ export async function updateTask(id: string, input: UpdateTaskInput): Promise<Pr
   }
   if (input.assignee !== undefined) updates.assignee = input.assignee
   if (input.projectId !== undefined) updates.project_id = input.projectId
+  if (input.lifecycleStatus !== undefined) updates.lifecycle_status = input.lifecycleStatus
+  if (input.acceptanceCriteria !== undefined) updates.acceptance_criteria = input.acceptanceCriteria
+  if (input.parentTaskId !== undefined) updates.parent_task_id = input.parentTaskId
 
   if (Object.keys(updates).length === 0) return null
 
@@ -246,7 +402,6 @@ export async function deleteTask(id: string): Promise<boolean> {
 }
 
 export async function reorderTasks(orderedIds: string[]): Promise<boolean> {
-  // Batch update sort_order for each task
   const updates = orderedIds.map((id, index) =>
     supabase.from("todos").update({ sort_order: index, updated_at: new Date().toISOString() }).eq("id", id),
   )

@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import dynamic from "next/dynamic"
 import { Plus, Sparkle } from "@phosphor-icons/react/dist/ssr"
 import {
@@ -77,6 +78,7 @@ function groupTasksByCategory(tasks: ProjectTask[]): CategoryTaskGroup[] {
 }
 
 export function MyTasksPage() {
+  const searchParams = useSearchParams()
   const [allTasks, setAllTasks] = useState<ProjectTask[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
@@ -129,6 +131,15 @@ export function MyTasksPage() {
       if (timeoutId) clearTimeout(timeoutId)
     }
   }, [])
+
+  useEffect(() => {
+    const taskId = searchParams.get("taskId")
+    if (!taskId) return
+    const task = allTasks.find((t) => t.id === taskId)
+    if (task) {
+      setDetailTask(task)
+    }
+  }, [searchParams, allTasks])
 
   const groups = useMemo(() => groupTasksByCategory(allTasks), [allTasks])
 

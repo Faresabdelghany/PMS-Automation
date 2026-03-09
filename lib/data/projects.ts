@@ -28,6 +28,11 @@ export type Project = {
   }>
 }
 
+/**
+ * @deprecated Use fetchProjects() from lib/services/projects.ts instead.
+ * This empty array is retained only for backward compatibility with imports
+ * that reference `projects` directly. It will always be empty.
+ */
 export const projects: Project[] = []
 
 export type FilterCounts = {
