@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Task 1: Build schema",
+    "acceptance_criteria": "Table exists",
+    "description": "Create table"
+  },
+  {
+    "title": "Task 2: Implement API",
+    "acceptance_criteria": "Returns 201",
+    "description": "Create endpoint"
+  }
+]

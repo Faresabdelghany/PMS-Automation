@@ -1,0 +1,26 @@
+{
+  "task_id": "todo-9677ac72-push-pms-github",
+  "from": "ziko",
+  "to": "Product Analyst",
+  "context": {
+    "feature": "Push PMS-Automation local changes to GitHub.",
+    "prd_path": "N/A",
+    "prior_decisions": [
+      "External actions should be explicitly approved before execution."
+    ],
+    "do_not_revisit": [
+      "Do not push any secrets or env files.",
+      "Do not force push or rewrite history."
+    ],
+    "current_state": "Task claimed via status sweep. No implementation started.",
+    "next_step": "Create a short execution plan for safe push: preflight checks, branch strategy, commit message format, and approval gate."
+  },
+  "outputs_expected": [
+    "spec.md, plan.md, tasks.md, analysis.md",
+    "report with exact safe push steps"
+  ],
+  "escalate_if": [
+    "Repository has untrusted files or secrets risk.",
+    "No clear remote/branch target."
+  ]
+}

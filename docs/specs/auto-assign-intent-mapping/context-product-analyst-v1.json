@@ -1,0 +1,26 @@
+{
+  "task_id": "todo-17433134-auto-assign-intent-mapping",
+  "from": "ziko",
+  "to": "Product Analyst",
+  "context": {
+    "feature": "Auto-assign intent mapping + pipeline automation (manual assign overridden).",
+    "prd_path": "N/A",
+    "prior_decisions": [
+      "Automation work must follow PA → Dev → Testing → Review pipeline.",
+      "Manual assignment should not be overridden without explicit rules."
+    ],
+    "do_not_revisit": [
+      "Do not implement code changes before spec is complete."
+    ],
+    "current_state": "Task claimed via heartbeat. No work started.",
+    "next_step": "Run SpecKit to define requirements, success metrics, and a plan for intent-based auto-assign and pipeline automation behavior; clarify manual override rules."
+  },
+  "outputs_expected": [
+    "spec.md, plan.md, tasks.md, analysis.md",
+    "Report summary file"
+  ],
+  "escalate_if": [
+    "Missing business context for assignment rules.",
+    "Scope suggests >2 days of work."
+  ]
+}

@@ -1,0 +1,1709 @@
+[realtime] Task watcher started. Waiting for events...
+[realtime] Subscription status: SUBSCRIBED
+[realtime] ✅ Listening for todo changes...
+[realtime] Still listening... 2026-03-07T03:40:40.148Z
+[realtime] INSERT detected: "RUN_STATUS_SWEEP 05:40 cron check"
+[realtime] Still listening... 2026-03-07T03:45:40.149Z
+[realtime] Still listening... 2026-03-07T03:50:40.150Z
+[realtime] Subscription status: CHANNEL_ERROR
+[realtime] Subscription status: CHANNEL_ERROR
+[realtime] Subscription status: SUBSCRIBED
+[realtime] ✅ Listening for todo changes...
+[realtime] Subscription status: CHANNEL_ERROR
+[realtime] Subscription status: SUBSCRIBED
+[realtime] ✅ Listening for todo changes...
+[realtime] Still listening... 2026-03-07T03:55:40.154Z
+[realtime] Still listening... 2026-03-07T04:00:40.154Z
+[realtime] INSERT detected: "Daily self-improve 2026-03-07"
+[realtime] Waking Ziko: Daily self-improve 2026-03-07
+[realtime] UPDATE detected — now dispatchable: "Daily self-improve 2026-03-07"
+[realtime] Waking Ziko: Daily self-improve 2026-03-07
+[realtime] auto-dispatch: NO_NEW_TASKS
+[realtime] auto-dispatch: {"id":"feb749a9-80b3-4256-81df-68d48d02e261","title":"Daily self-improve 2026-03-07","category":"Work","priority":"Medium","due_date":null,"status":"in_progress","track_status":"On Track","created_at":"2026-03-07T04:01:43.98298+00:00","description":"","start_date":null,"tag":"","assignee":"Ziko","sort_order":0,"updated_at":"2026-03-07T04:01:43.98298+00:00","claimed_by":"Ziko","claimed_at":"2026-03-07T04:01:45+00:00","source_message_id":null,"source_channel":null,"source_ts":null,"workflow_stage":"SPECIALIST","created_by_user":null,"created_by_agent":"Ziko","updated_by_user":null,"updated_by_agent":null,"last_update_summary":null,"current_run_id":"6255e8d7-882e-485b-b0e3-366b435057be","last_event_at":"2026-03-07T04:01:45+00:00","failed_at":null,"completed_at":null,"archived_at":null}
+
+Event: task_claimed for feb749a9-80b3-4256-81df-68d48d02e261
+CLAIMED: Daily self-improve 2026-03-07 [assigned to Ziko]
+TASKS_FOUND:1
+{"id":"feb749a9-80b3-4256-81df-68d48d02e261","title":"Daily self-improve 2026-03-07","category":"Work","priority":"Medium","assignee":"Ziko","description":"","tag":""}
+[realtime] Still listening... 2026-03-07T04:05:40.167Z
+[realtime] INSERT detected: "RUN_STATUS_SWEEP 06:08"
+[realtime] Still listening... 2026-03-07T04:10:40.181Z
+[realtime] Still listening... 2026-03-07T04:15:40.181Z
+[realtime] Still listening... 2026-03-07T04:20:40.181Z
+[realtime] Still listening... 2026-03-07T04:25:40.181Z
+[realtime] Still listening... 2026-03-07T04:30:40.196Z
+[realtime] Still listening... 2026-03-07T04:35:40.212Z
+[realtime] Still listening... 2026-03-07T04:40:40.212Z
+[realtime] Still listening... 2026-03-07T04:45:40.223Z
+[realtime] Still listening... 2026-03-07T04:50:40.228Z
+[realtime] Still listening... 2026-03-07T04:55:40.244Z
+[realtime] Still listening... 2026-03-07T05:00:40.258Z
+[realtime] Still listening... 2026-03-07T05:05:40.260Z
+[realtime] Still listening... 2026-03-07T05:10:40.275Z
+[realtime] Still listening... 2026-03-07T05:15:40.290Z
+[realtime] Still listening... 2026-03-07T05:20:40.290Z
+[realtime] Still listening... 2026-03-07T05:25:40.305Z
+[realtime] Still listening... 2026-03-07T05:30:40.306Z
+[realtime] Still listening... 2026-03-07T05:35:40.321Z
+[realtime] Still listening... 2026-03-07T05:40:40.321Z
+[realtime] Still listening... 2026-03-07T05:45:40.321Z
+[realtime] Still listening... 2026-03-07T05:50:40.321Z
+[realtime] Still listening... 2026-03-07T05:55:40.321Z
+[realtime] Still listening... 2026-03-07T06:00:40.321Z
+[realtime] Still listening... 2026-03-07T06:05:40.321Z
+[realtime] Still listening... 2026-03-07T06:10:40.332Z
+[realtime] Still listening... 2026-03-07T06:15:40.337Z
+[realtime] Still listening... 2026-03-07T06:20:40.353Z
+[realtime] Still listening... 2026-03-07T06:25:40.368Z
+[realtime] Still listening... 2026-03-07T06:30:40.368Z
+[realtime] Still listening... 2026-03-07T06:35:40.368Z
+[realtime] Still listening... 2026-03-07T06:40:40.379Z
+[realtime] Still listening... 2026-03-07T06:45:40.384Z
+[realtime] Still listening... 2026-03-07T06:50:40.398Z
+[realtime] Still listening... 2026-03-07T06:55:40.399Z
+[realtime] Still listening... 2026-03-07T07:00:40.399Z
+[realtime] Still listening... 2026-03-07T07:05:40.399Z
+[realtime] Still listening... 2026-03-07T07:10:40.399Z
+[realtime] Still listening... 2026-03-07T07:15:40.413Z
+[realtime] Still listening... 2026-03-07T07:20:40.415Z
+[realtime] Still listening... 2026-03-07T07:25:40.415Z
+[realtime] Still listening... 2026-03-07T07:30:40.430Z
+[realtime] Still listening... 2026-03-07T07:35:40.446Z
+[realtime] Still listening... 2026-03-07T07:40:40.448Z
+[realtime] Still listening... 2026-03-07T07:45:40.458Z
+[realtime] Still listening... 2026-03-07T07:50:40.470Z
+[realtime] Still listening... 2026-03-07T07:55:40.477Z
+[realtime] Still listening... 2026-03-07T08:00:40.493Z
+[realtime] Still listening... 2026-03-07T08:05:40.506Z
+[realtime] Still listening... 2026-03-07T08:10:40.509Z
+[realtime] Still listening... 2026-03-07T08:15:40.519Z
+[realtime] Still listening... 2026-03-07T08:20:40.524Z
+[realtime] Still listening... 2026-03-07T08:25:40.524Z
+[realtime] Still listening... 2026-03-07T08:30:40.525Z
+[realtime] Still listening... 2026-03-07T08:35:40.528Z
+[realtime] Still listening... 2026-03-07T08:40:40.540Z
+[realtime] Still listening... 2026-03-07T08:45:40.547Z
+[realtime] Still listening... 2026-03-07T08:50:40.571Z
+[realtime] Still listening... 2026-03-07T08:55:40.572Z
+[realtime] Still listening... 2026-03-07T09:00:40.587Z
+[realtime] Still listening... 2026-03-07T09:05:40.601Z
+[realtime] Still listening... 2026-03-07T09:10:40.602Z
+[realtime] Still listening... 2026-03-07T09:15:40.602Z
+[realtime] Still listening... 2026-03-07T09:20:40.613Z
+[realtime] Still listening... 2026-03-07T09:25:40.634Z
+[realtime] Still listening... 2026-03-07T09:30:40.648Z
+[realtime] Still listening... 2026-03-07T09:35:40.657Z
+[realtime] Subscription status: CHANNEL_ERROR
+[realtime] Subscription status: CHANNEL_ERROR
+[realtime] Still listening... 2026-03-07T09:40:40.666Z
+[realtime] Subscription status: CLOSED
+[realtime] Subscription status: TIMED_OUT
+[realtime] Still listening... 2026-03-07T09:45:40.681Z
+[realtime] Still listening... 2026-03-07T09:50:40.692Z
+[realtime] Still listening... 2026-03-07T09:55:40.705Z
+[realtime] Still listening... 2026-03-07T10:00:40.719Z
+[realtime] Still listening... 2026-03-07T10:05:40.719Z
+[realtime] Still listening... 2026-03-07T10:10:40.725Z
+[realtime] Still listening... 2026-03-07T10:15:40.732Z
+[realtime] Still listening... 2026-03-07T10:20:40.739Z
+[realtime] Still listening... 2026-03-07T10:25:40.753Z
+[realtime] Still listening... 2026-03-07T10:30:40.752Z
+[realtime] Still listening... 2026-03-07T10:35:40.759Z
+[realtime] Still listening... 2026-03-07T10:40:40.769Z
+[realtime] Still listening... 2026-03-07T10:45:40.775Z
+[realtime] Still listening... 2026-03-07T10:50:40.775Z
+[realtime] Still listening... 2026-03-07T10:55:40.787Z
+[realtime] Still listening... 2026-03-07T11:00:40.790Z
+[realtime] Still listening... 2026-03-07T11:05:40.804Z
+[realtime] Still listening... 2026-03-07T11:10:40.806Z
+[realtime] Still listening... 2026-03-07T11:15:40.800Z
+[realtime] Still listening... 2026-03-07T11:20:40.806Z
+[realtime] Still listening... 2026-03-07T11:25:40.821Z
+[realtime] Still listening... 2026-03-07T11:30:40.821Z
+[realtime] Still listening... 2026-03-07T11:35:40.835Z
+[realtime] Still listening... 2026-03-07T11:40:40.836Z
+[realtime] Still listening... 2026-03-07T11:45:40.837Z
+[realtime] Still listening... 2026-03-07T11:50:40.852Z
+[realtime] Still listening... 2026-03-07T11:55:40.868Z
+[realtime] Still listening... 2026-03-07T12:00:40.882Z
+[realtime] Still listening... 2026-03-07T12:05:40.883Z
+[realtime] Still listening... 2026-03-07T12:10:40.884Z
+[realtime] Still listening... 2026-03-07T12:15:40.899Z
+[realtime] Still listening... 2026-03-07T12:20:40.899Z
+[realtime] Still listening... 2026-03-07T12:25:40.914Z
+[realtime] Still listening... 2026-03-07T12:30:40.915Z
+[realtime] Still listening... 2026-03-07T12:35:40.925Z
+[realtime] Still listening... 2026-03-07T12:40:40.937Z
+[realtime] Still listening... 2026-03-07T12:45:40.947Z
+[realtime] Still listening... 2026-03-07T12:50:40.947Z
+[realtime] Still listening... 2026-03-07T12:55:40.962Z
+[realtime] Still listening... 2026-03-07T13:00:40.975Z
+[realtime] Still listening... 2026-03-07T13:05:40.976Z
+[realtime] Still listening... 2026-03-07T13:10:40.983Z
+[realtime] Still listening... 2026-03-07T13:15:41.009Z
+[realtime] Still listening... 2026-03-07T13:20:41.009Z
+[realtime] Still listening... 2026-03-07T13:25:41.020Z
+[realtime] Still listening... 2026-03-07T13:30:41.031Z
+[realtime] Still listening... 2026-03-07T13:35:41.040Z
+[realtime] Still listening... 2026-03-07T13:40:41.040Z
+[realtime] Still listening... 2026-03-07T13:45:41.055Z
+[realtime] Still listening... 2026-03-07T13:50:41.063Z
+[realtime] Still listening... 2026-03-07T13:55:41.071Z
+[realtime] Still listening... 2026-03-07T14:00:41.073Z
+[realtime] Still listening... 2026-03-07T14:05:41.101Z
+[realtime] Still listening... 2026-03-07T14:10:41.112Z
+[realtime] Still listening... 2026-03-07T14:15:41.130Z
+[realtime] Still listening... 2026-03-07T14:20:41.143Z
+[realtime] Still listening... 2026-03-07T14:25:41.153Z
+[realtime] Still listening... 2026-03-07T14:30:41.179Z
+[realtime] Still listening... 2026-03-07T14:35:41.183Z
+[realtime] Still listening... 2026-03-07T14:40:41.193Z
+[realtime] Still listening... 2026-03-07T14:45:41.207Z
+[realtime] Still listening... 2026-03-07T14:50:41.214Z
+[realtime] Still listening... 2026-03-07T14:55:41.229Z
+[realtime] Still listening... 2026-03-07T15:00:41.234Z
+[realtime] Still listening... 2026-03-07T15:05:41.245Z
+[realtime] Still listening... 2026-03-07T15:10:41.250Z
+[realtime] Still listening... 2026-03-07T15:15:41.259Z
+[realtime] Still listening... 2026-03-07T15:20:41.273Z
+[realtime] Still listening... 2026-03-07T15:25:41.274Z
+[realtime] Still listening... 2026-03-07T15:30:41.275Z
+[realtime] Still listening... 2026-03-07T15:35:41.275Z
+[realtime] Still listening... 2026-03-07T15:40:41.275Z
+[realtime] Still listening... 2026-03-07T15:45:41.275Z
+[realtime] Still listening... 2026-03-07T15:50:41.275Z
+[realtime] Still listening... 2026-03-07T15:55:41.290Z
+[realtime] Still listening... 2026-03-07T16:00:41.290Z
+[realtime] Still listening... 2026-03-07T16:05:41.305Z
+[realtime] Still listening... 2026-03-07T16:10:41.306Z
+[realtime] Still listening... 2026-03-07T16:15:41.320Z
+[realtime] Still listening... 2026-03-07T16:20:41.321Z
+[realtime] Still listening... 2026-03-07T16:25:41.321Z
+[realtime] Still listening... 2026-03-07T16:30:41.329Z
+[realtime] Still listening... 2026-03-07T16:35:41.334Z
+[realtime] Still listening... 2026-03-07T16:40:41.337Z
+[realtime] Still listening... 2026-03-07T16:45:41.345Z
+[realtime] Still listening... 2026-03-07T16:50:41.351Z
+[realtime] Still listening... 2026-03-07T16:55:41.353Z
+[realtime] Still listening... 2026-03-07T17:00:41.367Z
+[realtime] Still listening... 2026-03-07T17:05:41.382Z
+[realtime] Still listening... 2026-03-07T17:10:41.384Z
+[realtime] Still listening... 2026-03-07T17:15:41.398Z
+[realtime] Still listening... 2026-03-07T17:20:41.403Z
+[realtime] Still listening... 2026-03-07T17:25:41.415Z
+[realtime] Still listening... 2026-03-07T17:30:41.430Z
+[realtime] Still listening... 2026-03-07T17:35:41.431Z
+[realtime] Still listening... 2026-03-07T17:40:41.431Z
+[realtime] Still listening... 2026-03-07T17:45:41.446Z
+[realtime] Still listening... 2026-03-07T17:50:41.446Z
+[realtime] Still listening... 2026-03-07T17:55:41.446Z
+[realtime] Still listening... 2026-03-07T18:00:41.451Z
+[realtime] Still listening... 2026-03-07T18:05:41.461Z
+[realtime] Still listening... 2026-03-07T18:10:41.465Z
+[realtime] Still listening... 2026-03-07T18:15:41.472Z
+[realtime] Still listening... 2026-03-07T18:20:41.472Z
+[realtime] Still listening... 2026-03-07T18:25:41.482Z
+[realtime] Still listening... 2026-03-07T18:30:41.489Z
+[realtime] Still listening... 2026-03-07T18:35:41.491Z
+[realtime] Still listening... 2026-03-07T18:40:41.497Z
+[realtime] Still listening... 2026-03-07T18:45:41.512Z
+[realtime] Still listening... 2026-03-07T18:50:41.519Z
+[realtime] Still listening... 2026-03-07T18:55:41.525Z
+[realtime] Still listening... 2026-03-07T19:00:41.538Z
+[realtime] Still listening... 2026-03-07T19:05:41.538Z
+[realtime] Still listening... 2026-03-07T19:10:41.546Z
+[realtime] Still listening... 2026-03-07T19:15:41.554Z
+[realtime] Still listening... 2026-03-07T19:20:41.569Z
+[realtime] Still listening... 2026-03-07T19:25:41.581Z
+[realtime] Still listening... 2026-03-07T19:30:41.586Z
+[realtime] Still listening... 2026-03-07T19:35:41.591Z
+[realtime] Still listening... 2026-03-07T19:40:41.599Z
+[realtime] Still listening... 2026-03-07T19:45:41.612Z
+[realtime] Still listening... 2026-03-07T19:50:41.614Z
+[realtime] Still listening... 2026-03-07T19:55:41.626Z
+[realtime] Still listening... 2026-03-07T20:00:41.638Z
+[realtime] Still listening... 2026-03-07T20:05:41.638Z
+[realtime] Still listening... 2026-03-07T20:10:41.644Z
+[realtime] Still listening... 2026-03-07T20:15:41.651Z
+[realtime] Still listening... 2026-03-07T20:20:41.659Z
+[realtime] Still listening... 2026-03-07T20:25:41.662Z
+[realtime] Still listening... 2026-03-07T20:30:41.662Z
+[realtime] Still listening... 2026-03-07T20:35:41.676Z
+[realtime] Still listening... 2026-03-07T20:40:41.685Z
+[realtime] Still listening... 2026-03-07T20:45:41.700Z
+[realtime] Still listening... 2026-03-07T20:50:41.709Z
+[realtime] Still listening... 2026-03-07T20:55:41.723Z
+[realtime] Still listening... 2026-03-07T21:00:41.730Z
+[realtime] Still listening... 2026-03-07T21:05:41.734Z
+[realtime] Still listening... 2026-03-07T21:10:41.735Z
+[realtime] Still listening... 2026-03-07T21:15:41.739Z
+[realtime] Still listening... 2026-03-07T21:20:41.745Z
+[realtime] Still listening... 2026-03-07T21:25:41.749Z
+[realtime] Still listening... 2026-03-07T21:30:41.755Z
+[realtime] Still listening... 2026-03-07T21:35:41.764Z
+[realtime] Still listening... 2026-03-07T21:40:41.772Z
+[realtime] Still listening... 2026-03-07T21:45:41.773Z
+[realtime] Still listening... 2026-03-07T21:50:41.784Z
+[realtime] Still listening... 2026-03-07T21:55:41.798Z
+[realtime] Still listening... 2026-03-07T22:00:41.813Z
+[realtime] Still listening... 2026-03-07T22:05:41.823Z
+[realtime] Still listening... 2026-03-07T22:10:41.833Z
+[realtime] Still listening... 2026-03-07T22:15:41.834Z
+[realtime] Still listening... 2026-03-07T22:20:41.849Z
+[realtime] Still listening... 2026-03-07T22:25:41.863Z
+[realtime] Still listening... 2026-03-07T22:30:41.866Z
+[realtime] Still listening... 2026-03-07T22:35:41.881Z
+[realtime] Still listening... 2026-03-07T22:40:41.895Z
+[realtime] Still listening... 2026-03-07T22:45:41.907Z
+[realtime] Still listening... 2026-03-07T22:50:41.910Z
+[realtime] Still listening... 2026-03-07T22:55:41.919Z
+[realtime] Still listening... 2026-03-07T23:00:41.923Z
+[realtime] Still listening... 2026-03-07T23:05:41.930Z
+[realtime] Still listening... 2026-03-07T23:10:41.942Z
+[realtime] Still listening... 2026-03-07T23:15:41.957Z
+[realtime] Still listening... 2026-03-07T23:20:41.961Z
+[realtime] Still listening... 2026-03-07T23:25:41.971Z
+[realtime] Still listening... 2026-03-07T23:30:41.974Z
+[realtime] Still listening... 2026-03-07T23:35:41.975Z
+[realtime] Still listening... 2026-03-07T23:40:41.975Z
+[realtime] Still listening... 2026-03-07T23:45:41.980Z
+[realtime] Still listening... 2026-03-07T23:50:41.993Z
+[realtime] Still listening... 2026-03-07T23:55:42.007Z
+[realtime] Still listening... 2026-03-08T00:00:42.018Z
+[realtime] Still listening... 2026-03-08T00:05:42.027Z
+[realtime] Still listening... 2026-03-08T00:10:42.034Z
+[realtime] Still listening... 2026-03-08T00:15:42.038Z
+[realtime] Still listening... 2026-03-08T00:20:42.050Z
+[realtime] Still listening... 2026-03-08T00:25:42.056Z
+[realtime] Still listening... 2026-03-08T00:30:42.071Z
+[realtime] Still listening... 2026-03-08T00:35:42.075Z
+[realtime] Still listening... 2026-03-08T00:40:42.087Z
+[realtime] Still listening... 2026-03-08T00:45:42.101Z
+[realtime] Still listening... 2026-03-08T00:50:42.101Z
+[realtime] Still listening... 2026-03-08T00:55:42.108Z
+[realtime] Still listening... 2026-03-08T01:00:42.111Z
+[realtime] Still listening... 2026-03-08T01:05:42.120Z
+[realtime] Still listening... 2026-03-08T01:10:42.135Z
+[realtime] Still listening... 2026-03-08T01:15:42.155Z
+[realtime] Still listening... 2026-03-08T01:20:42.157Z
+[realtime] Still listening... 2026-03-08T01:25:42.164Z
+[realtime] Still listening... 2026-03-08T01:30:42.167Z
+[realtime] Still listening... 2026-03-08T01:35:42.182Z
+[realtime] Still listening... 2026-03-08T01:40:42.195Z
+[realtime] Still listening... 2026-03-08T01:45:42.204Z
+[realtime] Still listening... 2026-03-08T01:50:42.210Z
+[realtime] Still listening... 2026-03-08T01:55:42.225Z
+[realtime] Still listening... 2026-03-08T02:00:42.236Z
+[realtime] Still listening... 2026-03-08T02:05:42.245Z
+[realtime] Still listening... 2026-03-08T02:10:42.248Z
+[realtime] Still listening... 2026-03-08T02:15:42.251Z
+[realtime] Still listening... 2026-03-08T02:20:42.252Z
+[realtime] Still listening... 2026-03-08T02:25:43.761Z
+[realtime] Still listening... 2026-03-08T02:30:43.775Z
+[realtime] Still listening... 2026-03-08T02:35:43.782Z
+[realtime] Still listening... 2026-03-08T02:40:43.796Z
+[realtime] Still listening... 2026-03-08T02:45:43.810Z
+[realtime] Still listening... 2026-03-08T02:50:43.813Z
+[realtime] Still listening... 2026-03-08T02:55:43.821Z
+[realtime] Still listening... 2026-03-08T03:00:43.831Z
+[realtime] Still listening... 2026-03-08T03:05:43.834Z
+[realtime] Still listening... 2026-03-08T03:10:43.848Z
+[realtime] Still listening... 2026-03-08T03:15:43.859Z
+[realtime] Still listening... 2026-03-08T03:20:43.861Z
+[realtime] Still listening... 2026-03-08T03:25:43.871Z
+[realtime] Still listening... 2026-03-08T03:30:43.873Z
+[realtime] Still listening... 2026-03-08T03:35:43.879Z
+[realtime] Still listening... 2026-03-08T03:40:43.880Z
+[realtime] Still listening... 2026-03-08T03:45:43.894Z
+[realtime] Still listening... 2026-03-08T03:50:43.898Z
+[realtime] Still listening... 2026-03-08T03:55:43.898Z
+[realtime] Still listening... 2026-03-08T04:00:43.908Z
+[realtime] Still listening... 2026-03-08T04:05:43.922Z
+[realtime] Still listening... 2026-03-08T04:10:43.923Z
+[realtime] Still listening... 2026-03-08T04:15:43.929Z
+[realtime] Still listening... 2026-03-08T04:20:43.930Z
+[realtime] Still listening... 2026-03-08T04:25:43.935Z
+[realtime] Still listening... 2026-03-08T04:30:43.937Z
+[realtime] Still listening... 2026-03-08T04:35:43.947Z
+[realtime] Still listening... 2026-03-08T04:40:43.953Z
+[realtime] Still listening... 2026-03-08T04:45:43.954Z
+[realtime] Still listening... 2026-03-08T04:50:43.954Z
+[realtime] Still listening... 2026-03-08T04:55:43.954Z
+[realtime] Still listening... 2026-03-08T05:00:43.962Z
+[realtime] Still listening... 2026-03-08T05:05:43.976Z
+[realtime] Still listening... 2026-03-08T05:10:43.982Z
+[realtime] Still listening... 2026-03-08T05:15:43.997Z
+[realtime] Still listening... 2026-03-08T05:20:43.999Z
+[realtime] Still listening... 2026-03-08T05:25:44.009Z
+[realtime] Still listening... 2026-03-08T05:30:44.015Z
+[realtime] Still listening... 2026-03-08T05:35:44.029Z
+[realtime] Still listening... 2026-03-08T05:40:44.038Z
+[realtime] Still listening... 2026-03-08T05:45:44.053Z
+[realtime] Still listening... 2026-03-08T05:50:44.062Z
+[realtime] Still listening... 2026-03-08T05:55:44.068Z
+[realtime] Still listening... 2026-03-08T06:00:44.071Z
+[realtime] Still listening... 2026-03-08T06:05:44.079Z
+[realtime] Still listening... 2026-03-08T06:10:44.093Z
+[realtime] Still listening... 2026-03-08T06:15:44.096Z
+[realtime] Still listening... 2026-03-08T06:20:44.105Z
+[realtime] Still listening... 2026-03-08T06:25:44.109Z
+[realtime] Still listening... 2026-03-08T06:30:44.118Z
+[realtime] Still listening... 2026-03-08T06:35:44.130Z
+[realtime] Still listening... 2026-03-08T06:40:44.144Z
+[realtime] Still listening... 2026-03-08T06:45:44.149Z
+[realtime] Still listening... 2026-03-08T06:50:44.152Z
+[realtime] Still listening... 2026-03-08T06:55:44.164Z
+[realtime] Still listening... 2026-03-08T07:00:44.175Z
+[realtime] Still listening... 2026-03-08T07:05:44.185Z
+[realtime] Still listening... 2026-03-08T07:10:44.187Z
+[realtime] Still listening... 2026-03-08T07:15:44.194Z
+[realtime] Still listening... 2026-03-08T07:20:44.199Z
+[realtime] Still listening... 2026-03-08T07:25:44.205Z
+[realtime] Still listening... 2026-03-08T07:30:44.216Z
+[realtime] Still listening... 2026-03-08T07:35:44.221Z
+[realtime] Still listening... 2026-03-08T07:40:44.222Z
+[realtime] Still listening... 2026-03-08T07:45:44.224Z
+[realtime] Still listening... 2026-03-08T07:50:44.234Z
+[realtime] Still listening... 2026-03-08T07:55:44.250Z
+[realtime] Still listening... 2026-03-08T08:00:44.252Z
+[realtime] Still listening... 2026-03-08T08:05:44.263Z
+[realtime] Still listening... 2026-03-08T08:10:44.265Z
+[realtime] Still listening... 2026-03-08T08:15:44.266Z
+[realtime] Still listening... 2026-03-08T08:20:44.274Z
+[realtime] Still listening... 2026-03-08T08:25:44.286Z
+[realtime] Still listening... 2026-03-08T08:30:44.294Z
+[realtime] Still listening... 2026-03-08T08:35:44.300Z
+[realtime] Still listening... 2026-03-08T08:40:44.308Z
+[realtime] Still listening... 2026-03-08T08:45:44.316Z
+[realtime] Still listening... 2026-03-08T08:50:44.324Z
+[realtime] Still listening... 2026-03-08T08:55:44.338Z
+[realtime] Still listening... 2026-03-08T09:00:44.340Z
+[realtime] Still listening... 2026-03-08T09:05:44.349Z
+[realtime] Still listening... 2026-03-08T09:10:44.355Z
+[realtime] Still listening... 2026-03-08T09:15:44.366Z
+[realtime] Still listening... 2026-03-08T09:20:44.372Z
+[realtime] Still listening... 2026-03-08T09:25:44.373Z
+[realtime] Still listening... 2026-03-08T09:30:44.388Z
+[realtime] Still listening... 2026-03-08T09:35:44.401Z
+[realtime] Still listening... 2026-03-08T09:40:44.407Z
+[realtime] Still listening... 2026-03-08T09:45:44.416Z
+[realtime] Still listening... 2026-03-08T09:50:44.428Z
+[realtime] Still listening... 2026-03-08T09:55:44.443Z
+[realtime] Still listening... 2026-03-08T10:00:44.453Z
+[realtime] Still listening... 2026-03-08T10:05:44.455Z
+[realtime] Still listening... 2026-03-08T10:10:44.462Z
+[realtime] Still listening... 2026-03-08T10:15:44.467Z
+[realtime] Still listening... 2026-03-08T10:20:44.477Z
+[realtime] Still listening... 2026-03-08T10:25:44.477Z
+[realtime] Still listening... 2026-03-08T10:30:44.482Z
+[realtime] Still listening... 2026-03-08T10:35:44.492Z
+[realtime] Still listening... 2026-03-08T10:40:44.497Z
+[realtime] Still listening... 2026-03-08T10:45:44.506Z
+[realtime] Still listening... 2026-03-08T10:50:44.519Z
+[realtime] Still listening... 2026-03-08T10:55:44.523Z
+[realtime] Still listening... 2026-03-08T11:00:44.523Z
+[realtime] Still listening... 2026-03-08T11:05:44.537Z
+[realtime] Still listening... 2026-03-08T11:10:44.546Z
+[realtime] Still listening... 2026-03-08T11:15:44.562Z
+[realtime] Still listening... 2026-03-08T11:20:44.573Z
+[realtime] Still listening... 2026-03-08T11:25:44.583Z
+[realtime] Still listening... 2026-03-08T11:30:44.592Z
+[realtime] Still listening... 2026-03-08T11:35:44.599Z
+[realtime] Still listening... 2026-03-08T11:40:44.602Z
+[realtime] Still listening... 2026-03-08T11:45:44.615Z
+[realtime] Still listening... 2026-03-08T11:50:44.624Z
+[realtime] Still listening... 2026-03-08T11:55:44.630Z
+[realtime] Still listening... 2026-03-08T12:00:44.636Z
+[realtime] Still listening... 2026-03-08T12:05:44.638Z
+[realtime] Still listening... 2026-03-08T12:10:44.638Z
+[realtime] Still listening... 2026-03-08T12:15:44.638Z
+[realtime] Still listening... 2026-03-08T12:20:44.640Z
+[realtime] Still listening... 2026-03-08T12:25:44.653Z
+[realtime] Still listening... 2026-03-08T12:30:44.661Z
+[realtime] Still listening... 2026-03-08T12:35:44.662Z
+[realtime] Still listening... 2026-03-08T12:40:44.666Z
+[realtime] Still listening... 2026-03-08T12:45:44.672Z
+[realtime] Still listening... 2026-03-08T12:50:44.672Z
+[realtime] Still listening... 2026-03-08T12:55:44.686Z
+[realtime] Still listening... 2026-03-08T13:00:44.693Z
+[realtime] Still listening... 2026-03-08T13:05:44.706Z
+[realtime] Still listening... 2026-03-08T13:10:44.716Z
+[realtime] Still listening... 2026-03-08T13:15:44.725Z
+[realtime] Still listening... 2026-03-08T13:20:44.736Z
+[realtime] Still listening... 2026-03-08T13:25:44.737Z
+[realtime] Still listening... 2026-03-08T13:30:44.752Z
+[realtime] Still listening... 2026-03-08T13:35:44.757Z
+[realtime] Still listening... 2026-03-08T13:40:44.769Z
+[realtime] Still listening... 2026-03-08T13:45:44.771Z
+[realtime] Still listening... 2026-03-08T13:50:44.777Z
+[realtime] Still listening... 2026-03-08T13:55:44.783Z
+[realtime] Still listening... 2026-03-08T14:00:44.786Z
+[realtime] Still listening... 2026-03-08T14:05:44.797Z
+[realtime] Still listening... 2026-03-08T14:10:44.807Z
+[realtime] Still listening... 2026-03-08T14:15:44.816Z
+[realtime] Still listening... 2026-03-08T14:20:44.828Z
+[realtime] Still listening... 2026-03-08T14:25:44.833Z
+[realtime] Still listening... 2026-03-08T14:30:44.845Z
+[realtime] Still listening... 2026-03-08T14:35:44.859Z
+[realtime] Still listening... 2026-03-08T14:40:44.869Z
+[realtime] Still listening... 2026-03-08T14:45:44.879Z
+[realtime] Still listening... 2026-03-08T14:50:44.880Z
+[realtime] Still listening... 2026-03-08T14:55:44.883Z
+[realtime] Still listening... 2026-03-08T15:00:44.894Z
+[realtime] Still listening... 2026-03-08T15:05:44.898Z
+[realtime] Still listening... 2026-03-08T15:10:44.899Z
+[realtime] Still listening... 2026-03-08T15:15:44.917Z
+[realtime] Still listening... 2026-03-08T15:20:44.927Z
+[realtime] Still listening... 2026-03-08T15:25:44.948Z
+[realtime] Still listening... 2026-03-08T15:30:44.963Z
+[realtime] Still listening... 2026-03-08T15:35:44.977Z
+[realtime] Still listening... 2026-03-08T15:40:44.979Z
+[realtime] Still listening... 2026-03-08T15:45:44.994Z
+[realtime] Still listening... 2026-03-08T15:50:44.997Z
+[realtime] Still listening... 2026-03-08T15:55:45.012Z
+[realtime] Still listening... 2026-03-08T16:00:45.022Z
+[realtime] Still listening... 2026-03-08T16:05:45.024Z
+[realtime] Still listening... 2026-03-08T16:10:45.026Z
+[realtime] Still listening... 2026-03-08T16:15:45.041Z
+[realtime] Still listening... 2026-03-08T16:20:45.044Z
+[realtime] Still listening... 2026-03-08T16:25:45.057Z
+[realtime] Still listening... 2026-03-08T16:30:45.058Z
+[realtime] Still listening... 2026-03-08T16:35:45.073Z
+[realtime] Still listening... 2026-03-08T16:40:45.087Z
+[realtime] Still listening... 2026-03-08T16:45:45.092Z
+[daemon] Notification daemon starting...
+[daemon] Supabase: https://lazhmdyajdqbnxxwyxun.supabase.co
+[daemon] Poll interval: 2000ms
+[daemon] CLI command: openclaw.cmd
+
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed
+[daemon] Poll fetch error: fetch failed

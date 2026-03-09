@@ -1,0 +1,26 @@
+{
+  "task_id": "todo-4ad6e151-platform-launch-marketing",
+  "from": "ziko",
+  "to": "Marketing Agent",
+  "context": {
+    "feature": "Platform launch marketing plan — define channels, messaging, timeline, and assets.",
+    "prd_path": "N/A",
+    "prior_decisions": [
+      "No public posting or outbound messaging without explicit approval.",
+      "Keep plan concise and execution-ready."
+    ],
+    "do_not_revisit": [
+      "Do not invent product capabilities beyond known context.",
+      "Do not schedule or send any outbound comms."
+    ],
+    "current_state": "Task claimed via heartbeat; no plan drafted yet.",
+    "next_step": "Draft a launch marketing plan with channels, timeline, messaging pillars, and required assets."
+  },
+  "outputs_expected": [
+    "Marketing plan document path (e.g., /docs/reports/platform-launch-marketing-plan.md)"
+  ],
+  "escalate_if": [
+    "ICP is undefined or conflicting.",
+    "Product capabilities are unclear for claims."
+  ]
+}

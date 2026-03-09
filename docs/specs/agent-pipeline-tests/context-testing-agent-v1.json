@@ -1,0 +1,27 @@
+{
+  "task_id": "todo-06fce20c-agent-pipeline-tests",
+  "from": "ziko",
+  "to": "Testing Agent",
+  "context": {
+    "feature": "Agent pipeline integration tests — add coverage for task pickup/dispatch flow.",
+    "prd_path": "N/A",
+    "prior_decisions": [
+      "Use existing test frameworks in the repo.",
+      "Do not change production logic while adding tests."
+    ],
+    "do_not_revisit": [
+      "Do not modify agent pipeline behavior without approval.",
+      "Do not add new dependencies unless required and approved."
+    ],
+    "current_state": "Task claimed via heartbeat; no tests added yet.",
+    "next_step": "Locate agent pipeline code in workspace, design + implement integration tests, run them, and write a brief report."
+  },
+  "outputs_expected": [
+    "Test files added/updated (or patch summary if no repo write).",
+    "Report file path (e.g., /docs/reports/agent-pipeline-tests.md)"
+  ],
+  "escalate_if": [
+    "Cannot locate the agent pipeline code in the workspace.",
+    ">20% test failure on first run (spec problem)."
+  ]
+}

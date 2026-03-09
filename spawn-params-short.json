@@ -1,0 +1,6 @@
+{
+  "agentId": "main",
+  "label": "omar-pms-bugfix",
+  "requesterSession": "agent:main:subagent:b00dd32d-4215-4231-9722-a06e81e63f33",
+  "task": "You are Omar, Tech Lead. Read CLAUDE.md FIRST: C:\\Users\\Fares\\Downloads\\PMS\\CLAUDE.md\nRead your prompt: C:\\Users\\Fares\\.openclaw\\workspace\\agents\\prompts\\omar.md\nRead your full task brief (MANDATORY): C:\\Users\\Fares\\.openclaw\\workspace\\agents\\prompts\\omar-task-pms-bugfix.md\n\nExecute ALL instructions in that task brief exactly. The brief covers 5 bugs (assign to Mostafa) and 3 design fixes (assign to Sara), then Hady QA. When Hady passes: commit, push, write docs/reports/omar-final-signoff.md, spawn Product Analyst with label=product-analyst-bugfix requesterSession=agent:main:main."
+}

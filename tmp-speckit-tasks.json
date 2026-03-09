@@ -1,0 +1,4 @@
+[
+  {"title":"Task 1: Wire API","description":"Implement endpoint","acceptance_criteria":"Endpoint returns 200"},
+  {"title":"Task 2: Add UI","description":"Hook UI","acceptance_criteria":"UI shows data"}
+]
