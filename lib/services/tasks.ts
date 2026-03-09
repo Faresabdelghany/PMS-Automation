@@ -194,7 +194,6 @@ export async function fetchTasks(taskType: TaskTypeFilter = "user_task"): Promis
   let query = supabase
     .from(table)
     .select("*")
-    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
 
   if (taskType !== "all" && taskType !== "user_task") {

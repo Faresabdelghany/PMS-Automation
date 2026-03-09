@@ -83,7 +83,10 @@ export function MyTasksPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
 
-  const [filters, setFilters] = useState<FilterChipType[]>([])
+  const [filters, setFilters] = useState<FilterChipType[]>([
+    { key: "Status", value: "todo" },
+    { key: "Status", value: "in-progress" },
+  ])
   const [viewOptions, setViewOptions] = useState<ViewOptions>(DEFAULT_VIEW_OPTIONS)
 
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false)

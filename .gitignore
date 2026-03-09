@@ -5,3 +5,4 @@ secrets/
 secrets/
 .env.local
 next-env.d.ts
+node_modules/
