@@ -1,0 +1,7 @@
+.next/
+secrets/
+
+.next/
+secrets/
+.env.local
+next-env.d.ts

@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ProgressCircle } from "@/components/progress-circle"
+import { LifecycleBadge } from "@/components/ui/lifecycle-badge"
 import { cn } from "@/lib/utils"
 import type { FilterChip as FilterChipType } from "@/lib/view-options"
 import type { CreateTaskContext } from "@/components/tasks/TaskQuickCreateModal"
@@ -365,7 +366,7 @@ export function TaskRowDnD({ task, onToggle, onTaskClick }: TaskRowDnDProps) {
         subtitle={<div className="hidden sm:inline">{getTaskDescriptionSnippet(task)}</div>}
         meta={
           <>
-            <TaskStatus status={task.status} />
+            <LifecycleBadge lifecycleStatus={(task as Record<string, unknown>).lifecycleStatus as string | undefined} status={task.status} />
             {task.startDate && (
               <span className="text-muted-foreground hidden sm:inline">
                 Start: {format(task.startDate, "dd/MM")}

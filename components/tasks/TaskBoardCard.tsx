@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 import type { ProjectTask } from "@/lib/data/project-details"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { TAG_OPTIONS } from "@/components/tasks/TaskQuickCreateModal"
+import { LifecycleBadge } from "@/components/ui/lifecycle-badge"
 
 type TaskBoardCardVariant = "default" | "completed" | "empty"
 
@@ -127,6 +128,9 @@ export const TaskBoardCard = memo(function TaskBoardCard({ task, variant = "defa
             {dateText}
           </span>
         </div>
+
+        {/* Lifecycle status badge */}
+        <LifecycleBadge lifecycleStatus={(task as Record<string, unknown>).lifecycleStatus as string | undefined} status={task.status} />
 
         {/* Type chip with inline tag selector */}
         <DropdownMenu>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -40,7 +40,8 @@ import {
   CaretRight,
   CaretUpDown,
 } from "@phosphor-icons/react/dist/ssr"
-import { activeProjects, footerItems, navItems, type NavItemId, type SidebarFooterItemId } from "@/lib/data/sidebar"
+import { footerItems, navItems, type NavItemId, type SidebarFooterItemId, type ActiveProjectSummary } from "@/lib/data/sidebar"
+import { fetchProjects } from "@/lib/services/projects"
 import { SettingsDialog } from "@/components/settings/SettingsDialog"
 import { AuthDialog, type AuthMode } from "@/components/auth/AuthDialog"
 
@@ -64,6 +65,23 @@ export function AppSidebar() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>("sign-in")
+  const [activeProjects, setActiveProjects] = useState<ActiveProjectSummary[]>([])
+
+  useEffect(() => {
+    fetchProjects().then((projects) => {
+      const colors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"]
+      setActiveProjects(
+        projects
+          .filter((p) => p.status === "active" || p.status === "planned")
+          .slice(0, 8)
+          .map((p, i) => ({
+            name: p.name,
+            progress: p.progress,
+            color: colors[i % colors.length],
+          })),
+      )
+    }).catch(() => {})
+  }, [])
 
   const openAuth = (mode: AuthMode) => {
     setAuthMode(mode)
