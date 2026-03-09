@@ -1,210 +1,258 @@
 "use client"
 
-import { useEffect, useMemo, useState, useCallback } from "react"
+import { useEffect, useMemo, useState, useCallback, memo } from "react"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import type { Agent } from "@/lib/data/agents"
-import { agents as staticAgents } from "@/lib/data/agents"
-import type { AgentLog } from "@/lib/services/agents"
-import { fetchAgentLogs } from "@/lib/services/agents"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import type { Agent, AgentStatus, AgentType } from "@/lib/data/agents"
+import { fetchAgentsWithActivity } from "@/lib/services/agents"
 import { fetchRecentRuns, type AgentRun } from "@/lib/services/agent-runs"
-import { fetchRecentEvents, type TaskEvent } from "@/lib/services/task-events"
 import { useAgentMonitorRealtime } from "@/lib/hooks/use-realtime"
-import { LifecycleBadge, LifecycleDot } from "@/components/ui/lifecycle-badge"
 import { cn } from "@/lib/utils"
-import { format } from "date-fns"
+import { Bot } from "lucide-react"
+import {
+  CaretUpDown,
+  ArrowDown,
+  ArrowUp,
+  DotsThreeVertical,
+  MagnifyingGlass,
+  Plus,
+} from "@phosphor-icons/react/dist/ssr"
+import { AgentDetailPanel } from "./AgentDetailPanel"
 
-// ─── Helpers ───
+// ─── Types ───
 
-function formatTimeAgo(dateStr: string): string {
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffSec = Math.floor(diffMs / 1000)
-  const diffMin = Math.floor(diffSec / 60)
-  const diffHrs = Math.floor(diffMin / 60)
-  const diffDays = Math.floor(diffHrs / 24)
-  if (diffSec < 10) return "just now"
-  if (diffSec < 60) return `${diffSec}s ago`
-  if (diffMin < 60) return `${diffMin}m ago`
-  if (diffHrs < 24) return `${diffHrs}h ago`
-  return `${diffDays}d ago`
+type SortKey = "name" | "role" | "type" | "squad" | "status" | "model"
+type SortDir = "asc" | "desc"
+type StatusFilter = "all" | AgentStatus
+
+// ─── Status Config ───
+
+const statusDotColor: Record<AgentStatus, string> = {
+  online: "bg-emerald-500",
+  busy: "bg-amber-500",
+  idle: "bg-blue-400",
+  offline: "bg-zinc-400 dark:bg-zinc-500",
 }
 
-function formatDuration(startedAt: string, completedAt?: string | null): string {
-  const start = new Date(startedAt).getTime()
-  const end = completedAt ? new Date(completedAt).getTime() : Date.now()
-  const diffSec = Math.floor((end - start) / 1000)
-  if (diffSec < 60) return `${diffSec}s`
-  const min = Math.floor(diffSec / 60)
-  const sec = diffSec % 60
-  if (min < 60) return `${min}m ${sec}s`
-  return `${Math.floor(min / 60)}h ${min % 60}m`
+const statusTextColor: Record<AgentStatus, string> = {
+  online: "text-emerald-600 dark:text-emerald-400",
+  busy: "text-amber-600 dark:text-amber-400",
+  idle: "text-blue-600 dark:text-blue-400",
+  offline: "text-zinc-400 dark:text-zinc-500",
 }
 
-type AgentStatus = "running" | "idle" | "error" | "blocked"
-
-function deriveAgentStatus(agentName: string, runs: AgentRun[]): AgentStatus {
-  const agentRuns = runs.filter((r) => r.agentName === agentName)
-  const active = agentRuns.find((r) => r.status === "running" || r.status === "pending")
-  if (active) return "running"
-  const recent = agentRuns[0]
-  if (recent?.status === "failed") return "error"
-  return "idle"
-}
-
-const STATUS_COLORS: Record<AgentStatus, string> = {
-  running: "bg-emerald-500 animate-pulse",
-  idle: "bg-zinc-400",
-  error: "bg-red-500",
-  blocked: "bg-amber-500",
-}
-
-const STATUS_LABELS: Record<AgentStatus, string> = {
-  running: "Running",
+const statusLabel: Record<AgentStatus, string> = {
+  online: "Online",
+  busy: "Busy",
   idle: "Idle",
-  error: "Error",
-  blocked: "Blocked",
+  offline: "Offline",
 }
 
-// ─── Agent Monitor Table Row ───
+// Type badge — Specialist=teal, Lead=blue, Supreme=purple
+const TYPE_BADGE: Record<AgentType, string> = {
+  Specialist: "bg-teal-50 text-teal-700 border-transparent dark:bg-teal-500/15 dark:text-teal-300",
+  Lead: "bg-blue-50 text-blue-700 border-transparent dark:bg-blue-500/15 dark:text-blue-300",
+  Supreme: "bg-purple-50 text-purple-700 border-transparent dark:bg-purple-500/15 dark:text-purple-300",
+}
 
-function AgentMonitorRow({
-  agent,
-  status,
-  activeRun,
-  lastEvent,
+// ─── Sort Header ───
+
+function SortableHead({
+  col,
+  label,
+  sortKey,
+  sortDir,
+  onSort,
+  className,
 }: {
-  agent: Agent
-  status: AgentStatus
-  activeRun?: AgentRun
-  lastEvent?: TaskEvent
+  col: SortKey
+  label: string
+  sortKey: SortKey
+  sortDir: SortDir
+  onSort: (col: SortKey) => void
+  className?: string
 }) {
   return (
-    <tr className="border-b border-border/40 hover:bg-muted/30 transition-colors">
-      {/* Agent */}
-      <td className="px-3 py-3">
-        <div className="flex items-center gap-2.5">
-          <span className="text-base">{agent.emoji}</span>
-          <span className="text-sm font-medium text-foreground">{agent.name}</span>
-        </div>
-      </td>
-      {/* Status */}
-      <td className="px-3 py-3">
-        <div className="flex items-center gap-2">
-          <span className={cn("h-2 w-2 rounded-full", STATUS_COLORS[status])} />
-          <span className="text-xs text-muted-foreground">{STATUS_LABELS[status]}</span>
-        </div>
-      </td>
-      {/* Current Task */}
-      <td className="px-3 py-3">
-        {activeRun ? (
-          <span className="text-xs text-foreground truncate max-w-[200px] block">
-            {activeRun.inputSummary || "Working..."}
-          </span>
+    <TableHead
+      className={cn(
+        "cursor-pointer select-none whitespace-nowrap text-xs font-medium text-muted-foreground hover:text-foreground transition-colors",
+        className,
+      )}
+      onClick={() => onSort(col)}
+    >
+      <span className="inline-flex items-center gap-1">
+        {label}
+        {sortKey === col ? (
+          sortDir === "asc" ? (
+            <ArrowUp className="h-3 w-3" />
+          ) : (
+            <ArrowDown className="h-3 w-3" />
+          )
         ) : (
-          <span className="text-xs text-muted-foreground/50">—</span>
+          <CaretUpDown className="h-3 w-3 opacity-40" />
         )}
-      </td>
-      {/* Run ID */}
-      <td className="px-3 py-3">
-        {activeRun ? (
-          <code className="text-[10px] text-muted-foreground font-mono bg-muted px-1.5 py-0.5 rounded">
-            {activeRun.id.slice(0, 8)}
-          </code>
-        ) : (
-          <span className="text-xs text-muted-foreground/50">—</span>
-        )}
-      </td>
-      {/* Runtime */}
-      <td className="px-3 py-3">
-        {activeRun ? (
-          <span className="text-xs text-muted-foreground font-mono">
-            {formatDuration(activeRun.startedAt, activeRun.completedAt)}
-          </span>
-        ) : (
-          <span className="text-xs text-muted-foreground/50">—</span>
-        )}
-      </td>
-      {/* Model */}
-      <td className="px-3 py-3">
-        <Badge variant="secondary" className="text-[10px] font-mono px-1.5">
-          {agent.model}
-        </Badge>
-      </td>
-      {/* Last Activity */}
-      <td className="px-3 py-3">
-        {lastEvent ? (
-          <span className="text-xs text-muted-foreground">{formatTimeAgo(lastEvent.createdAt)}</span>
-        ) : (
-          <span className="text-xs text-muted-foreground/50">—</span>
-        )}
-      </td>
-    </tr>
+      </span>
+    </TableHead>
   )
 }
 
-// ─── Live Event Stream ───
+// ─── Agent Row ───
 
-function LiveEventRow({ event }: { event: TaskEvent }) {
-  const eventColors: Record<string, string> = {
-    task_started: "text-amber-500",
-    task_completed: "text-emerald-500",
-    task_failed: "text-red-500",
-    agent_spawned: "text-blue-500",
-    agent_message: "text-foreground",
-    test_started: "text-purple-500",
-    test_passed: "text-lime-600",
-    test_failed: "text-red-500",
-    review_started: "text-indigo-500",
-    review_completed: "text-emerald-500",
-    review_approved: "text-emerald-600",
-  }
-  const color = eventColors[event.eventType] || "text-muted-foreground"
-
+const AgentTableRow = memo(function AgentTableRow({
+  agent,
+  activeRun,
+  onSelect,
+}: {
+  agent: Agent
+  activeRun?: AgentRun
+  onSelect: (agent: Agent) => void
+}) {
   return (
-    <div className="flex items-start gap-3 px-3 py-2 hover:bg-muted/30 rounded-md transition-colors">
-      <span className="text-[10px] font-mono text-muted-foreground shrink-0 pt-0.5 w-16">
-        {format(new Date(event.createdAt), "HH:mm:ss")}
-      </span>
-      <span className={cn("text-xs font-semibold shrink-0 w-32", color)}>
-        {event.actorName}
-      </span>
-      <span className="text-xs text-muted-foreground flex-1">{event.summary}</span>
-      <code className="text-[9px] text-muted-foreground/50 font-mono shrink-0">{event.eventType}</code>
-    </div>
+    <TableRow
+      className="cursor-pointer hover:bg-muted/40 transition-colors"
+      onClick={() => onSelect(agent)}
+    >
+      {/* Name */}
+      <TableCell className="py-3.5">
+        <div className="flex items-center gap-3">
+          <div className="relative shrink-0">
+            <Avatar className="h-8 w-8 rounded-lg">
+              <AvatarFallback className="rounded-lg bg-muted text-muted-foreground">
+                <Bot className="h-4 w-4" />
+              </AvatarFallback>
+            </Avatar>
+            <span
+              className={cn(
+                "absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background",
+                statusDotColor[agent.status],
+              )}
+            />
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-foreground truncate">{agent.name}</p>
+            <p className="text-[11px] text-muted-foreground truncate mt-0.5">
+              {agent.reportsTo !== "None" ? `→ ${agent.reportsTo}` : "—"}
+            </p>
+          </div>
+        </div>
+      </TableCell>
+
+      {/* Role */}
+      <TableCell className="py-3.5">
+        <span className="text-sm text-muted-foreground">{agent.roleLabel}</span>
+      </TableCell>
+
+      {/* Type */}
+      <TableCell className="py-3.5">
+        <Badge
+          variant="outline"
+          className={cn(
+            "rounded-full text-[11px] font-medium px-2.5 py-0.5 border",
+            TYPE_BADGE[agent.agentType],
+          )}
+        >
+          {agent.agentType}
+        </Badge>
+      </TableCell>
+
+      {/* Squad */}
+      <TableCell className="py-3.5">
+        <span className="text-sm text-muted-foreground">{agent.squad}</span>
+      </TableCell>
+
+      {/* Status */}
+      <TableCell className="py-3.5">
+        <div className="flex items-center gap-1.5">
+          <span className={cn("h-2 w-2 rounded-full shrink-0", statusDotColor[agent.status])} />
+          <span className={cn("text-sm", statusTextColor[agent.status])}>
+            {statusLabel[agent.status]}
+          </span>
+        </div>
+      </TableCell>
+
+      {/* Model */}
+      <TableCell className="py-3.5">
+        <span className="text-xs text-muted-foreground font-mono">{agent.model}</span>
+      </TableCell>
+
+      {/* Session */}
+      <TableCell className="py-3.5">
+        <span className="text-sm text-muted-foreground/40">—</span>
+      </TableCell>
+
+      {/* Actions */}
+      <TableCell className="py-3.5 text-right" onClick={(e) => e.stopPropagation()}>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-muted-foreground/50 hover:text-muted-foreground"
+            >
+              <DotsThreeVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-36">
+            <DropdownMenuItem onClick={() => onSelect(agent)}>Quick view</DropdownMenuItem>
+            <DropdownMenuItem>Edit agent</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
   )
-}
+})
 
 // ─── Main Component ───
 
 export function AgentsPage() {
+  const [agents, setAgents] = useState<Agent[]>([])
   const [runs, setRuns] = useState<AgentRun[]>([])
-  const [events, setEvents] = useState<TaskEvent[]>([])
-  const [logs, setLogs] = useState<AgentLog[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  // Initial fetch
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
+  const [squadFilter, setSquadFilter] = useState("all")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
+  const [sortKey, setSortKey] = useState<SortKey>("name")
+  const [sortDir, setSortDir] = useState<SortDir>("asc")
+
   useEffect(() => {
     let cancelled = false
     setIsLoading(true)
-
-    Promise.all([fetchRecentRuns(100), fetchRecentEvents(100), fetchAgentLogs(50)]).then(
-      ([runsData, eventsData, logsData]) => {
-        if (!cancelled) {
-          setRuns(runsData)
-          setEvents(eventsData)
-          setLogs(logsData)
-          setIsLoading(false)
-        }
-      },
-    )
-
+    Promise.all([fetchAgentsWithActivity(), fetchRecentRuns(100)]).then(([agentData, runsData]) => {
+      if (!cancelled) {
+        setAgents(agentData)
+        setRuns(runsData)
+        setIsLoading(false)
+      }
+    })
     return () => { cancelled = true }
   }, [])
 
-  // Realtime subscriptions
   const handleRealtimeRun = useCallback((run: Record<string, unknown>) => {
     setRuns((prev) => {
       const existing = prev.findIndex((r) => r.id === run.id)
@@ -231,164 +279,191 @@ export function AgentsPage() {
     })
   }, [])
 
-  const handleRealtimeEvent = useCallback((event: Record<string, unknown>) => {
-    const mapped: TaskEvent = {
-      id: event.id as string,
-      todoId: event.todo_id as string,
-      runId: (event.run_id as string) || null,
-      eventType: event.event_type as string,
-      actorType: event.actor_type as string,
-      actorName: event.actor_name as string,
-      summary: event.summary as string,
-      metadata: (event.metadata as Record<string, unknown>) || {},
-      createdAt: event.created_at as string,
-    }
-    setEvents((prev) => [mapped, ...prev].slice(0, 200))
-  }, [])
+  useAgentMonitorRealtime({ onAgentRun: handleRealtimeRun })
 
-  useAgentMonitorRealtime({
-    onAgentRun: handleRealtimeRun,
-    onTaskEvent: handleRealtimeEvent,
-  })
+  const squads = useMemo(() => Array.from(new Set(agents.map((a) => a.squad))), [agents])
 
-  // Derive agent statuses from runs
-  const agentData = useMemo(() => {
-    return staticAgents.map((agent) => {
-      const status = deriveAgentStatus(agent.name, runs)
-      const activeRun = runs.find(
-        (r) => r.agentName === agent.name && (r.status === "running" || r.status === "pending"),
-      )
-      const lastEvent = events.find((e) => e.actorName === agent.name)
-      return { agent, status, activeRun, lastEvent }
+  const filtered = useMemo(() => {
+    let items = agents.filter((agent) => {
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase()
+        if (
+          !agent.name.toLowerCase().includes(q) &&
+          !agent.roleLabel.toLowerCase().includes(q) &&
+          !agent.squad.toLowerCase().includes(q)
+        )
+          return false
+      }
+      if (squadFilter !== "all" && agent.squad !== squadFilter) return false
+      if (statusFilter !== "all" && agent.status !== statusFilter) return false
+      return true
     })
-  }, [runs, events])
 
-  const stats = useMemo(() => {
-    const running = agentData.filter((a) => a.status === "running").length
-    const idle = agentData.filter((a) => a.status === "idle").length
-    const errors = agentData.filter((a) => a.status === "error").length
-    const activeRuns = runs.filter((r) => r.status === "running" || r.status === "pending").length
-    return { running, idle, errors, activeRuns, totalEvents: events.length }
-  }, [agentData, runs, events])
+    items = [...items].sort((a, b) => {
+      let cmp = 0
+      if (sortKey === "name") cmp = a.name.localeCompare(b.name)
+      else if (sortKey === "role") cmp = a.roleLabel.localeCompare(b.roleLabel)
+      else if (sortKey === "type") cmp = a.agentType.localeCompare(b.agentType)
+      else if (sortKey === "squad") cmp = a.squad.localeCompare(b.squad)
+      else if (sortKey === "status") cmp = a.status.localeCompare(b.status)
+      else if (sortKey === "model") cmp = a.model.localeCompare(b.model)
+      return sortDir === "asc" ? cmp : -cmp
+    })
+
+    return items
+  }, [agents, statusFilter, squadFilter, searchQuery, sortKey, sortDir])
+
+  function handleSort(col: SortKey) {
+    if (sortKey === col) setSortDir((d) => (d === "asc" ? "desc" : "asc"))
+    else {
+      setSortKey(col)
+      setSortDir("asc")
+    }
+  }
+
+  const STATUS_PILLS: { id: StatusFilter; label: string }[] = [
+    { id: "all", label: "All" },
+    { id: "online", label: "Online" },
+    { id: "busy", label: "Busy" },
+    { id: "idle", label: "Idle" },
+    { id: "offline", label: "Offline" },
+  ]
 
   if (isLoading) {
     return (
       <div className="flex flex-1 flex-col min-h-0 bg-background mx-2 my-2 border border-border rounded-lg min-w-0">
-        <div className="flex items-center justify-between px-4 py-4 border-b border-border/70">
-          <div className="flex items-center gap-3">
-            <SidebarTrigger className="h-8 w-8 rounded-lg hover:bg-accent text-muted-foreground" />
-            <p className="text-base font-medium text-foreground">Agent Monitor</p>
-          </div>
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-border/70">
+          <SidebarTrigger className="h-8 w-8 rounded-lg hover:bg-accent text-muted-foreground" />
+          <p className="text-lg font-bold">Agents</p>
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <p className="text-sm text-muted-foreground">Loading agent data...</p>
+          <p className="text-sm text-muted-foreground">Loading agents...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-1 flex-col min-h-0 bg-background mx-2 my-2 border border-border rounded-lg min-w-0">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border/70">
-        <div className="flex items-center gap-3">
-          <SidebarTrigger className="h-8 w-8 rounded-lg hover:bg-accent text-muted-foreground" />
-          <p className="text-base font-medium text-foreground">Agent Monitor</p>
-          <span className="flex items-center gap-1.5 text-[10px] text-emerald-500 font-medium">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            LIVE
-          </span>
-        </div>
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-          {stats.running > 0 && <span className="text-emerald-500 font-medium">{stats.running} running</span>}
-          <span>{stats.idle} idle</span>
-          {stats.errors > 0 && <span className="text-red-500">{stats.errors} errors</span>}
-          <span>{stats.activeRuns} active runs</span>
-        </div>
-      </header>
+    <>
+      <div className="flex flex-1 flex-col min-h-0 bg-background mx-2 my-2 border border-border rounded-lg min-w-0">
+        {/* Header */}
+        <header className="flex items-center justify-between px-5 py-3.5 border-b border-border/60">
+          <div className="flex items-center gap-3">
+            <SidebarTrigger className="h-8 w-8 rounded-lg hover:bg-accent text-muted-foreground" />
+            <h1 className="text-lg font-bold text-foreground">Agents</h1>
+          </div>
+          <Button variant="ghost" size="sm" className="text-sm font-medium gap-1 h-8">
+            <Plus className="h-4 w-4" />
+            New Agent
+          </Button>
+        </header>
 
-      <div className="flex-1 min-h-0 overflow-y-auto">
-        {/* Agent Status Table */}
-        <div className="px-4 py-4">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
-            Agents
-          </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-border/60">
-                  <th className="px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Agent</th>
-                  <th className="px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
-                  <th className="px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Current Task</th>
-                  <th className="px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Run ID</th>
-                  <th className="px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Runtime</th>
-                  <th className="px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Model</th>
-                  <th className="px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Last Activity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {agentData.map(({ agent, status, activeRun, lastEvent }) => (
-                  <AgentMonitorRow
-                    key={agent.id}
-                    agent={agent}
-                    status={status}
-                    activeRun={activeRun}
-                    lastEvent={lastEvent}
-                  />
+        {/* Filter bar */}
+        <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-border/40 flex-wrap">
+          {/* Status pills */}
+          <div className="flex items-center gap-1.5">
+            {STATUS_PILLS.map((pill) => (
+              <button
+                key={pill.id}
+                onClick={() => setStatusFilter(pill.id)}
+                className={cn(
+                  "h-7 px-3 rounded-full text-xs font-medium transition-colors",
+                  statusFilter === pill.id
+                    ? "bg-muted text-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                )}
+              >
+                {pill.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Right controls */}
+          <div className="flex items-center gap-2.5">
+            <Select value={squadFilter} onValueChange={setSquadFilter}>
+              <SelectTrigger className="h-8 w-32 text-xs rounded-lg border-border">
+                <SelectValue placeholder="All Squads" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Squads</SelectItem>
+                {squads.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              </SelectContent>
+            </Select>
 
-        {/* Live Activity Stream */}
-        <div className="px-4 py-4 border-t border-border/40">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Live Activity Stream
-            </p>
-            <span className="text-[10px] text-muted-foreground">{events.length} events</span>
-          </div>
-          <div className="space-y-0.5 max-h-[400px] overflow-y-auto">
-            {events.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">
-                No events yet. Agent activity will appear here in real time.
-              </p>
-            ) : (
-              events.slice(0, 100).map((event) => (
-                <LiveEventRow key={event.id} event={event} />
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Recent Agent Logs */}
-        {logs.length > 0 && (
-          <div className="px-4 py-4 border-t border-border/40">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
-              Recent Agent Logs
-            </p>
-            <div className="space-y-0.5">
-              {logs.slice(0, 20).map((log) => (
-                <div key={log.id} className="flex items-center gap-3 px-3 py-2 hover:bg-muted/30 rounded-md transition-colors">
-                  <Badge
-                    variant={log.status === "completed" ? "default" : "destructive"}
-                    className="text-[10px] px-1.5 min-w-[70px] justify-center"
-                  >
-                    {log.status}
-                  </Badge>
-                  <span className="text-xs font-medium text-foreground min-w-[120px]">{log.agentName}</span>
-                  <span className="text-xs text-muted-foreground flex-1 truncate">{log.taskDescription}</span>
-                  {log.runId && (
-                    <code className="text-[9px] text-muted-foreground/50 font-mono">{log.runId.slice(0, 8)}</code>
-                  )}
-                  <span className="text-[10px] text-muted-foreground whitespace-nowrap">{formatTimeAgo(log.createdAt)}</span>
-                </div>
-              ))}
+            <div className="relative">
+              <MagnifyingGlass className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Input
+                placeholder="Search agents..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-8 pl-8 pr-3 text-xs w-40 rounded-lg border-border"
+              />
             </div>
+
+            <span className="text-xs text-muted-foreground whitespace-nowrap">
+              {filtered.length} agent{filtered.length !== 1 ? "s" : ""}
+            </span>
           </div>
-        )}
+        </div>
+
+        {/* Table */}
+        <div className="flex-1 min-h-0 overflow-auto px-5 pt-4 pb-2">
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 border border-dashed border-border/60 rounded-lg bg-muted/20">
+              <p className="text-sm font-medium text-foreground">No agents found</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Try adjusting your search or filters.
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-border overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent bg-muted/50">
+                    <SortableHead col="name" label="Name" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[26%]" />
+                    <SortableHead col="role" label="Role" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[18%]" />
+                    <SortableHead col="type" label="Type" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[10%]" />
+                    <SortableHead col="squad" label="Squad" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[12%]" />
+                    <SortableHead col="status" label="Status" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[10%]" />
+                    <SortableHead col="model" label="Model" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} className="w-[14%]" />
+                    <TableHead className="text-xs font-medium text-muted-foreground w-[6%]">
+                      Session
+                    </TableHead>
+                    <TableHead className="w-10" />
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((agent) => {
+                    const activeRun = runs.find(
+                      (r) =>
+                        r.agentName === agent.name &&
+                        (r.status === "running" || r.status === "pending"),
+                    )
+                    return (
+                      <AgentTableRow
+                        key={agent.id}
+                        agent={agent}
+                        activeRun={activeRun}
+                        onSelect={setSelectedAgent}
+                      />
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* Agent Detail Panel */}
+      <AgentDetailPanel
+        agent={selectedAgent}
+        onClose={() => setSelectedAgent(null)}
+      />
+    </>
   )
 }

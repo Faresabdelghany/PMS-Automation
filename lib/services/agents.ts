@@ -18,6 +18,12 @@ type AgentLogRow = {
   completed_at: string | null
 }
 
+type AgentConfigRow = {
+  name: string
+  ai_provider: string | null
+  ai_model: string | null
+}
+
 // ---------- App type ----------
 
 export type AgentLog = {
@@ -33,6 +39,18 @@ export type AgentLog = {
   level: string | null
   errorMessage: string | null
   completedAt: string | null
+}
+
+const PROVIDER_MAP: Record<string, string> = {
+  anthropic: "anthropic",
+  google: "google",
+  openai: "openai",
+  groq: "groq",
+  mistral: "mistral",
+  xai: "xai",
+  deepseek: "deepseek",
+  openrouter: "openrouter",
+  "openai-codex": "openai-codex",
 }
 
 // ---------- Mapping ----------
@@ -53,6 +71,15 @@ function rowToLog(row: AgentLogRow): AgentLog {
     errorMessage: row.error_message,
     completedAt: row.completed_at,
   }
+}
+
+function composeModelId(config: AgentConfigRow): string | null {
+  if (!config.ai_model) return null
+  if (config.ai_model.includes("/")) return config.ai_model
+
+  const rawProvider = config.ai_provider || "anthropic"
+  const provider = PROVIDER_MAP[rawProvider] || rawProvider
+  return `${provider}/${config.ai_model}`
 }
 
 // ---------- Queries ----------
@@ -122,9 +149,13 @@ export async function fetchAgentLogs(limit = 50): Promise<AgentLog[]> {
 
 export async function fetchAgentsWithActivity(): Promise<Agent[]> {
   const logs = await fetchAgentLogs(200)
+  const { data: configRows, error: configError } = await supabase
+    .from("agents")
+    .select("name, ai_provider, ai_model")
 
   const taskCounts = new Map<string, number>()
   const lastActive = new Map<string, string>()
+  const liveConfigs = new Map<string, AgentConfigRow>()
 
   for (const log of logs) {
     const current = taskCounts.get(log.agentName) ?? 0
@@ -135,8 +166,18 @@ export async function fetchAgentsWithActivity(): Promise<Agent[]> {
     }
   }
 
+  if (!configError) {
+    for (const row of (configRows as AgentConfigRow[]) || []) {
+      liveConfigs.set(row.name, row)
+    }
+  } else {
+    console.error("fetchAgentsWithActivity config error:", configError)
+  }
+
   return staticAgents.map((agent) => ({
     ...agent,
+    model: composeModelId(liveConfigs.get(agent.name) ?? { name: agent.name, ai_provider: agent.provider, ai_model: agent.model }) ?? agent.model,
+    provider: liveConfigs.get(agent.name)?.ai_provider || agent.provider,
     taskCount: taskCounts.get(agent.name) ?? 0,
     lastActive: lastActive.get(agent.name),
   }))

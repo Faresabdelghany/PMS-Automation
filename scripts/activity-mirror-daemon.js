@@ -17,29 +17,44 @@ const ERR_PATH = path.join(__dirname, "activity-mirror-err.log")
 
 const POLL_SESSION_MAP_MS = 60_000
 const MAX_SEEN = 5000
+const SUPABASE_URL = "https://uvqnrysmjpyupkhtnyfd.supabase.co"
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2cW5yeXNtanB5dXBraHRueWZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NTc1NzUsImV4cCI6MjA4ODMzMzU3NX0.hBrPgN_8zgRq6bSwqkOmz1T3QYV1PuhWYtC-h2D_iYo"
 
 const args = new Set(process.argv.slice(2))
 const DRY_RUN = args.has("--dry-run")
 const ONCE = args.has("--once")
 const LIMIT = Number(process.argv.find((a) => a.startsWith("--limit="))?.split("=")[1] || "200")
 
-const AGENT_UUID = {
+const FALLBACK_AGENT_UUID = {
   main: "a2776ed4-b6a6-4465-b060-664d3a99be55",
   "product-analyst": "1f483d60-8c25-448a-8215-207c5787fd7e",
   marketing: "371279bf-1c6f-4527-87c3-bcf04d7d8b05",
   "marketing-agent": "371279bf-1c6f-4527-87c3-bcf04d7d8b05",
   designer: "955cc174-4ebe-4fb8-b5c4-bf404e21bfe1",
   dev: "fb92236d-8d7e-4471-b490-a04652d624f5",
-  reviewer: "fb92236d-8d7e-4471-b490-a04652d624f5",
-  tester: "fb92236d-8d7e-4471-b490-a04652d624f5",
+  tester: "53dca9ed-5ffa-4d58-9909-450ede58e9e0",
 
   // aliases
-  "code-reviewer": "fb92236d-8d7e-4471-b490-a04652d624f5",
   "tech-lead": "ba6990f4-674c-499e-96f5-8610378ace63",
   "marketing-lead": "371279bf-1c6f-4527-87c3-bcf04d7d8b05",
   "design-lead": "955cc174-4ebe-4fb8-b5c4-bf404e21bfe1",
   nabil: "f2e54318-0dcb-4306-87e4-77016efaa6bb",
 }
+
+const AGENT_NAME_TO_SLUG = {
+  Ziko: "main",
+  "Product Analyst": "product-analyst",
+  "Marketing Agent": "marketing-agent",
+  Designer: "designer",
+  Dev: "dev",
+  "Code Reviewer": "reviewer",
+  "Testing Agent": "tester",
+  "Job Search Agent": "job-search",
+}
+
+const resolvedAgentUuid = new Map(
+  Object.entries(FALLBACK_AGENT_UUID).filter(([, value]) => Boolean(value)),
+)
 
 const state = loadState()
 const runToAgent = new Map(state.runToAgent || [])
@@ -92,7 +107,10 @@ function normalizeAgentSlug(sessionKey) {
     designer: "designer",
     dev: "dev",
     reviewer: "reviewer",
+    tester: "tester",
+    "testing-agent": "tester",
     "code-reviewer": "reviewer",
+    "job-search": "job-search",
   }
   return aliases[raw] || raw
 }
@@ -106,8 +124,37 @@ function displayAgent(slug) {
     designer: "Designer",
     dev: "Dev",
     reviewer: "Code Reviewer",
+    tester: "Testing Agent",
+    "job-search": "Job Search Agent",
   }
   return names[slug] || slug
+}
+
+async function refreshAgentUuidMap() {
+  if (typeof fetch !== "function") return
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/agents?select=id,name`, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+    })
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${await res.text()}`)
+    }
+
+    const agents = await res.json()
+    for (const agent of agents) {
+      const slug = AGENT_NAME_TO_SLUG[agent.name]
+      if (slug && agent.id) {
+        resolvedAgentUuid.set(slug, agent.id)
+      }
+    }
+  } catch (e) {
+    append(ERR_PATH, `[agent-map] refresh error: ${e.message}`)
+  }
 }
 
 async function refreshSessionMap() {
@@ -145,11 +192,11 @@ async function pushEventWithRetry(evt) {
   seen.add(key)
 
   const slug = evt.agentSlug
-  let agentId = slug ? AGENT_UUID[slug] : undefined
+  let agentId = slug ? resolvedAgentUuid.get(slug) : undefined
 
   // Fallback: never drop activity events. Route unmapped events to Ziko.
   if (!agentId) {
-    agentId = AGENT_UUID.main
+    agentId = resolvedAgentUuid.get("main") || FALLBACK_AGENT_UUID.main
     append(LOG_PATH, `[fallback] unmapped slug=${slug || "unknown"} type=${evt.type} -> main`)
   }
 
@@ -351,6 +398,7 @@ async function runOnce() {
 
 async function main() {
   await refreshSessionMap()
+  await refreshAgentUuidMap()
 
   process.on("SIGINT", () => { saveState(); process.exit(0) })
   process.on("SIGTERM", () => { saveState(); process.exit(0) })
@@ -362,11 +410,19 @@ async function main() {
   }
 
   setInterval(refreshSessionMap, POLL_SESSION_MAP_MS)
+  setInterval(() => { refreshAgentUuidMap().catch(() => {}) }, POLL_SESSION_MAP_MS)
   setInterval(saveState, 15_000)
   startFollow()
 }
 
-main().catch((e) => {
-  append(ERR_PATH, `[fatal] ${e.stack || e.message}`)
-  process.exit(1)
-})
+if (require.main === module) {
+  main().catch((e) => {
+    append(ERR_PATH, `[fatal] ${e.stack || e.message}`)
+    process.exit(1)
+  })
+}
+
+module.exports = {
+  displayAgent,
+  normalizeAgentSlug,
+}

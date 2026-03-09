@@ -7,8 +7,8 @@
 const { execSync } = require("child_process")
 const fs = require("fs")
 
-const SUPABASE_URL   = "https://lazhmdyajdqbnxxwyxun.supabase.co"
-const SERVICE_KEY    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhemhtZHlhamRxYm54eHd5eHVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTAzMzUzMCwiZXhwIjoyMDg0NjA5NTMwfQ.ynuJxkd-n6t162KfbHsaR-OVPBG-Ap65T_-VfCqN4ao"
+const SUPABASE_URL   = "https://uvqnrysmjpyupkhtnyfd.supabase.co"
+const SERVICE_KEY    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV2cW5yeXNtanB5dXBraHRueWZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NTc1NzUsImV4cCI6MjA4ODMzMzU3NX0.hBrPgN_8zgRq6bSwqkOmz1T3QYV1PuhWYtC-h2D_iYo"
 const ORG_ID         = "9c52b861-abb7-4774-9b5b-3fa55c8392cb"
 const CONFIG_PATH    = "C:\\Users\\Fares\\.openclaw\\openclaw.json"
 const PUSH_SCRIPT    = "C:\\Users\\Fares\\.openclaw\\workspace\\scripts\\push-event.ps1"
@@ -18,13 +18,39 @@ const POLL_INTERVAL  = 10000 // 10 seconds
 const NAME_TO_ID = {
   "Ziko": "main",
   "Product Analyst": "product-analyst",
+  "Marketing Agent": "marketing",
   "Karim": "marketing",
+  "Designer": "designer",
   "Design Lead": "designer",
   "Dev": "dev",
+  "Code Reviewer": "reviewer",
+  "Testing Agent": "tester",
+  "Job Search Agent": "job-search",
   "Nabil": "main",
   "Omar": "dev",
   "Mostafa": "dev",
   "Sara": "dev",
+}
+
+const PROVIDER_MAP = {
+  anthropic: "anthropic",
+  google: "google",
+  openai: "openai",
+  groq: "groq",
+  mistral: "mistral",
+  xai: "xai",
+  deepseek: "deepseek",
+  openrouter: "openrouter",
+  "openai-codex": "openai-codex",
+}
+
+function composeModelId(agent) {
+  if (!agent.ai_model) return null
+  if (agent.ai_model.includes("/")) return agent.ai_model
+
+  const rawProvider = agent.ai_provider || "anthropic"
+  const provider = PROVIDER_MAP[rawProvider] || rawProvider
+  return `${provider}/${agent.ai_model}`
 }
 
 // Cache last known full model per agent to avoid unnecessary writes
@@ -49,8 +75,8 @@ function syncChanges(agents) {
     const ocId = NAME_TO_ID[agent.name]
     if (!ocId || !agent.ai_model) continue
 
-    const provider  = agent.ai_provider || "anthropic"
-    const fullModel = `${provider}/${agent.ai_model}`
+    const fullModel = composeModelId(agent)
+    if (!fullModel) continue
 
     // Skip if same as last poll
     if (lastKnown[agent.name] === fullModel) continue

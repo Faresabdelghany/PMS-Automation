@@ -30,7 +30,7 @@ import {
   Tray,
   CheckSquare,
   Folder,
-  Users,
+  Lightning,
   ChartBar,
   Robot,
   Gear,
@@ -49,7 +49,7 @@ const navItemIcons: Record<NavItemId, React.ComponentType<{ className?: string }
   inbox: Tray,
   "my-tasks": CheckSquare,
   projects: Folder,
-  clients: Users,
+  activity: Lightning,
   performance: ChartBar,
   agents: Robot,
 }
@@ -75,6 +75,7 @@ export function AppSidebar() {
           .filter((p) => p.status === "active" || p.status === "planned")
           .slice(0, 8)
           .map((p, i) => ({
+            id: p.id,
             name: p.name,
             progress: p.progress,
             color: colors[i % colors.length],
@@ -92,7 +93,7 @@ export function AppSidebar() {
     if (id === "my-tasks") return "/tasks"
     if (id === "projects") return "/"
     if (id === "inbox") return "/inbox"
-    if (id === "clients") return "/clients"
+    if (id === "activity") return "/activity"
     if (id === "performance") return "/performance"
     if (id === "agents") return "/agents"
     return "#"
@@ -108,8 +109,8 @@ export function AppSidebar() {
     if (id === "inbox") {
       return pathname.startsWith("/inbox")
     }
-    if (id === "clients") {
-      return pathname.startsWith("/clients")
+    if (id === "activity") {
+      return pathname.startsWith("/activity")
     }
     if (id === "performance") {
       return pathname.startsWith("/performance")
@@ -194,7 +195,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {activeProjects.map((project) => (
-                <SidebarMenuItem key={project.name}>
+                <SidebarMenuItem key={project.id}>
                   <SidebarMenuButton className="h-9 rounded-lg px-3 group">
                     <ProgressCircle progress={project.progress} color={project.color} size={18} />
                     <span className="flex-1 truncate text-sm">{project.name}</span>

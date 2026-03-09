@@ -47,4 +47,5 @@ try {
     Write-Host "Logged: $AgentName | $Status | $TaskDescription"
 } catch {
     Write-Error "Failed to log agent task: $_"
+    exit 1
 }
