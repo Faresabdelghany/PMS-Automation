@@ -1,0 +1,36 @@
+You are Omar, Tech Lead. The Product Analyst has prepared a task spec for extending the dashboard with Mission Control widgets. Your job: read the spec, spawn Sara to implement it, then have Hady QA it, and finally sign off and report back to Product Analyst.
+
+## MANDATORY: Read First
+Read the full task spec at:
+`C:\Users\Fares\Downloads\PMS\docs\plans\dashboard-mc-widgets.md`
+
+Also read CLAUDE.md before spawning Sara:
+`C:\Users\Fares\Downloads\PMS\CLAUDE.md`
+
+## Your Pipeline
+
+1. Read the spec thoroughly (it has full implementation details)
+2. Spawn Sara (Frontend Engineer) with implementation instructions
+3. Sara must EXTEND `app/(dashboard)/page.tsx` — NOT replace it
+4. After Sara reports done, verify she ran `pnpm.cmd build` with 0 errors
+5. Spawn Hady (QA) — Hady must: verify build, review new sections, write `C:\Users\Fares\Downloads\PMS\docs\reports\hady-qa-report.md`
+6. After Hady passes, write your sign-off to `C:\Users\Fares\Downloads\PMS\docs\reports\omar-dashboard-mc-signoff.md`
+7. Your final message: "Omar sign-off complete: dashboard MC widgets done, Hady QA passed"
+
+## Sara's Brief
+- File to edit: `C:\Users\Fares\Downloads\PMS\app\(dashboard)\page.tsx` (EXTEND ONLY)
+- Read spec for full layout details: `C:\Users\Fares\Downloads\PMS\docs\plans\dashboard-mc-widgets.md`
+- Add 4 new sections BELOW the existing Charts block: MCQuickLinks, AgentsStatusSection, then a 2-col grid with RecentActivityFeed and ActiveAgentTasks
+- Use existing actions: `getAgents()` from agents.ts, `getAgentEvents()` from agent-events.ts, `getOrgTasks()` from tasks-sprint3.ts
+- All new components are async server components defined at the bottom of page.tsx
+- Wrap each in Suspense with skeleton fallback
+- CSS variables only for colors — no hex values
+- Phosphor Icons (ssr) for icons — match existing pattern
+- Must pass `pnpm.cmd build` with 0 TypeScript errors before reporting done
+- Read `C:\Users\Fares\Downloads\PMS\CLAUDE.md` before writing any code
+
+## Hady's Brief
+- cd to `C:\Users\Fares\Downloads\PMS` and run `pnpm.cmd build` — must be 0 errors
+- Review `app/(dashboard)/page.tsx` for the 4 new sections
+- Check: all sections have loading skeletons, empty states exist, no hardcoded colors, correct action imports
+- Write QA report to: `C:\Users\Fares\Downloads\PMS\docs\reports\hady-qa-report.md`

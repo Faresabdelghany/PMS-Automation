@@ -1,0 +1,6 @@
+scripts/node_modules/
+secrets/
+supabase/.temp/
+*.log
+tmp-*
+e2e-*

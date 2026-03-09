@@ -1,0 +1,27 @@
+{
+  "task_id": "todo-242a8ab5-auto-assign-pipeline",
+  "from": "ziko",
+  "to": "Product Analyst",
+  "context": {
+    "feature": "Auto-assign tasks based on intent + full pipeline automation + manual override; fix DISPATCH-FOOTER edit error.",
+    "prd_path": "N/A",
+    "prior_decisions": [
+      "Product/automation work must follow PA → Dev → Testing → Review pipeline.",
+      "Dispatch tasks must include DISPATCH-FOOTER logging instructions."
+    ],
+    "do_not_revisit": [
+      "Do not implement code changes before spec is complete.",
+      "Do not bypass logging requirements."
+    ],
+    "current_state": "Task claimed via heartbeat. No work started.",
+    "next_step": "Run SpecKit to define requirements, success metrics, and a plan. Identify the DISPATCH-FOOTER edit error and propose fixes."
+  },
+  "outputs_expected": [
+    "spec.md, plan.md, tasks.md, analysis.md",
+    "Report path for findings/fix proposal"
+  ],
+  "escalate_if": [
+    "Conflicting requirements or missing business context.",
+    "Scope suggests >2 days of work."
+  ]
+}

@@ -25,19 +25,20 @@ const LIMIT = Number(process.argv.find((a) => a.startsWith("--limit="))?.split("
 
 const AGENT_UUID = {
   main: "a2776ed4-b6a6-4465-b060-664d3a99be55",
-  "product-analyst": "b9d6d5c5-e2f9-42cb-ab30-ffabfeaebab0",
-  "marketing-agent": "53e856f2-0ee3-4d02-bf8e-6e42ebcfada9",
-  designer: "83833da4-5448-4cfd-b944-f202aa45990a",
+  "product-analyst": "1f483d60-8c25-448a-8215-207c5787fd7e",
+  marketing: "371279bf-1c6f-4527-87c3-bcf04d7d8b05",
+  "marketing-agent": "371279bf-1c6f-4527-87c3-bcf04d7d8b05",
+  designer: "955cc174-4ebe-4fb8-b5c4-bf404e21bfe1",
   dev: "fb92236d-8d7e-4471-b490-a04652d624f5",
-  reviewer: "fa3a6a53-09ab-46c5-912a-901edac69980",
+  reviewer: "fb92236d-8d7e-4471-b490-a04652d624f5",
+  tester: "fb92236d-8d7e-4471-b490-a04652d624f5",
 
-  // safe aliases from old setup
-  marketing: "53e856f2-0ee3-4d02-bf8e-6e42ebcfada9",
-  "code-reviewer": "fa3a6a53-09ab-46c5-912a-901edac69980",
-  "tech-lead": "42ebb10b-2c89-492a-b1f5-120575e5a36d",
-  "marketing-lead": "15257503-eba5-4312-8a02-636117e567a2",
-  "design-lead": "cabaaa15-1678-4978-a375-d16a0545f905",
-  nabil: "d9cb258c-c033-4188-998a-a79033e1aa1c",
+  // aliases
+  "code-reviewer": "fb92236d-8d7e-4471-b490-a04652d624f5",
+  "tech-lead": "ba6990f4-674c-499e-96f5-8610378ace63",
+  "marketing-lead": "371279bf-1c6f-4527-87c3-bcf04d7d8b05",
+  "design-lead": "955cc174-4ebe-4fb8-b5c4-bf404e21bfe1",
+  nabil: "f2e54318-0dcb-4306-87e4-77016efaa6bb",
 }
 
 const state = loadState()
@@ -144,31 +145,32 @@ async function pushEventWithRetry(evt) {
   seen.add(key)
 
   const slug = evt.agentSlug
-  const agentId = slug ? AGENT_UUID[slug] : undefined
+  let agentId = slug ? AGENT_UUID[slug] : undefined
 
+  // Fallback: never drop activity events. Route unmapped events to Ziko.
   if (!agentId) {
-    append(LOG_PATH, `[skip] no agent UUID mapping for slug=${slug || "unknown"} type=${evt.type}`)
-    return
+    agentId = AGENT_UUID.main
+    append(LOG_PATH, `[fallback] unmapped slug=${slug || "unknown"} type=${evt.type} -> main`)
   }
-
-  const cmd = [
-    "powershell",
-    "-ExecutionPolicy", "Bypass",
-    "-File", `\"${PUSH_SCRIPT}\"`,
-    "-EventType", `\"${evt.type}\"`,
-    "-Message", `\"${evt.message.replace(/\"/g, '\\\"')}\"`,
-    "-AgentId", `\"${agentId}\"`,
-  ].join(" ")
 
   if (DRY_RUN) {
     append(LOG_PATH, `[dry-run] ${evt.type} ${slug} :: ${evt.message}`)
     return
   }
 
+  const safeMessage = evt.message.replace(/"/g, '\\"')
+  const args = [
+    "-ExecutionPolicy", "Bypass",
+    "-File", PUSH_SCRIPT,
+    "-EventType", evt.type,
+    "-Message", safeMessage,
+    "-AgentId", agentId,
+  ]
+
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       await new Promise((resolve, reject) => {
-        const p = spawn("cmd", ["/c", cmd], { stdio: ["ignore", "pipe", "pipe"] })
+        const p = spawn("powershell", args, { stdio: ["ignore", "pipe", "pipe"] })
         let err = ""
         p.stderr.on("data", (d) => (err += d.toString()))
         p.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`exit=${code} ${err.trim()}`))))
@@ -200,7 +202,7 @@ function parseLogLine(obj) {
       runId,
       agentSlug: slug,
       key: `task_started|${runId}`,
-      message: `${displayAgent(slug)}: run started (${runId.slice(0, 8)}) via ${channel}`,
+      message: `${displayAgent(slug)}: run started via ${channel}`,
     }
   }
 
@@ -231,7 +233,7 @@ function parseLogLine(obj) {
       runId,
       agentSlug: slug,
       key: `${aborted === "true" ? "task_failed" : "task_completed"}|${runId}`,
-      message: `${displayAgent(slug)}: run ${aborted === "true" ? "aborted" : "completed"} (${runId.slice(0, 8)})`,
+      message: `${displayAgent(slug)}: run ${aborted === "true" ? "aborted" : "completed"} (${runToolCount.get(runId) || 0} steps)`,
     }
   }
 
@@ -244,7 +246,7 @@ function parseLogLine(obj) {
       runId,
       agentSlug: slug,
       key: `task_failed|${runId}|agent_end`,
-      message: `${displayAgent(slug)}: run failed (${runId.slice(0, 8)}) — ${err.slice(0, 180)}`,
+      message: `${displayAgent(slug)}: run failed — ${err.slice(0, 180)}`,
     }
   }
 

@@ -1,0 +1,25 @@
+{
+  "task_id": "todo-28ae5ed9-daily-standup-cron",
+  "from": "ziko",
+  "to": "Product Analyst",
+  "context": {
+    "feature": "Daily standup cron — define requirements, timing, and workflow.",
+    "prd_path": "N/A",
+    "prior_decisions": [
+      "Automation/infra tasks follow PA → Dev → Testing → Review pipeline."
+    ],
+    "do_not_revisit": [
+      "Do not implement code changes before spec is complete."
+    ],
+    "current_state": "Task claimed via heartbeat. No work started.",
+    "next_step": "Run SpecKit to define requirements, success metrics, and plan for a daily standup cron task."
+  },
+  "outputs_expected": [
+    "spec.md, plan.md, tasks.md, analysis.md",
+    "Report summary file"
+  ],
+  "escalate_if": [
+    "Missing business context (who receives standup, channel, time zone).",
+    "Scope suggests >2 days of work."
+  ]
+}

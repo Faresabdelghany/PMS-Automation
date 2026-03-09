@@ -1,0 +1,24 @@
+{
+  "task_id": "todo-1818544f-new-task-modal-positioning",
+  "from": "ziko",
+  "to": "Testing Agent",
+  "context": {
+    "feature": "Test New Task modal positioning — verify UI layout and positioning behavior.",
+    "prd_path": "N/A",
+    "prior_decisions": [
+      "Testing Agent runs validation only; no code changes."
+    ],
+    "do_not_revisit": [
+      "Do not change UI behavior; report issues only."
+    ],
+    "current_state": "Task claimed via heartbeat. No testing run yet.",
+    "next_step": "Run UI tests or manual verification to confirm New Task modal positioning across viewports; report any issues with repro steps and screenshots if possible."
+  },
+  "outputs_expected": [
+    "Test report file path (e.g., /docs/reports/new-task-modal-positioning-test.md)"
+  ],
+  "escalate_if": [
+    "Cannot locate the New Task modal UI.",
+    "Positioning issues block primary flows."
+  ]
+}
