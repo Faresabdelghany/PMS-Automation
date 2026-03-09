@@ -113,6 +113,25 @@ Every agent MUST prefix every message with their name and emoji. No exceptions.
   2. "Never guess — use your tools to read files and gather info"
   3. "Never mention tool names to users — speak in natural language"
 
+## Workspace GitHub Repo
+- URL: https://github.com/Faresabdelghany/PMS-Automation
+- Remote: origin, branch: master
+- First full push: 2026-03-09 (commit 71e0760)
+
+## PA→Dev→Tester→Reviewer Workflow Contract (2026-03-09)
+- **Canonical chain**: User → Ziko → PA → PMS child task creation → Dev ↔ Tester ↔ PA loop → Reviewer → PA → Ziko → User
+- **DB migration**: `20260309022500_child_task_workflow_contract.sql` — adds parent_task_id, order_index, source, acceptance_criteria, lifecycle_status to todos
+- **Lifecycle**: queued → ready → in_progress → dev_done → in_test → tested_passed → in_review → done (+ changes_requested, failed, cancelled)
+- **Enforcement**: unique constraint = one active child per parent; idempotent speckit import by (parent_task_id, order_index)
+- **Key scripts**:
+  - `ingest-speckit-decomposition.ps1` — single approved PA→PMS ingestion path
+  - `verify-pa-spec-gate.ps1` — blocks Dev if artifacts/queue invalid
+  - `transition-child-task.ps1` — role-based transitions + sequential unlock
+  - `run-feature-workflow.ps1` — orchestrator entrypoint
+- **Docs**: INGESTION-SCHEMA.md, REVIEWER-POLICY.md, WORKFLOW-PA-DEV-TEST-REVIEW.md
+- **Reviewer policy**: low-risk = fast-track (tested_passed→done), standard = in_review gate
+- **Lesson**: Fares wants delta-only reports. Never restate completed work.
+
 ## First session: 2026-02-20
 - Bootstrapped identity, migrated auth, configured Opus 4.6
 
