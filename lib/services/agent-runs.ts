@@ -24,7 +24,7 @@ export type AgentRun = {
   todoId: string | null
   parentRunId: string | null
   agentName: string
-  status: "pending" | "running" | "completed" | "failed" | "cancelled" | "stale_timeout"
+  status: "queued" | "running" | "completed" | "failed" | "cancelled" | "stale_timeout"
   inputSummary: string | null
   outputSummary: string | null
   errorMessage: string | null
@@ -92,7 +92,7 @@ export async function fetchActiveRuns(): Promise<AgentRun[]> {
   const { data, error } = await supabase
     .from("agent_runs")
     .select("*")
-    .in("status", ["running", "pending"])
+    .in("status", ["running", "queued"])
     .order("started_at", { ascending: false })
 
   if (error) {

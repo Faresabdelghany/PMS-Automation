@@ -268,7 +268,7 @@ export function AgentsPage() {
         startedAt: run.started_at as string,
         completedAt: (run.completed_at as string) || null,
         createdAt: run.created_at as string,
-        updatedAt: run.updated_at as string,
+        updatedAt: (run.updated_at as string) || (run.created_at as string),
       }
       if (existing >= 0) {
         const next = [...prev]
@@ -441,7 +441,7 @@ export function AgentsPage() {
                     const activeRun = runs.find(
                       (r) =>
                         r.agentName === agent.name &&
-                        (r.status === "running" || r.status === "pending"),
+                        (r.status === "running" || r.status === "queued"),
                     )
                     return (
                       <AgentTableRow

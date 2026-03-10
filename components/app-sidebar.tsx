@@ -32,6 +32,7 @@ import {
   Folder,
   ChartBar,
   Robot,
+  Lightning,
   Gear,
   Layout,
   Question,
@@ -46,6 +47,7 @@ const navItemIcons: Record<NavItemId, React.ComponentType<{ className?: string }
   inbox: Tray,
   "my-tasks": CheckSquare,
   projects: Folder,
+  activity: Lightning,
   performance: ChartBar,
   agents: Robot,
 }

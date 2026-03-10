@@ -149,13 +149,17 @@ export async function fetchAgentLogs(limit = 50): Promise<AgentLog[]> {
 
 export async function fetchAgentsWithActivity(): Promise<Agent[]> {
   const logs = await fetchAgentLogs(200)
-  const { data: configRows, error: configError } = await supabase
-    .from("agents")
-    .select("name, ai_provider, ai_model")
+
+  // Fetch live agent configs and active runs in parallel
+  const [configResult, runsResult] = await Promise.all([
+    supabase.from("agents").select("name, ai_provider, ai_model"),
+    supabase.from("agent_runs").select("agent_name, status, started_at").in("status", ["running", "queued"]),
+  ])
 
   const taskCounts = new Map<string, number>()
   const lastActive = new Map<string, string>()
   const liveConfigs = new Map<string, AgentConfigRow>()
+  const activeAgents = new Set<string>()
 
   for (const log of logs) {
     const current = taskCounts.get(log.agentName) ?? 0
@@ -166,19 +170,44 @@ export async function fetchAgentsWithActivity(): Promise<Agent[]> {
     }
   }
 
-  if (!configError) {
-    for (const row of (configRows as AgentConfigRow[]) || []) {
+  if (!configResult.error) {
+    for (const row of (configResult.data as AgentConfigRow[]) || []) {
       liveConfigs.set(row.name, row)
     }
   } else {
-    console.error("fetchAgentsWithActivity config error:", configError)
+    console.error("fetchAgentsWithActivity config error:", configResult.error)
   }
 
-  return staticAgents.map((agent) => ({
-    ...agent,
-    model: composeModelId(liveConfigs.get(agent.name) ?? { name: agent.name, ai_provider: agent.provider, ai_model: agent.model }) ?? agent.model,
-    provider: liveConfigs.get(agent.name)?.ai_provider || agent.provider,
-    taskCount: taskCounts.get(agent.name) ?? 0,
-    lastActive: lastActive.get(agent.name),
-  }))
+  // Track which agents have active (running/queued) runs
+  if (!runsResult.error) {
+    for (const run of runsResult.data || []) {
+      activeAgents.add(run.agent_name)
+    }
+  }
+
+  const now = Date.now()
+
+  return staticAgents.map((agent) => {
+    const lastActiveTs = lastActive.get(agent.name)
+    const hasActiveRun = activeAgents.has(agent.name)
+
+    // Compute dynamic status from activity
+    let status: Agent["status"] = "offline"
+    if (hasActiveRun) {
+      status = "busy"
+    } else if (lastActiveTs) {
+      const ageSec = (now - new Date(lastActiveTs).getTime()) / 1000
+      if (ageSec < 300) status = "online"       // active < 5 min
+      else if (ageSec < 1800) status = "idle"    // active < 30 min
+    }
+
+    return {
+      ...agent,
+      status,
+      model: composeModelId(liveConfigs.get(agent.name) ?? { name: agent.name, ai_provider: agent.provider, ai_model: agent.model }) ?? agent.model,
+      provider: liveConfigs.get(agent.name)?.ai_provider || agent.provider,
+      taskCount: taskCounts.get(agent.name) ?? 0,
+      lastActive: lastActiveTs,
+    }
+  })
 }
