@@ -29,6 +29,7 @@ import { fetchRunsByTask, type AgentRun } from "@/lib/services/agent-runs"
 import { fetchChildTasks } from "@/lib/services/tasks"
 import { LifecycleBadge, LifecycleTimeline } from "@/components/ui/lifecycle-badge"
 import { useTaskRealtime } from "@/lib/hooks/use-realtime"
+import { toast } from "sonner"
 
 type TaskDetailsPanelProps = {
   task: ProjectTask | null
@@ -170,24 +171,31 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
     ])
   }
 
-  const persistField = (updates: Parameters<typeof updateTaskService>[1]) => {
+  const syncTaskState = useCallback((nextTask: ProjectTask) => {
+    setExtendedTask(nextTask as ExtendedProjectTask)
+    setEditTitle(nextTask.name)
+    setEditDescription(nextTask.description || "")
+    setEditStatus(nextTask.status)
+    setEditStartDate(nextTask.startDate ? format(new Date(nextTask.startDate), "yyyy-MM-dd") : "")
+    setEditDueDate(nextTask.dueLabel || "")
+    setEditPriority(nextTask.priority || "no-priority")
+    setEditAssignee(nextTask.assignee?.name ?? "")
+    onTaskUpdated?.(nextTask)
+  }, [onTaskUpdated])
+
+  const persistField = async (updates: Parameters<typeof updateTaskService>[1]) => {
     if (!task) return
-    updateTaskService(task.id, updates)
-    if (onTaskUpdated) {
-      const updated = { ...task }
-      if (updates.name !== undefined) updated.name = updates.name
-      if (updates.status !== undefined) updated.status = updates.status
-      if (updates.priority !== undefined) updated.priority = updates.priority
-      if (updates.description !== undefined) updated.description = updates.description
-      if (updates.startDate !== undefined) updated.startDate = updates.startDate ?? undefined
-      if (updates.dueLabel !== undefined) updated.dueLabel = updates.dueLabel
-      if (updates.assignee !== undefined) {
-        updated.assignee = updates.assignee
-          ? { id: updates.assignee.toLowerCase().replace(/\s+/g, "-"), name: updates.assignee, avatarUrl: getAvatarUrl(updates.assignee) }
-          : undefined
-      }
-      onTaskUpdated(updated)
+
+    const previousTask = (extendedTask ?? task) as ProjectTask
+    const nextTask = await updateTaskService(task.id, updates)
+
+    if (!nextTask) {
+      syncTaskState(previousTask)
+      toast.error("Failed to save task changes")
+      return
     }
+
+    syncTaskState(nextTask)
   }
 
   const taskId = task?.id
@@ -209,15 +217,7 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
       // Fetch full task data
       fetchTaskById(task.id).then((latest) => {
         if (!latest) return
-        setExtendedTask(latest)
-        setEditTitle(latest.name)
-        setEditDescription(latest.description || "")
-        setEditStatus(latest.status)
-        setEditStartDate(latest.startDate ? format(new Date(latest.startDate), "yyyy-MM-dd") : "")
-        setEditDueDate(latest.dueLabel || "")
-        setEditPriority(latest.priority || "no-priority")
-        setEditAssignee(latest.assignee?.name ?? "")
-        onTaskUpdated?.(latest)
+        syncTaskState(latest)
       })
 
       fetchSubtasks(task.id).then((items) => setSubtasks(items))
@@ -231,7 +231,7 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
       setChildTasksLoading(true)
       fetchChildTasks(task.id).then((children) => { setChildTasks(children); setChildTasksLoading(false) })
     }
-  }, [taskId, open]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [taskId, open, syncTaskState]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Realtime subscriptions for this task
   const handleRealtimeEvent = useCallback((raw: Record<string, unknown>) => {

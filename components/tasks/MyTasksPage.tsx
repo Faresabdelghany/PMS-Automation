@@ -21,6 +21,7 @@ import {
   updateTask as updateTaskService,
   reorderTasks as reorderTasksService,
 } from "@/lib/services/tasks"
+import { toast } from "sonner"
 
 const TaskWeekBoardView = dynamic(
   () => import("@/components/tasks/TaskWeekBoardView").then(m => m.TaskWeekBoardView),
@@ -179,47 +180,58 @@ export function MyTasksPage() {
     setAllTasks((prev) => [...prev, task])
   }, [])
 
+  const applyTaskUpdate = useCallback(
+    async (
+      taskId: string,
+      getOptimisticTask: (task: ProjectTask) => ProjectTask,
+      updates: Parameters<typeof updateTaskService>[1],
+      failureMessage: string,
+    ) => {
+      let previousTask: ProjectTask | null = null
+
+      setAllTasks((prev) =>
+        prev.map((task) => {
+          if (task.id !== taskId) return task
+          previousTask = task
+          return getOptimisticTask(task)
+        }),
+      )
+
+      if (!previousTask) return
+
+      const updatedTask = await updateTaskService(taskId, updates)
+      if (!updatedTask) {
+        setAllTasks((prev) => prev.map((task) => (task.id === taskId ? previousTask! : task)))
+        setDetailTask((prev) => (prev?.id === taskId ? previousTask : prev))
+        toast.error(failureMessage)
+        return
+      }
+
+      setAllTasks((prev) => prev.map((task) => (task.id === taskId ? updatedTask : task)))
+      setDetailTask((prev) => (prev?.id === taskId ? updatedTask : prev))
+    },
+    [],
+  )
+
   const toggleTask = useCallback((taskId: string) => {
-    setAllTasks((prev) =>
-      prev.map((task) => {
-        if (task.id !== taskId) return task
-        const newStatus = task.status === "done" ? "todo" : "done"
-        // Fire-and-forget update to DB
-        updateTaskService(taskId, { status: newStatus })
-        return { ...task, status: newStatus }
-      }),
-    )
-  }, [])
+    const currentTask = allTasks.find((task) => task.id === taskId)
+    if (!currentTask) return
+
+    const newStatus = currentTask.status === "done" ? "todo" : "done"
+    void applyTaskUpdate(taskId, (task) => ({ ...task, status: newStatus }), { status: newStatus }, "Failed to update task status")
+  }, [allTasks, applyTaskUpdate])
 
   const changeTaskTag = useCallback((taskId: string, tagLabel?: string) => {
-    setAllTasks((prev) =>
-      prev.map((task) => {
-        if (task.id !== taskId) return task
-        updateTaskService(taskId, { tag: tagLabel ?? "" })
-        return { ...task, tag: tagLabel }
-      }),
-    )
-  }, [])
+    void applyTaskUpdate(taskId, (task) => ({ ...task, tag: tagLabel }), { tag: tagLabel ?? "" }, "Failed to update task tag")
+  }, [applyTaskUpdate])
 
   const changeTaskStatus = useCallback((taskId: string, newStatus: WorkstreamTaskStatus) => {
-    setAllTasks((prev) =>
-      prev.map((task) => {
-        if (task.id !== taskId) return task
-        updateTaskService(taskId, { status: newStatus })
-        return { ...task, status: newStatus }
-      }),
-    )
-  }, [])
+    void applyTaskUpdate(taskId, (task) => ({ ...task, status: newStatus }), { status: newStatus }, "Failed to update task status")
+  }, [applyTaskUpdate])
 
   const moveTaskDate = useCallback((taskId: string, newDate: Date) => {
-    setAllTasks((prev) =>
-      prev.map((task) => {
-        if (task.id !== taskId) return task
-        updateTaskService(taskId, { startDate: newDate })
-        return { ...task, startDate: newDate }
-      }),
-    )
-  }, [])
+    void applyTaskUpdate(taskId, (task) => ({ ...task, startDate: newDate }), { startDate: newDate }, "Failed to update task date")
+  }, [applyTaskUpdate])
 
   const handleTaskUpdated = useCallback((updated: ProjectTask) => {
     setAllTasks((prev) =>
@@ -227,12 +239,16 @@ export function MyTasksPage() {
     )
   }, [])
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
+  const handleDragEnd = useCallback(async (event: DragEndEvent) => {
     const { active, over } = event
 
     if (!over || active.id === over.id) return
 
+    let previousTasks: ProjectTask[] | null = null
+    let categoryTaskIds: string[] = []
+
     setAllTasks((prev) => {
+      previousTasks = prev
       const activeIndex = prev.findIndex((t) => t.id === active.id)
       const overIndex = prev.findIndex((t) => t.id === over.id)
 
@@ -243,15 +259,21 @@ export function MyTasksPage() {
 
       const reordered = arrayMove(prev, activeIndex, overIndex)
 
-      // Fire-and-forget reorder to DB for tasks in this category
       const cat = prev[activeIndex].category ?? "Uncategorized"
-      const categoryTaskIds = reordered
+      categoryTaskIds = reordered
         .filter((t) => (t.category ?? "Uncategorized") === cat)
         .map((t) => t.id)
-      reorderTasksService(categoryTaskIds)
 
       return reordered
     })
+
+    if (!previousTasks || categoryTaskIds.length === 0) return
+
+    const ok = await reorderTasksService(categoryTaskIds)
+    if (!ok) {
+      setAllTasks(previousTasks)
+      toast.error("Failed to reorder tasks")
+    }
   }, [])
 
   if (isLoading) {

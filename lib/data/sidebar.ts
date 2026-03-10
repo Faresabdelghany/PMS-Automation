@@ -1,4 +1,4 @@
-export type NavItemId = "inbox" | "my-tasks" | "projects" | "clients" | "performance" | "agents"
+export type NavItemId = "inbox" | "my-tasks" | "projects" | "performance" | "agents"
 
 export type SidebarFooterItemId = "settings" | "templates" | "help"
 
@@ -25,7 +25,6 @@ export const navItems: NavItem[] = [
     { id: "inbox", label: "Inbox" },
     { id: "my-tasks", label: "Tasks" },
     { id: "projects", label: "Projects", isActive: true },
-    { id: "clients", label: "Clients" },
     { id: "performance", label: "Performance" },
     { id: "agents", label: "Agents" },
 ]

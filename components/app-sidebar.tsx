@@ -30,26 +30,22 @@ import {
   Tray,
   CheckSquare,
   Folder,
-  Lightning,
   ChartBar,
   Robot,
   Gear,
   Layout,
   Question,
-  SignOut,
   CaretRight,
   CaretUpDown,
 } from "@phosphor-icons/react/dist/ssr"
 import { footerItems, navItems, type NavItemId, type SidebarFooterItemId, type ActiveProjectSummary } from "@/lib/data/sidebar"
 import { fetchProjects } from "@/lib/services/projects"
 import { SettingsDialog } from "@/components/settings/SettingsDialog"
-import { AuthDialog, type AuthMode } from "@/components/auth/AuthDialog"
 
 const navItemIcons: Record<NavItemId, React.ComponentType<{ className?: string }>> = {
   inbox: Tray,
   "my-tasks": CheckSquare,
   projects: Folder,
-  activity: Lightning,
   performance: ChartBar,
   agents: Robot,
 }
@@ -63,8 +59,6 @@ const footerItemIcons: Record<SidebarFooterItemId, React.ComponentType<{ classNa
 export function AppSidebar() {
   const pathname = usePathname()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
-  const [isAuthOpen, setIsAuthOpen] = useState(false)
-  const [authMode, setAuthMode] = useState<AuthMode>("sign-in")
   const [activeProjects, setActiveProjects] = useState<ActiveProjectSummary[]>([])
 
   useEffect(() => {
@@ -84,16 +78,10 @@ export function AppSidebar() {
     }).catch(() => {})
   }, [])
 
-  const openAuth = (mode: AuthMode) => {
-    setAuthMode(mode)
-    setIsAuthOpen(true)
-  }
-
   const getHrefForNavItem = (id: NavItemId): string => {
     if (id === "my-tasks") return "/tasks"
     if (id === "projects") return "/"
     if (id === "inbox") return "/inbox"
-    if (id === "activity") return "/activity"
     if (id === "performance") return "/performance"
     if (id === "agents") return "/agents"
     return "#"
@@ -108,9 +96,6 @@ export function AppSidebar() {
     }
     if (id === "inbox") {
       return pathname.startsWith("/inbox")
-    }
-    if (id === "activity") {
-      return pathname.startsWith("/activity")
     }
     if (id === "performance") {
       return pathname.startsWith("/performance")
@@ -251,23 +236,16 @@ export function AppSidebar() {
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right" align="end" className="w-40">
             <DropdownMenuItem
-              className="cursor-pointer text-destructive focus:text-destructive"
-              onSelect={() => openAuth("sign-in")}
+              className="cursor-pointer"
+              onSelect={() => setIsSettingsOpen(true)}
             >
-              <SignOut className="h-4 w-4" />
-              Logout
+              Settings
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarFooter>
 
       <SettingsDialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen} />
-      <AuthDialog
-        open={isAuthOpen}
-        onOpenChange={setIsAuthOpen}
-        mode={authMode}
-        onModeChange={setAuthMode}
-      />
     </Sidebar>
   )
 }
