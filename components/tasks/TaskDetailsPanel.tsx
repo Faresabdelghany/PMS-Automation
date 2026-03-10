@@ -171,6 +171,9 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
     ])
   }
 
+  const onTaskUpdatedRef = useRef(onTaskUpdated)
+  onTaskUpdatedRef.current = onTaskUpdated
+
   const syncTaskState = useCallback((nextTask: ProjectTask) => {
     setExtendedTask(nextTask as ExtendedProjectTask)
     setEditTitle(nextTask.name)
@@ -180,8 +183,8 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
     setEditDueDate(nextTask.dueLabel || "")
     setEditPriority(nextTask.priority || "no-priority")
     setEditAssignee(nextTask.assignee?.name ?? "")
-    onTaskUpdated?.(nextTask)
-  }, [onTaskUpdated])
+    onTaskUpdatedRef.current?.(nextTask)
+  }, [])
 
   const persistField = async (updates: Parameters<typeof updateTaskService>[1]) => {
     if (!task) return
@@ -231,7 +234,7 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
       setChildTasksLoading(true)
       fetchChildTasks(task.id).then((children) => { setChildTasks(children); setChildTasksLoading(false) })
     }
-  }, [taskId, open, syncTaskState]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [taskId, open, syncTaskState])
 
   // Realtime subscriptions for this task
   const handleRealtimeEvent = useCallback((raw: Record<string, unknown>) => {
@@ -272,10 +275,10 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
   }, [])
 
   const handleTodoUpdate = useCallback((raw: Record<string, unknown>) => {
-    if (raw.lifecycle_status && extendedTask) {
-      setExtendedTask({ ...extendedTask, lifecycleStatus: raw.lifecycle_status as ExtendedProjectTask["lifecycleStatus"] })
+    if (raw.lifecycle_status) {
+      setExtendedTask((prev) => prev ? { ...prev, lifecycleStatus: raw.lifecycle_status as ExtendedProjectTask["lifecycleStatus"] } : prev)
     }
-  }, [extendedTask])
+  }, [])
 
   useTaskRealtime(open && taskId ? taskId : null, {
     onTaskEvent: handleRealtimeEvent,

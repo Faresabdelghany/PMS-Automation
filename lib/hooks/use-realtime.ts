@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
+import { useEffect, useRef } from "react"
 import { supabase } from "@/lib/supabase"
 import type { RealtimeChannel } from "@supabase/supabase-js"
 
@@ -16,15 +16,21 @@ type SubscriptionConfig = {
 /**
  * Subscribe to one or more Supabase Realtime channels.
  * Returns cleanup automatically on unmount.
+ * Uses refs for callbacks to avoid stale closures without re-subscribing.
  */
 export function useRealtimeSubscription(subscriptions: SubscriptionConfig[], deps: unknown[] = []) {
   const channelRef = useRef<RealtimeChannel | null>(null)
+  const subsRef = useRef(subscriptions)
+  subsRef.current = subscriptions
 
   useEffect(() => {
+    if (subsRef.current.length === 0) return
+
     const channelName = `pms-rt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
     let channel = supabase.channel(channelName)
 
-    for (const sub of subscriptions) {
+    for (let i = 0; i < subsRef.current.length; i++) {
+      const sub = subsRef.current[i]
       const event = sub.event ?? "*"
       const config: Record<string, string> = {
         event,
@@ -33,12 +39,13 @@ export function useRealtimeSubscription(subscriptions: SubscriptionConfig[], dep
       }
       if (sub.filter) config.filter = sub.filter
 
+      const idx = i
       channel = channel.on(
         "postgres_changes" as "system",
         config as unknown as { event: string },
         (payload: unknown) => {
           const p = payload as { new: Record<string, unknown>; old: Record<string, unknown>; eventType: string }
-          sub.onPayload(p)
+          subsRef.current[idx]?.onPayload(p)
         },
       )
     }
