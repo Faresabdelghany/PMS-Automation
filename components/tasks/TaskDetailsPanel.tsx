@@ -449,12 +449,7 @@ export function TaskDetailsPanel({ task, open, onClose, onTaskUpdated }: TaskDet
                 </p>
               )}
 
-              {/* Lifecycle Timeline Bar */}
-              {(extendedTask?.lifecycleStatus || task.status) && (
-                <div className="mb-6">
-                  <LifecycleTimeline currentStatus={extendedTask?.lifecycleStatus || (task.status === "done" ? "done" : task.status === "in-progress" ? "in_progress" : "queued")} />
-                </div>
-              )}
+
 
               {/* Child Tasks (if parent) */}
               {childTasks.length > 0 && (
