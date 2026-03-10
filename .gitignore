@@ -1,8 +1,12 @@
 .next/
 secrets/
-
-.next/
-secrets/
 .env.local
 next-env.d.ts
 node_modules/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Generated output / agent logs
+output/
