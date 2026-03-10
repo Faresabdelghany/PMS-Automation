@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 export type NavItemId = "inbox" | "my-tasks" | "projects" | "performance" | "agents"
+=======
+export type NavItemId = "inbox" | "my-tasks" | "projects" | "activity" | "performance" | "agents"
+>>>>>>> 4679ef6e8cbe3e8e4143360b785480f4c3195422
 
 export type SidebarFooterItemId = "settings" | "templates" | "help"
 
@@ -25,6 +29,10 @@ export const navItems: NavItem[] = [
     { id: "inbox", label: "Inbox" },
     { id: "my-tasks", label: "Tasks" },
     { id: "projects", label: "Projects", isActive: true },
+<<<<<<< HEAD
+=======
+    { id: "activity", label: "Activity" },
+>>>>>>> 4679ef6e8cbe3e8e4143360b785480f4c3195422
     { id: "performance", label: "Performance" },
     { id: "agents", label: "Agents" },
 ]
