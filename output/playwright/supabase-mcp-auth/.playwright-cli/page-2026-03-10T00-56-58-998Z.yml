@@ -1,0 +1,346 @@
+- generic:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - banner:
+              - generic:
+                - generic:
+                  - link:
+                    - /url: /dashboard/org/vercel_icfg_KYF2nuijzjnOVhOLQtVp8zzm
+                    - img
+                  - generic:
+                    - generic:
+                      - generic:
+                        - img
+                      - generic: Account
+                - generic:
+                  - generic:
+                    - generic: Feedback
+                  - generic:
+                    - button:
+                      - generic:
+                        - img
+                        - paragraph: Search...
+                      - generic:
+                        - generic:
+                          - img
+                          - generic: K
+                    - button [ref=e33] [cursor=pointer]:
+                      - img [ref=e35]
+                    - button [ref=e39] [cursor=pointer]:
+                      - img [ref=e41]
+                  - button:
+                    - generic:
+                      - img
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - main:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - link:
+                                      - /url: /dashboard/organizations
+                                      - img
+                                      - text: Back to dashboard
+                                - generic:
+                                  - generic:
+                                    - menu:
+                                      - list:
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic:
+                                                    - generic: Account Settings
+                                              - generic:
+                                                - menuitem:
+                                                  - generic:
+                                                    - link:
+                                                      - /url: /dashboard/account/me
+                                                      - generic:
+                                                        - generic:
+                                                          - generic: Preferences
+                                                - menuitem:
+                                                  - generic:
+                                                    - link:
+                                                      - /url: /dashboard/account/tokens
+                                                      - generic:
+                                                        - generic:
+                                                          - generic: Access Tokens
+                                                - menuitem:
+                                                  - generic:
+                                                    - link:
+                                                      - /url: /dashboard/account/security
+                                                      - generic:
+                                                        - generic:
+                                                          - generic: Security
+                                        - generic:
+                                          - generic:
+                                            - generic:
+                                              - generic:
+                                                - generic:
+                                                  - generic:
+                                                    - generic: Logs
+                                              - generic:
+                                                - menuitem:
+                                                  - generic:
+                                                    - link:
+                                                      - /url: /dashboard/account/audit
+                                                      - generic:
+                                                        - generic:
+                                                          - generic: Audit Logs
+                            - generic:
+                              - generic:
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - heading [level=1]: Access Tokens
+                                        - generic: Create and manage access tokens for API authentication.
+                                  - generic:
+                                    - generic:
+                                      - navigation:
+                                        - menu:
+                                          - listitem:
+                                            - link:
+                                              - /url: /dashboard/account/tokens
+                                              - text: Classic Tokens
+                                - generic:
+                                  - generic:
+                                    - generic:
+                                      - generic:
+                                        - textbox:
+                                          - /placeholder: Filter tokens
+                                        - generic:
+                                          - img
+                                      - generic:
+                                        - link:
+                                          - /url: https://supabase.com/docs/reference/api/introduction
+                                          - generic:
+                                            - img
+                                          - generic: API Docs
+                                        - link:
+                                          - /url: https://supabase.com/docs/reference/cli/start
+                                          - generic:
+                                            - img
+                                          - generic: CLI docs
+                                        - generic:
+                                          - button:
+                                            - generic: Generate new token
+                                          - button:
+                                            - generic:
+                                              - img
+                                    - generic:
+                                      - generic:
+                                        - generic:
+                                          - generic:
+                                            - table:
+                                              - rowgroup:
+                                                - row:
+                                                  - columnheader: Token
+                                                  - columnheader:
+                                                    - button:
+                                                      - text: Last used
+                                                      - generic:
+                                                        - img
+                                                        - img
+                                                        - img
+                                                  - columnheader:
+                                                    - button:
+                                                      - text: Expires
+                                                      - generic:
+                                                        - img
+                                                        - img
+                                                        - img
+                                                  - columnheader
+                                              - rowgroup:
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: PMS Automation
+                                                    - paragraph: sbp_c93c••••••••••••••••••••••••••••••••239d
+                                                  - cell: 8 hours ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: Pms 2
+                                                    - paragraph: sbp_b1ca••••••••••••••••••••••••••••••••d286
+                                                  - cell: 22 days ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: PMs
+                                                    - paragraph: sbp_64d0••••••••••••••••••••••••••••••••f4f2
+                                                  - cell: 2 months ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: Claude-Code-MCP-Dec2025
+                                                    - paragraph: sbp_99f1••••••••••••••••••••••••••••••••f887
+                                                  - cell: 3 months ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: Supabase-MCP-2025
+                                                    - paragraph: sbp_9187••••••••••••••••••••••••••••••••3af2
+                                                  - cell:
+                                                    - paragraph: Never used
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: Supabase-MCP-Claude
+                                                    - paragraph: sbp_c950••••••••••••••••••••••••••••••••d61b
+                                                  - cell: 3 months ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: Claude-Code-MCP-Server
+                                                    - paragraph: sbp_87a0••••••••••••••••••••••••••••••••a11d
+                                                  - cell:
+                                                    - paragraph: Never used
+                                                  - cell: Expired
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: CLI-Setup-Token
+                                                    - paragraph: sbp_abd8••••••••••••••••••••••••••••••••adde
+                                                  - cell: 4 months ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: MCP-Claude-Code
+                                                    - paragraph: sbp_0400••••••••••••••••••••••••••••••••3b66
+                                                  - cell: 5 months ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: cli_DESKTOP-70CPJVH\fares@DESKTOP-70CPJVH_1755694251
+                                                    - paragraph: sbp_9aa7••••••••••••••••••••••••••••••••a289
+                                                  - cell: 7 months ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: newapp
+                                                    - paragraph: sbp_126f••••••••••••••••••••••••••••••••c195
+                                                  - cell: 7 months ago
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+                                                - row:
+                                                  - cell:
+                                                    - paragraph: MCP
+                                                    - paragraph: sbp_ed65••••••••••••••••••••••••••••••••35e3
+                                                  - cell:
+                                                    - paragraph: Never used
+                                                  - cell:
+                                                    - paragraph: Never
+                                                  - cell:
+                                                    - generic:
+                                                      - button:
+                                                        - generic:
+                                                          - img
+  - generic:
+    - alert: Supabase
+  - dialog "Generate New Token" [ref=e363]:
+    - heading "Generate New Token" [level=2] [ref=e365]
+    - alert [ref=e367]:
+      - img [ref=e368]
+      - generic [ref=e371]:
+        - heading "Access tokens can be used to control your whole account" [level=5] [ref=e372]
+        - paragraph [ref=e374]: Be careful when sharing your tokens
+    - generic [ref=e376]:
+      - generic [ref=e378]:
+        - generic [ref=e431]: Name
+        - textbox "Name" [ref=e384]:
+          - /placeholder: Provide a name for your token
+          - text: Codex-Supabase-MCP
+      - generic [ref=e386]:
+        - generic [ref=e432]: Expires in
+        - generic [ref=e391]:
+          - generic [ref=e392]:
+            - combobox [active] [ref=e393] [cursor=pointer]:
+              - generic: Never
+              - img [ref=e394]
+            - combobox [ref=e396]
+          - generic [ref=e433]:
+            - img [ref=e434]
+            - generic [ref=e436]: Make sure to keep your non-expiring token safe and secure.
+    - generic [ref=e397]:
+      - button "Cancel" [ref=e398] [cursor=pointer]:
+        - generic [ref=e399]: Cancel
+      - button "Generate token" [ref=e400] [cursor=pointer]:
+        - generic [ref=e401]: Generate token
+    - button "Close" [ref=e402] [cursor=pointer]:
+      - img [ref=e403]
+      - generic [ref=e406]: Close

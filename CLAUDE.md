@@ -89,14 +89,42 @@ Hybrid type/service layer:
 - `lib/data/sidebar.ts`: static nav metadata
 - `lib/data/clients.ts`: client records used by UI pickers
 
+### OpenClaw / Telegram Integration
+
+**This is the core automation loop of the entire system.**
+
+```
+Fares (Telegram) → OpenClaw → Supabase → PMS UI
+                                 ↑
+              Agents write back their activity here
+```
+
+- **Task intake**: Every message Fares sends to OpenClaw via Telegram (`@Fares_Agents_bot`) is auto-classified and inserted as a task into the `todos` table (`source: "telegram"`, `source_channel: "telegram"`, `source_message_id` set).
+- **Agent activity**: As OpenClaw agents work (PA, Dev, Reviewer, Specialist, etc.), they write their execution state back to Supabase — `agent_runs`, `agent_logs`, `task_events`, `tool_invocations`, `skill_invocations`. PMS reads and displays all of this in real-time.
+- **Real-time display**: The `/agents` page and task detail panels surface live agent runs, events, and logs. Supabase Realtime is enabled on `agent_runs`, `task_events`, `todos`.
+- **Workflow stages**: Tasks move through `workflow_stage` values (`PA → DEV → REVIEW → SPECIALIST`) as agents pick them up and advance them.
+- **Lifecycle tracking**: `lifecycle_status` on `todos` reflects where a task is in the agent pipeline (`queued → in_progress → dev_done → tested_passed → done`).
+- **`current_run_id`**: Active agent run is tracked on the task itself so the UI can link directly to the live run.
+
+**Tables that OpenClaw writes to (do not break their schema):**
+- `todos` — creates + updates tasks
+- `agent_runs` — one row per agent execution
+- `agent_logs` — detailed log entries per run
+- `task_events` — event stream (PA assigned, dev started, review requested, etc.)
+- `tool_invocations` — each tool call within a run
+- `skill_invocations` — each skill invoked within a run
+- `inbox_notifications` — alerts pushed to the inbox page
+
 ### Observability Tables
 
 Supabase operational tables in active use:
 - `agent_runs`
 - `task_events`
 - `agent_logs`
+- `tool_invocations`
+- `skill_invocations`
 
-These are part of the task pipeline and must not be removed or bypassed.
+These are written by OpenClaw and read by PMS. Must not be removed or bypassed.
 
 ### Component Organization
 
